@@ -21,12 +21,20 @@ limitations under the License.
   <parent>
     <groupId>org.apache.calcite</groupId>
     <artifactId>calcite</artifactId>
+<<<<<<< HEAD:elasticsearch/pom.xml
     <version>1.17.0-kylin-r1-SNAPSHOT</version>
+=======
+    <version>1.13.0-kylin-r2-SNAPSHOT</version>
+>>>>>>> use kylin version name and private nexus 1.13-r2:elasticsearch2/pom.xml
   </parent>
 
   <artifactId>calcite-elasticsearch</artifactId>
   <packaging>jar</packaging>
+<<<<<<< HEAD:elasticsearch/pom.xml
   <version>1.17.0-kylin-r1-SNAPSHOT</version>
+=======
+  <version>1.13.0-kylin-r2-SNAPSHOT</version>
+>>>>>>> use kylin version name and private nexus 1.13-r2:elasticsearch2/pom.xml
   <name>Calcite Elasticsearch</name>
   <description>Elasticsearch adapter for Calcite</description>
 

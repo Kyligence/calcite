@@ -19,13 +19,21 @@ limitations under the License.
   <parent>
     <groupId>org.apache.calcite</groupId>
     <artifactId>calcite</artifactId>
+<<<<<<< HEAD
     <version>1.17.0-kylin-r1-SNAPSHOT</version>
+=======
+    <version>1.13.0-kylin-r2-SNAPSHOT</version>
+>>>>>>> use kylin version name and private nexus 1.13-r2
   </parent>
 
   <!-- The basics. -->
   <artifactId>calcite-file</artifactId>
   <packaging>jar</packaging>
+<<<<<<< HEAD
   <version>1.17.0-kylin-r1-SNAPSHOT</version>
+=======
+  <version>1.13.0-kylin-r2-SNAPSHOT</version>
+>>>>>>> use kylin version name and private nexus 1.13-r2
   <name>Calcite File</name>
   <description>Calcite provider that reads files and URIs</description>
 
