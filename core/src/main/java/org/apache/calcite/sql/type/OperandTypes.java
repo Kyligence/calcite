@@ -456,7 +456,7 @@ public abstract class OperandTypes {
   // TODO: interval+datetime checking missing
   public static final SqlSingleOperandTypeChecker PLUS_OPERATOR =
       OperandTypes.or(NUMERIC_NUMERIC, INTERVAL_SAME_SAME, DATETIME_INTERVAL,
-          INTERVAL_DATETIME);
+          INTERVAL_DATETIME, STRING_STRING);
 
   /**
    * Type checking strategy for the "*" operator
