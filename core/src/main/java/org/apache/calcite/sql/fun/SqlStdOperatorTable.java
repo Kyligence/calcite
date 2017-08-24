@@ -53,6 +53,7 @@ import org.apache.calcite.sql.type.OperandTypes;
 import org.apache.calcite.sql.type.ReturnTypes;
 import org.apache.calcite.sql.type.SqlOperandCountRanges;
 import org.apache.calcite.sql.type.SqlTypeName;
+import org.apache.calcite.sql.type.SqlTypeUtil;
 import org.apache.calcite.sql.util.ReflectiveSqlOperatorTable;
 import org.apache.calcite.sql.validate.SqlConformance;
 import org.apache.calcite.sql.validate.SqlModality;
@@ -526,7 +527,7 @@ public class SqlStdOperatorTable extends ReflectiveSqlOperatorTable {
           SqlKind.PLUS,
           40,
           true,
-          ReturnTypes.DECIMAL_STRING_SUM_NULLABLE_SUM,
+          ReturnTypes.NULLABLE_SUM,
           InferTypes.FIRST_KNOWN,
           OperandTypes.PLUS_OPERATOR) {
         @Override public void validateCall(SqlCall call,
@@ -542,6 +543,16 @@ public class SqlStdOperatorTable extends ReflectiveSqlOperatorTable {
               break;
             }
           }
+        }
+
+        @Override public RelDataType inferReturnType(SqlOperatorBinding opBinding) {
+          int opBindCnt = opBinding.getOperandCount();
+          for (int i = 0; i < opBindCnt; i++) {
+            if (SqlTypeUtil.inCharOrBinaryFamilies(opBinding.getOperandType(i))) {
+              return ReturnTypes.DYADIC_STRING_SUM_PRECISION_NULLABLE.inferReturnType(opBinding);
+            }
+          }
+          return ReturnTypes.NULLABLE_SUM.inferReturnType(opBinding);
         }
       };
 

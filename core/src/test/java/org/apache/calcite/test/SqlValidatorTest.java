@@ -5073,14 +5073,17 @@ public class SqlValidatorTest extends SqlValidatorTestCase {
 
   @Test public void testInvalidGroupBy2() {
     sql("select count(*) from emp group by ^deptno + 'a'^")
-        .fails("(?s)Cannot apply '\\+' to arguments of type.*");
+        .fails("(?s).*Cannot apply '\\|\\|' to arguments of type '<INTEGER> \\|\\| <CHAR.1.>'"
+            + ".*Supported form.s.: '<STRING> \\|\\| <STRING>.*'");
+
   }
 
   @Test public void testInvalidGroupBy3() {
     sql("select deptno / 2 + 1, count(*) as c\n"
         + "from emp\n"
         + "group by rollup(deptno / 2, sal), rollup(empno, ^deptno + 'a'^)")
-        .fails("(?s)Cannot apply '\\+' to arguments of type.*");
+        .fails("(?s).*Cannot apply '\\|\\|' to arguments of type '<INTEGER> \\|\\| <CHAR.1.>'"
+            + ".*Supported form.s.: '<STRING> \\|\\| <STRING>.*'");
   }
 
   /** Test case for

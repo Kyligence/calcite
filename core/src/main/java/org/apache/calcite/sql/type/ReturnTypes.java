@@ -632,14 +632,6 @@ public abstract class ReturnTypes {
       cascade(DYADIC_STRING_SUM_PRECISION, SqlTypeTransforms.TO_NULLABLE);
 
   /**
-   * Same as {@link #NULLABLE_SUM} and using {@link #DYADIC_STRING_SUM_PRECISION_NULLABLE}
-   * These rules are used for addition including numeric plus and string concat.
-   */
-  public static final SqlReturnTypeInference DECIMAL_STRING_SUM_NULLABLE_SUM =
-          new SqlReturnTypeInferenceChain(DECIMAL_SUM_NULLABLE,
-              DYADIC_STRING_SUM_PRECISION_NULLABLE, LEAST_RESTRICTIVE);
-
-  /**
    * Type-inference strategy where the expression is assumed to be registered
    * as a {@link org.apache.calcite.sql.validate.SqlValidatorNamespace}, and
    * therefore the result type of the call is the type of that namespace.
