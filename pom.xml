@@ -27,11 +27,7 @@ limitations under the License.
   <groupId>org.apache.calcite</groupId>
   <artifactId>calcite</artifactId>
   <packaging>pom</packaging>
-<<<<<<< HEAD
   <version>1.17.0-kylin-r1-SNAPSHOT</version>
-=======
-  <version>1.13.0-kylin-r2-SNAPSHOT</version>
->>>>>>> use kylin version name and private nexus 1.13-r2
 
   <!-- More project information. -->
   <name>Calcite</name>

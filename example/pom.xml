@@ -20,21 +20,13 @@ limitations under the License.
   <parent>
     <groupId>org.apache.calcite</groupId>
     <artifactId>calcite</artifactId>
-<<<<<<< HEAD
     <version>1.17.0-kylin-r1-SNAPSHOT</version>
-=======
-    <version>1.13.0-kylin-r2-SNAPSHOT</version>
->>>>>>> use kylin version name and private nexus 1.13-r2
   </parent>
 
   <!-- The basics. -->
   <artifactId>calcite-example</artifactId>
   <packaging>pom</packaging>
-<<<<<<< HEAD
   <version>1.17.0-kylin-r1-SNAPSHOT</version>
-=======
-  <version>1.13.0-kylin-r2-SNAPSHOT</version>
->>>>>>> use kylin version name and private nexus 1.13-r2
   <name>Calcite Examples</name>
   <description>Calcite examples</description>
 
