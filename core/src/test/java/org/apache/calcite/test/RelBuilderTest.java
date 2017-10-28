@@ -352,13 +352,13 @@ public class RelBuilderTest {
     final RelBuilder builder = RelBuilder.create(config().build());
     try {
       builder.scan("EMP");
-      RexNode call = builder.call(SqlStdOperatorTable.PLUS,
+      RexNode call = builder.call(SqlStdOperatorTable.MINUS,
           builder.field(1),
           builder.field(3));
       fail("expected error, got " + call);
     } catch (IllegalArgumentException e) {
       assertThat(e.getMessage(),
-          is("cannot derive type: +; "
+          is("cannot derive type: -; "
               + "operands: [$1: VARCHAR(10), $3: SMALLINT]"));
     }
   }
@@ -1950,7 +1950,7 @@ public class RelBuilderTest {
     final RexNode arg0 = builder.literal(0);
     final RexNode arg1 = builder.literal("xyz");
     try {
-      builder.call(SqlStdOperatorTable.PLUS, Lists.newArrayList(arg0, arg1));
+      builder.call(SqlStdOperatorTable.MINUS, Lists.newArrayList(arg0, arg1));
       fail("Invalid combination of parameter types");
     } catch (IllegalArgumentException e) {
       assertThat(e.getMessage(), containsString("cannot derive type"));
@@ -1958,7 +1958,7 @@ public class RelBuilderTest {
 
     // test for b) call(operator, RexNode...)
     try {
-      builder.call(SqlStdOperatorTable.PLUS, arg0, arg1);
+      builder.call(SqlStdOperatorTable.MINUS, arg0, arg1);
       fail("Invalid combination of parameter types");
     } catch (IllegalArgumentException e) {
       assertThat(e.getMessage(), containsString("cannot derive type"));
