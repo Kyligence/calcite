@@ -5559,7 +5559,6 @@ SqlPostfixOperator PostfixRowOperator() :
 |   < CONTAINS: "CONTAINS" >
 |   < CONTINUE: "CONTINUE" >
 |   < CONVERT: "CONVERT" >
-|   < CORR: "CORR" >
 |   < CORRESPONDING: "CORRESPONDING" >
 |   < COUNT: "COUNT" >
 |   < COVAR_POP: "COVAR_POP" >

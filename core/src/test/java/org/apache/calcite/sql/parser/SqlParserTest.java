@@ -163,7 +163,6 @@ public class SqlParserTest {
       "CONTAINS",                      "92",               "2011", "2014", "c",
       "CONTINUE",                      "92", "99", "2003",
       "CONVERT",                       "92",               "2011", "2014", "c",
-      "CORR",                                              "2011", "2014", "c",
       "CORRESPONDING",                 "92", "99", "2003", "2011", "2014", "c",
       "COUNT",                         "92",               "2011", "2014", "c",
       "COVAR_POP",                                         "2011", "2014", "c",
