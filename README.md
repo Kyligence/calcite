@@ -28,7 +28,7 @@ Naming convension of different releases (the name could be used for creating git
 
 For new KyCalcite releases we need to deploy it to our own Nexus server (kynexus.chinaeast.cloudapp.chinacloudapi.cn:8081), if you don't have enough permission please contact hongbin.ma@kyligence.io
 
-**Since sonar does not allow overriding formal releases, you might choose to use a snapshot version name, e.g. 1.13.0-kylin-r1-SNAPSHOT
+**Since sonar does not allow overriding formal releases, you might choose to use a snapshot version name, e.g. 1.13.0-kylin-r1-SNAPSHOT**
 
 steps:
 
