@@ -34,7 +34,7 @@ steps:
 
 1. publish the new kycalcite to nexus server
 2. change kap and kylin's calcite pom dependency version
-3. create a tag for the commit on which the new kycalcite is built from
+3. create a tag for the commit on which the new kycalcite is built from. Don't forget to push tags to server
 
 
 # Apache Calcite
