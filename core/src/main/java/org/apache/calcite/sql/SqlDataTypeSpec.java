@@ -227,7 +227,7 @@ public class SqlDataTypeSpec extends SqlNode {
       writer.keyword(name.substring(1));
     } else {
       // else we have a user defined type
-      typeName.unparse(writer, leftPrec, rightPrec);
+      writer.userDefinedType(this, leftPrec, rightPrec);
     }
   }
 

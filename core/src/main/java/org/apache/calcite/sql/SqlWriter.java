@@ -325,6 +325,11 @@ public interface SqlWriter {
   void identifier(String name);
 
   /**
+   * Prints an user-defined type
+   */
+  void userDefinedType(SqlDataTypeSpec typeSpec, int leftPrec, int rightPrec);
+
+  /**
    * Prints the OFFSET/FETCH clause.
    */
   void fetchOffset(SqlNode fetch, SqlNode offset);
