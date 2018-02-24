@@ -17,6 +17,7 @@
 package org.apache.calcite.sql.pretty;
 
 import org.apache.calcite.avatica.util.Spaces;
+import org.apache.calcite.sql.SqlDataTypeSpec;
 import org.apache.calcite.sql.SqlDialect;
 import org.apache.calcite.sql.SqlNode;
 import org.apache.calcite.sql.SqlWriter;
@@ -910,6 +911,10 @@ public class SqlPrettyWriter implements SqlWriter {
     setNeedWhitespace(true);
   }
 
+  public void userDefinedType(SqlDataTypeSpec typeSpec, int leftPrec, int rightPrec) {
+    typeSpec.getTypeName().unparse(this, leftPrec, rightPrec);
+  }
+
   public void fetchOffset(SqlNode fetch, SqlNode offset) {
     if (fetch == null && offset == null) {
       return;
@@ -1066,6 +1071,11 @@ public class SqlPrettyWriter implements SqlWriter {
         nextWhitespace = newlineAfterSep ? NL : " ";
       }
       ++itemCount;
+    }
+
+    @SuppressWarnings("unused")
+    public FrameType getFrameType() {
+      return frameType;
     }
   }
 
