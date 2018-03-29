@@ -72,7 +72,7 @@ public class SqlWithItem extends SqlCall {
    * SqlWithItemOperator is used to represent an item in a WITH clause of a
    * query. It has a name, an optional column list, and a query.
    */
-  private static class SqlWithItemOperator extends SqlSpecialOperator {
+  public static class SqlWithItemOperator extends SqlSpecialOperator {
     private static final SqlWithItemOperator INSTANCE =
         new SqlWithItemOperator();
 
@@ -82,18 +82,8 @@ public class SqlWithItem extends SqlCall {
 
     //~ Methods ----------------------------------------------------------------
 
-    public void unparse(
-        SqlWriter writer,
-        SqlCall call,
-        int leftPrec,
-        int rightPrec) {
-      final SqlWithItem withItem = (SqlWithItem) call;
-      withItem.name.unparse(writer, getLeftPrec(), getRightPrec());
-      if (withItem.columnList != null) {
-        withItem.columnList.unparse(writer, getLeftPrec(), getRightPrec());
-      }
-      writer.keyword("AS");
-      withItem.query.unparse(writer, 10, 10);
+    public void unparse(SqlWriter writer, SqlCall call, int leftPrec, int rightPrec) {
+      writer.writeWithItem(call, this, leftPrec, rightPrec);
     }
 
     @Override public SqlCall createCall(SqlLiteral functionQualifier,

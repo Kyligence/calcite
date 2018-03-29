@@ -25,7 +25,15 @@ import org.apache.calcite.sql.util.SqlString;
  * [scott]</code>.
  */
 public interface SqlWriter {
-  //~ Enums ------------------------------------------------------------------
+
+  void writeWith(SqlCall call, int leftPrec, int rightPrec);
+
+  void writeWithItem(
+    SqlCall call,
+    SqlWithItem.SqlWithItemOperator sqlWithItemOperator,
+    int leftPrec,
+    int rightPrec);
+    //~ Enums ------------------------------------------------------------------
 
   /**
    * Style of formatting sub-queries.
@@ -136,6 +144,11 @@ public interface SqlWriter {
      * the WITH clause and the query, with AS as the separator.
      */
     WITH,
+
+    /**
+     * with items in with clause
+     */
+    WITH_ITEM,
 
     /**
      * OFFSET clause.

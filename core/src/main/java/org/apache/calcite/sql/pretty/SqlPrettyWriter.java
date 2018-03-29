@@ -17,9 +17,12 @@
 package org.apache.calcite.sql.pretty;
 
 import org.apache.calcite.avatica.util.Spaces;
+import org.apache.calcite.sql.SqlCall;
 import org.apache.calcite.sql.SqlDataTypeSpec;
 import org.apache.calcite.sql.SqlDialect;
 import org.apache.calcite.sql.SqlNode;
+import org.apache.calcite.sql.SqlWith;
+import org.apache.calcite.sql.SqlWithItem;
 import org.apache.calcite.sql.SqlWriter;
 import org.apache.calcite.sql.dialect.AnsiSqlDialect;
 import org.apache.calcite.sql.util.SqlBuilder;
@@ -985,6 +988,39 @@ public class SqlPrettyWriter implements SqlWriter {
     setWindowDeclListNewline(options.isWindowListItemsOnSeparateLines());
     setIndentation(options.getIndentation());
     setLineLength(options.getLineLength());
+  }
+
+  @Override public void writeWith(SqlCall call, int leftPrec, int rightPrec) {
+    final SqlWith with = (SqlWith) call;
+    final SqlWriter.Frame frame =
+      this.startList(SqlWriter.FrameTypeEnum.WITH, "WITH", "");
+    final SqlWriter.Frame frame1 = this.startList("", "");
+    for (SqlNode node : with.withList) {
+      this.sep(",");
+      node.unparse(this, 0, 0);
+    }
+    this.endList(frame1);
+    final SqlWriter.Frame frame2 =
+      this.startList(SqlWriter.FrameTypeEnum.SIMPLE);
+    with.body.unparse(this, 100, 100);
+    this.endList(frame2);
+    this.endList(frame);
+  }
+
+  @Override public void writeWithItem(
+      SqlCall call,
+      SqlWithItem.SqlWithItemOperator sqlWithItemOperator,
+      int leftPrec,
+      int rightPrec) {
+    final SqlWithItem withItem = (SqlWithItem) call;
+    leftPrec = sqlWithItemOperator.getLeftPrec();
+    rightPrec = sqlWithItemOperator.getRightPrec();
+    withItem.name.unparse(this, leftPrec, rightPrec);
+    if (withItem.columnList != null) {
+      withItem.columnList.unparse(this, leftPrec, rightPrec);
+    }
+    this.keyword("AS");
+    withItem.query.unparse(this, 10, 10);
   }
 
   //~ Inner Classes ----------------------------------------------------------
