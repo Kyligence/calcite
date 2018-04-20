@@ -27,9 +27,12 @@ import org.apache.calcite.linq4j.tree.Types;
 import org.apache.calcite.rel.type.RelDataType;
 import org.apache.calcite.runtime.FlatLists;
 import org.apache.calcite.runtime.Unit;
+import org.apache.calcite.runtime.Utilities;
 import org.apache.calcite.util.BuiltInMethod;
 
+import java.lang.reflect.Constructor;
 import java.lang.reflect.Type;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -56,7 +59,36 @@ public enum JavaRowFormat {
         assert javaRowClass == Unit.class;
         return Expressions.field(null, javaRowClass, "INSTANCE");
       default:
-        return Expressions.new_(javaRowClass, expressions);
+        try {
+          List<Expression> newExpressions = new ArrayList<>();
+          // Some class toString may be "class realClassName"
+          String[] classNameSplit = javaRowClass.toString().split(" ");
+          String className = classNameSplit[classNameSplit.length - 1];
+
+          // case 1. Some class has parameter-equipped constructor
+          try {
+            for (Constructor constructor : Class.forName(className).getConstructors()) {
+              if (constructor.getParameterTypes().length > 0) {
+                return Expressions.new_(javaRowClass, expressions);
+              }
+            }
+          } catch (ClassNotFoundException e) {
+            // fall back to case 2
+            // For calcite test, class is there in classpath. Class.forName(className) succeed.
+            // For general use, class is generated later. Class.forName(className) fails.
+            // Usually generated class only contains default constructor.
+          }
+
+          // case 2. Some class only has default constructor
+          newExpressions.add(
+              Expressions.variable(javaRowClass, className + ".class"));
+          newExpressions.addAll(expressions);
+          return Expressions.call(
+              Utilities.class.getMethod("newInstance", Class.class, Object[].class),
+              newExpressions);
+        } catch (NoSuchMethodException e) {
+          throw new RuntimeException(e);
+        }
       }
     }
 
