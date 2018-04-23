@@ -479,6 +479,14 @@ public class EnumerableRelImplementor extends JavaRelImplementor {
       this.types = types;
     }
 
+
+    @Override public Void visit(ParameterExpression parameterExpression) {
+      if (parameterExpression.name.endsWith(".class")) {
+        types.add(parameterExpression.type);
+      }
+      return super.visit(parameterExpression);
+    }
+
     @Override public Void visit(NewExpression newExpression) {
       types.add(newExpression.type);
       return super.visit(newExpression);
