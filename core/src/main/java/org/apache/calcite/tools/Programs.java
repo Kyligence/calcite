@@ -53,6 +53,8 @@ import org.apache.calcite.rel.rules.JoinPushThroughJoinRule;
 import org.apache.calcite.rel.rules.JoinToMultiJoinRule;
 import org.apache.calcite.rel.rules.LoptOptimizeJoinRule;
 import org.apache.calcite.rel.rules.MultiJoinOptimizeBushyRule;
+import org.apache.calcite.rel.rules.OLAPJoinPushThroughJoinRule;
+import org.apache.calcite.rel.rules.OLAPJoinPushThroughJoinRule2;
 import org.apache.calcite.rel.rules.ProjectCalcMergeRule;
 import org.apache.calcite.rel.rules.ProjectMergeRule;
 import org.apache.calcite.rel.rules.ProjectToCalcRule;
@@ -71,6 +73,13 @@ import com.google.common.collect.Lists;
 
 import java.util.Arrays;
 import java.util.List;
+
+/*
+ * The code has synced with calcite. Hope one day, we could remove the hardcode override point.
+ * OVERRIDE POINT:
+ * - add OLAPJoinPushThroughJoinRule OLAPJoinPushThroughJoinRule2 to
+ * org.apache.calcite.tools.Programs#subQuery
+ */
 
 /**
  * Utilities for creating {@link Program}s.
@@ -278,7 +287,8 @@ public class Programs {
     return hep(
         ImmutableList.of((RelOptRule) SubQueryRemoveRule.FILTER,
             SubQueryRemoveRule.PROJECT,
-            SubQueryRemoveRule.JOIN), true, metadataProvider);
+            SubQueryRemoveRule.JOIN, OLAPJoinPushThroughJoinRule.INSTANCE,
+            OLAPJoinPushThroughJoinRule2.INSTANCE), true, metadataProvider);
   }
 
   public static Program getProgram() {

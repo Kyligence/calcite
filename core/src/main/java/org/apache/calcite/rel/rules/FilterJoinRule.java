@@ -43,6 +43,11 @@ import java.util.Iterator;
 import java.util.List;
 
 /**
+ * Turn it off.
+ * Though try to turn it off in OLAPTableScan, sometimes it still triggerd.
+ */
+
+/**
  * Planner rule that pushes filters above and
  * within a join node into the join node and/or its children nodes.
  */
@@ -125,6 +130,11 @@ public abstract class FilterJoinRule extends RelOptRule {
     final List<RexNode> joinFilters =
         RelOptUtil.conjunctions(join.getCondition());
     final List<RexNode> origJoinFilters = ImmutableList.copyOf(joinFilters);
+
+    // HACK POINT
+    if (join.getJoinType() != JoinRelType.INNER || joinFilters.size() != 0) {
+      return;
+    }
 
     // If there is only the joinRel,
     // make sure it does not match a cartesian product joinRel
