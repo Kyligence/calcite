@@ -132,6 +132,7 @@ import org.apache.calcite.sql2rel.SqlRexConvertletTable;
 import org.apache.calcite.sql2rel.SqlToRelConverter;
 import org.apache.calcite.sql2rel.StandardConvertletTable;
 import org.apache.calcite.tools.Frameworks;
+import org.apache.calcite.tools.RelUtils;
 import org.apache.calcite.util.ImmutableIntList;
 import org.apache.calcite.util.Pair;
 import org.apache.calcite.util.Util;
@@ -155,6 +156,11 @@ import java.util.Set;
 
 import static org.apache.calcite.util.Static.RESOURCE;
 
+/*
+ * OVERRIDE POINT:
+ * - grep KYLIN_ONLY_PREPARE
+ */
+
 /**
  * Shit just got real.
  *
@@ -165,6 +171,8 @@ import static org.apache.calcite.util.Static.RESOURCE;
 public class CalcitePrepareImpl implements CalcitePrepare {
 
   public static final boolean DEBUG = Util.getBooleanProperty("calcite.debug");
+
+  public static final ThreadLocal<Boolean> KYLIN_ONLY_PREPARE = new ThreadLocal<>();
 
   public static final boolean COMMUTE =
       Util.getBooleanProperty("calcite.enable.join.commute");
@@ -613,6 +621,13 @@ public class CalcitePrepareImpl implements CalcitePrepare {
       long maxRowCount) {
     if (SIMPLE_SQLS.contains(query.sql)) {
       return simplePrepare(context, query.sql);
+    }
+
+    if (KYLIN_ONLY_PREPARE.get() != null && KYLIN_ONLY_PREPARE.get()) {
+      ParseResult parseResult = parse(context, query.sql);
+      Class<OnlyPrepareEarlyAbortException> onlyPrepareEarlyAbortExceptionClass =
+              OnlyPrepareEarlyAbortException.class;
+      throw new OnlyPrepareEarlyAbortException(context, parseResult);
     }
     final JavaTypeFactory typeFactory = context.getTypeFactory();
     CalciteCatalogReader catalogReader =
@@ -1131,7 +1146,10 @@ public class CalcitePrepareImpl implements CalcitePrepare {
 
       final List<Materialization> materializations = ImmutableList.of();
       final List<CalciteSchema.LatticeEntry> lattices = ImmutableList.of();
+      long start = System.currentTimeMillis();
+      LOGGER.info("Begin optimize");
       root = optimize(root, materializations, lattices);
+      LOGGER.info("End optimize, take : " + (System.currentTimeMillis() - start));
 
       if (timingTracer != null) {
         timingTracer.traceTime("end optimization");
@@ -1214,6 +1232,12 @@ public class CalcitePrepareImpl implements CalcitePrepare {
     }
 
     @Override protected PreparedResult implement(RelRoot root) {
+      if (RelUtils.findOLAPRel(root.rel)
+              && !root.rel.getClass().getName().contains("OLAPToEnumerableConverter")) {
+        String dumpPlan = RelOptUtil.dumpPlan("", root.rel,
+                false, SqlExplainLevel.DIGEST_ATTRIBUTES);
+        throw new IllegalArgumentException("Error planer:" + dumpPlan);
+      }
       RelDataType resultType = root.rel.getRowType();
       boolean isDml = root.kind.belongsTo(SqlKind.DML);
       final Bindable bindable;

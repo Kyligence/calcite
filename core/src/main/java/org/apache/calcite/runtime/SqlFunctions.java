@@ -59,6 +59,18 @@ import java.util.TimeZone;
 import java.util.concurrent.atomic.AtomicLong;
 import java.util.regex.Pattern;
 
+/*
+ * OVERRIDE POINT:
+ * - more power() overloads
+ * - refined org.apache.calcite.runtime.SqlFunctions#addMonths(int, int)
+ * - corner case subString()
+ * - corner case trim_()
+ * - upper()
+ * - lower()
+ * - charLength()
+ * - addMonths()
+ */
+
 /**
  * Helper methods to implement SQL functions in generated code.
  *
@@ -70,6 +82,7 @@ import java.util.regex.Pattern;
  * If null arguments are possible, the code-generation framework checks for
  * nulls before calling the functions.</p>
  */
+
 @SuppressWarnings("UnnecessaryUnboxing")
 @Deterministic
 public class SqlFunctions {
@@ -108,7 +121,11 @@ public class SqlFunctions {
   }
 
   /** SQL SUBSTRING(string FROM ... FOR ...) function. */
+  // override
   public static String substring(String s, int from, int for_) {
+    if (s == null) {
+      return null;
+    }
     return s.substring(from - 1, Math.min(from - 1 + for_, s.length()));
   }
 
@@ -128,12 +145,20 @@ public class SqlFunctions {
   }
 
   /** SQL UPPER(string) function. */
+  //overrivde
   public static String upper(String s) {
+    if (s == null) {
+      return "";
+    }
     return s.toUpperCase(Locale.ROOT);
   }
 
   /** SQL LOWER(string) function. */
+  //override
   public static String lower(String s) {
+    if (s == null) {
+      return "";
+    }
     return s.toLowerCase(Locale.ROOT);
   }
 
@@ -176,6 +201,9 @@ public class SqlFunctions {
 
   /** SQL CHARACTER_LENGTH(string) function. */
   public static int charLength(String s) {
+    if (s == null) {
+      return 0;
+    }
     return s.length();
   }
 
@@ -207,6 +235,9 @@ public class SqlFunctions {
 
   /** SQL {@code TRIM} function. */
   private static String trim_(String s, boolean left, boolean right, char c) {
+    if (s == null) {
+      return null;
+    }
     int j = s.length();
     if (right) {
       for (;;) {
@@ -834,6 +865,57 @@ public class SqlFunctions {
   public static double power(long b0, BigDecimal b1) {
     return Math.pow(b0, b1.doubleValue());
   }
+
+  // OVERRIDE POINT starts, more power overloads
+  public static double power(double n1, long n2) {
+    return Math.pow(n1, (double) n2);
+  }
+
+  public static double power(double n1, BigDecimal n2) {
+    return Math.pow(n1, n2.doubleValue());
+  }
+
+  public static double power(long n1, double n2) {
+    return Math.pow((double) n1, n2);
+  }
+
+  public static double power(BigDecimal n1, double n2) {
+    return Math.pow(n1.doubleValue(), n2);
+  }
+
+  public static double power(BigDecimal n1, long n2) {
+    return Math.pow(n1.doubleValue(), (double) n2);
+  }
+
+  public static double power(double n1, int n2) {
+    return Math.pow(n1, (double) n2);
+  }
+
+  public static double power(long n1, int n2) {
+    return Math.pow((double) n1, (double) n2);
+  }
+
+  public static double power(BigDecimal n1, int n2) {
+    return Math.pow(n1.doubleValue(), (double) n2);
+  }
+
+  public static double power(int n1, double n2) {
+    return Math.pow((double) n1, n2);
+  }
+
+  public static double power(int n1, long n2) {
+    return Math.pow((double) n1, (double) n2);
+  }
+
+  public static double power(int n1, BigDecimal n2) {
+    return Math.pow((double) n1, n2.doubleValue());
+  }
+
+  public static double power(int n1, int n2) {
+    return Math.pow(n1, n2);
+  }
+
+  // OVERRIDE POINT ends, more power overloads
 
   // LN
 
@@ -2287,13 +2369,19 @@ public class SqlFunctions {
 
   /** Adds a given number of months to a date, represented as the number of
    * days since the epoch. */
+  //override
   public static int addMonths(int date, int m) {
     int y0 = (int) DateTimeUtils.unixDateExtract(TimeUnitRange.YEAR, date);
     int m0 = (int) DateTimeUtils.unixDateExtract(TimeUnitRange.MONTH, date);
     int d0 = (int) DateTimeUtils.unixDateExtract(TimeUnitRange.DAY, date);
-    int y = m / 12;
+    int y = (m + m0) / 12;
     y0 += y;
-    m0 += m - y * 12;
+    m0 = m + m0 - y * 12;
+    if (m0 <= 0) {
+      m0 += 12;
+      assert m0 > 0;
+      y0--;
+    }
     int last = lastDay(y0, m0);
     if (d0 > last) {
       d0 = last;
