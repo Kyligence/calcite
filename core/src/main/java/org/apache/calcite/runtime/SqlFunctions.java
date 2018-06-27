@@ -129,9 +129,24 @@ public class SqlFunctions {
     return s.substring(from - 1, Math.min(from - 1 + for_, s.length()));
   }
 
+  public static String substring(String s, long from, long for_) {
+    if (from < Integer.MIN_VALUE || from > Integer.MAX_VALUE || for_ < Integer.MIN_VALUE
+        || for_ > Integer.MAX_VALUE) {
+      throw new IllegalArgumentException("Cannot be cast to int due to risk of overflow.");
+    }
+    return substring(s, (int) from, (int) for_);
+  }
+
   /** SQL SUBSTRING(string FROM ...) function. */
   public static String substring(String s, int from) {
     return s.substring(from - 1);
+  }
+
+  public static String substring(String s, long from) {
+    if (from < Integer.MIN_VALUE || from > Integer.MAX_VALUE) {
+      throw new IllegalArgumentException("Cannot be cast to int due to risk of overflow.");
+    }
+    return substring(s, (int) from);
   }
 
   /** SQL SUBSTRING(binary FROM ... FOR ...) function. */
@@ -139,9 +154,24 @@ public class SqlFunctions {
     return b.substring(from - 1, Math.min(from - 1 + for_, b.length()));
   }
 
+  public static ByteString substring(ByteString b, long from, long for_) {
+    if (from < Integer.MIN_VALUE || from > Integer.MAX_VALUE || for_ < Integer.MIN_VALUE
+        || for_ > Integer.MAX_VALUE) {
+      throw new IllegalArgumentException("Cannot be cast to int due to risk of overflow.");
+    }
+    return substring(b, (int) from, (int) for_);
+  }
+
   /** SQL SUBSTRING(binary FROM ...) function. */
   public static ByteString substring(ByteString b, int from) {
     return b.substring(from - 1);
+  }
+
+  public static ByteString substring(ByteString b, long from) {
+    if (from < Integer.MIN_VALUE || from > Integer.MAX_VALUE) {
+      throw new IllegalArgumentException("Cannot be cast to int due to risk of overflow.");
+    }
+    return substring(b, (int) from);
   }
 
   /** SQL UPPER(string) function. */
