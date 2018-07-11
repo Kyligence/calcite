@@ -1340,13 +1340,15 @@ public class StandardConvertletTable extends ReflectiveConvertletTable {
           new SqlIntervalQualifier(unit, null, SqlParserPos.ZERO);
       final RexNode op2 = cx.convertExpression(call.operand(2));
       final RexNode op1 = cx.convertExpression(call.operand(1));
+      List<RexNode> list = ImmutableList.of(op2, op1);
+      list = convertOpsToTimeStampOps(rexBuilder, list);
       final RelDataType intervalType =
           cx.getTypeFactory().createTypeWithNullability(
               cx.getTypeFactory().createSqlIntervalType(qualifier),
               op1.getType().isNullable() || op2.getType().isNullable());
       final RexCall rexCall = (RexCall) rexBuilder.makeCall(
           intervalType, SqlStdOperatorTable.MINUS_DATE,
-          ImmutableList.of(op2, op1));
+              list);
       final RelDataType intType =
           cx.getTypeFactory().createTypeWithNullability(
               cx.getTypeFactory().createSqlType(sqlTypeName),
@@ -1354,6 +1356,30 @@ public class StandardConvertletTable extends ReflectiveConvertletTable {
       RexNode e = rexBuilder.makeCast(intType, rexCall);
       return rexBuilder.multiplyDivide(e, multiplier, divider);
     }
+  }
+
+  private static List<RexNode>
+  convertOpsToTimeStampOps(RexBuilder rexBuilder, List<RexNode> nodes) {
+    RexNode op2 = nodes.get(0);
+    RexNode op1 = nodes.get(1);
+    SqlTypeName optp1 = op1.getType().getSqlTypeName();
+    SqlTypeName optp2 = op2.getType().getSqlTypeName();
+    if (!SqlTypeName.DATETIME_TYPES.contains(optp1)
+            || !SqlTypeName.DATETIME_TYPES.contains(optp2)) {
+      return nodes;
+    }
+    RelDataTypeFactory dtFactory = rexBuilder.getTypeFactory();
+    List<RexNode> convertedNodes = Lists.newArrayList();
+    for (RexNode node : nodes) {
+      SqlTypeName type = node.getType().getSqlTypeName();
+      if (!type.equals(SqlTypeName.TIMESTAMP)) {
+        RelDataType convertType = dtFactory.createSqlType(SqlTypeName.TIMESTAMP,
+                node.getType().getPrecision());
+        node = rexBuilder.makeCast(convertType, node);
+      }
+      convertedNodes.add(node);
+    }
+    return convertedNodes;
   }
 }
 
