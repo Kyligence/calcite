@@ -54,7 +54,7 @@ public class OLAPJoinPushThroughJoinRule extends RelOptRule {
           "OLAPJoinPushThroughJoinRule", LogicalJoin.class, RelFactories.LOGICAL_BUILDER);
 
   public OLAPJoinPushThroughJoinRule(String description, Class<? extends Join> clazz,
-    RelBuilderFactory relBuilderFactory) {
+                                     RelBuilderFactory relBuilderFactory) {
     super(
       operand(clazz,
         operand(clazz, operand(RelNode.class, any()),

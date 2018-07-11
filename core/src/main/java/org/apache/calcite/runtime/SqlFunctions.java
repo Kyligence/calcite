@@ -901,10 +901,6 @@ public class SqlFunctions {
     return Math.pow(n1, (double) n2);
   }
 
-  public static double power(double n1, BigDecimal n2) {
-    return Math.pow(n1, n2.doubleValue());
-  }
-
   public static double power(long n1, double n2) {
     return Math.pow((double) n1, n2);
   }

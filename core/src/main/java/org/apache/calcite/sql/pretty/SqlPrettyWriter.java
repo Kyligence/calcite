@@ -993,7 +993,7 @@ public class SqlPrettyWriter implements SqlWriter {
   @Override public void writeWith(SqlCall call, int leftPrec, int rightPrec) {
     final SqlWith with = (SqlWith) call;
     final SqlWriter.Frame frame =
-      this.startList(SqlWriter.FrameTypeEnum.WITH, "WITH", "");
+            this.startList(SqlWriter.FrameTypeEnum.WITH, "WITH", "");
     final SqlWriter.Frame frame1 = this.startList("", "");
     for (SqlNode node : with.withList) {
       this.sep(",");
@@ -1001,7 +1001,7 @@ public class SqlPrettyWriter implements SqlWriter {
     }
     this.endList(frame1);
     final SqlWriter.Frame frame2 =
-      this.startList(SqlWriter.FrameTypeEnum.SIMPLE);
+            this.startList(SqlWriter.FrameTypeEnum.SIMPLE);
     with.body.unparse(this, 100, 100);
     this.endList(frame2);
     this.endList(frame);
