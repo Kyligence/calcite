@@ -47,6 +47,7 @@ import org.apache.calcite.schema.impl.AggregateFunctionImpl;
 import org.apache.calcite.sql.SqlAggFunction;
 import org.apache.calcite.sql.SqlBinaryOperator;
 import org.apache.calcite.sql.SqlOperator;
+import org.apache.calcite.sql.fun.SqlCastFunction;
 import org.apache.calcite.sql.fun.SqlStdOperatorTable;
 import org.apache.calcite.sql.fun.SqlTrimFunction;
 import org.apache.calcite.sql.type.SqlTypeName;
@@ -917,13 +918,15 @@ public class RexImpTable {
       // RexNode can be referred via multiple ways: RexNode itself, RexLocalRef,
       // and may be others.
       final Map<RexNode, Boolean> nullable = new HashMap<>();
-      switch (nullPolicy) {
-      case STRICT:
-        // The arguments should be not nullable if STRICT operator is computed
-        // in nulls NOT_POSSIBLE mode
-        for (RexNode arg : call.getOperands()) {
-          if (translator.isNullable(arg) && !nullable.containsKey(arg)) {
-            nullable.put(arg, false);
+      if (!(call.op instanceof SqlCastFunction)) {
+        switch (nullPolicy) {
+        case STRICT:
+            // The arguments should be not nullable if STRICT operator is computed
+            // in nulls NOT_POSSIBLE mode
+          for (RexNode arg : call.getOperands()) {
+            if (translator.isNullable(arg) && !nullable.containsKey(arg)) {
+              nullable.put(arg, false);
+            }
           }
         }
       }
