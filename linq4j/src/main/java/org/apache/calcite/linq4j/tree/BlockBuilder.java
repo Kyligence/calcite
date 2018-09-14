@@ -18,6 +18,7 @@ package org.apache.calcite.linq4j.tree;
 
 import java.lang.reflect.Modifier;
 import java.lang.reflect.Type;
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -232,6 +233,10 @@ public class BlockBuilder {
       UnaryExpression una = (UnaryExpression) expr;
       return una.getNodeType() == ExpressionType.Convert
           && isSimpleExpression(una.expression);
+    }
+    if (expr instanceof NewExpression) {
+      Type type = ((NewExpression) expr).type;
+      return BigDecimal.class.equals(type);
     }
     return false;
   }
