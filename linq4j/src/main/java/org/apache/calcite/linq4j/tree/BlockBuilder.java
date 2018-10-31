@@ -123,9 +123,8 @@ public class BlockBuilder {
       if (statement instanceof DeclarationStatement) {
         DeclarationStatement declaration = (DeclarationStatement) statement;
         if (variables.contains(declaration.parameter.name)) {
-          Expression x = append(
-              newName(declaration.parameter.name, optimize),
-              declaration.initializer);
+          /* OVERRIDE POINT */
+          Expression x = newNameAndAdd(declaration, optimize);
           statement = null;
           result = x;
           if (declaration.parameter != x) {
@@ -298,6 +297,22 @@ public class BlockBuilder {
       }
       addExpressionForReuse(decl);
     }
+  }
+
+  /* OVERRIDE POINT */
+  // https://github.com/Kyligence/KAP/issues/7323
+  private Expression newNameAndAdd(DeclarationStatement decl, boolean optimize) {
+    String name = decl.parameter.name;
+    if (variables.contains(name)) {
+      String newName = newName(name, optimize);
+      variables.add(newName);
+      ParameterExpression expr = decl.parameter;
+      expr = Expressions.parameter(expr.modifier, expr.type, newName);
+      decl = Expressions.declare(decl.modifiers, expr, decl.initializer);
+    }
+    statements.add(decl);
+    addExpressionForReuse(decl);
+    return decl.parameter;
   }
 
   public void add(Expression expression) {
@@ -548,7 +563,13 @@ public class BlockBuilder {
           // with
           //   int v = 1 != a ? c : d;
           if (map.containsKey(expression0)) {
-            return expression1.accept(this);
+            /* OVERRIDE POINT */
+            // https://github.com/Kyligence/KAP/issues/7323
+            Expression substituteExpr = map.get(expression0);
+            if (substituteExpr instanceof ConstantExpression) {
+              return expression1.accept(this);
+            }
+            return super.visit(binaryExpression, substituteExpr, expression1);
           }
         }
       }
