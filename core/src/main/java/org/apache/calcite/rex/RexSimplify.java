@@ -292,11 +292,14 @@ public class RexSimplify {
    * Simplifies a conjunction of boolean expressions.
    */
   public RexNode simplifyAnds(Iterable<? extends RexNode> nodes) {
-    final List<RexNode> terms = new ArrayList<>();
+    List<RexNode> terms = new ArrayList<>();
     final List<RexNode> notTerms = new ArrayList<>();
     for (RexNode e : nodes) {
       RelOptUtil.decomposeConjunction(e, terms, notTerms);
     }
+    /* OVERRIDE POINT */
+    //https://github.com/Kyligence/KAP/issues/7521
+    terms = new ArrayList<>(new LinkedHashSet<>(terms)); // to eliminate duplicates
     simplifyList(terms);
     simplifyList(notTerms);
     if (unknownAsFalse) {
@@ -683,10 +686,13 @@ public class RexSimplify {
 
   // public only to support a deprecated method; treat as private
   public RexNode simplifyAnd(RexCall e) {
-    final List<RexNode> terms = new ArrayList<>();
+    List<RexNode> terms = new ArrayList<>();
     final List<RexNode> notTerms = new ArrayList<>();
     RelOptUtil.decomposeConjunction(e, terms, notTerms);
 
+    /* OVERRIDE POINT */
+    //https://github.com/Kyligence/KAP/issues/7521
+    terms = new ArrayList<>(new LinkedHashSet<>(terms)); // to eliminate duplicates
     if (unknownAsFalse && predicateElimination) {
       simplifyAndTerms(terms);
     } else {
