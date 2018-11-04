@@ -914,6 +914,13 @@ public class SqlPrettyWriter implements SqlWriter {
     setNeedWhitespace(true);
   }
 
+  public void identifierWithoutQuote(String name) {
+    maybeWhitespace(name);
+    pw.print(name);
+    charCount += name.length();
+    setNeedWhitespace(true);
+  }
+
   public void userDefinedType(SqlDataTypeSpec typeSpec, int leftPrec, int rightPrec) {
     typeSpec.getTypeName().unparse(this, leftPrec, rightPrec);
   }

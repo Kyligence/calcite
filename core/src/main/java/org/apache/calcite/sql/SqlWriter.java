@@ -338,6 +338,11 @@ public interface SqlWriter {
   void identifier(String name);
 
   /**
+   * Prints an identifier, without quote.
+   */
+  void identifierWithoutQuote(String name);
+
+  /**
    * Prints an user-defined type
    */
   void userDefinedType(SqlDataTypeSpec typeSpec, int leftPrec, int rightPrec);

@@ -295,6 +295,28 @@ public class SqlIdentifier extends SqlNode {
     writer.endList(frame);
   }
 
+  public void unparseWithoutQuote(
+          SqlWriter writer,
+          int leftPrec,
+          int rightPrec) {
+    final SqlWriter.Frame frame =
+            writer.startList(SqlWriter.FrameTypeEnum.IDENTIFIER);
+    for (String name : names) {
+      writer.sep(".");
+      if (name.equals("")) {
+        writer.print("*");
+      } else {
+        writer.identifierWithoutQuote(name);
+      }
+    }
+
+    if (null != collation) {
+      collation.unparse(writer, leftPrec, rightPrec);
+    }
+    writer.endList(frame);
+  }
+
+
   public void validate(SqlValidator validator, SqlValidatorScope scope) {
     validator.validateIdentifier(this, scope);
   }
