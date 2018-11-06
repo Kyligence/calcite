@@ -25,7 +25,7 @@ public class H2SqlDialect extends SqlDialect {
   public static final SqlDialect DEFAULT =
       new H2SqlDialect(EMPTY_CONTEXT
           .withDatabaseProduct(DatabaseProduct.H2)
-          .withIdentifierQuoteString("\""));
+          .withIdentifierQuoteString("`"));
 
   /** Creates an H2SqlDialect. */
   public H2SqlDialect(Context context) {
