@@ -24,7 +24,6 @@ import org.apache.calcite.sql.SqlOperandCountRange;
 import org.apache.calcite.sql.SqlOperator;
 import org.apache.calcite.sql.SqlSpecialOperator;
 import org.apache.calcite.sql.SqlWriter;
-import org.apache.calcite.sql.parser.SqlParserPos;
 import org.apache.calcite.sql.parser.SqlParserUtil;
 import org.apache.calcite.sql.type.InferTypes;
 import org.apache.calcite.sql.type.OperandTypes;
@@ -184,7 +183,7 @@ public class SqlLikeOperator extends SqlSpecialOperator {
       operands = new SqlNode[]{exp0, exp1};
       end = opOrdinal + 2;
     }
-    SqlCall call = createCall(SqlParserPos.ZERO, operands);
+    SqlCall call = createCall(exp0.getParserPosition(), operands);
     return new ReduceResult(opOrdinal - 1, end, call);
   }
 }
