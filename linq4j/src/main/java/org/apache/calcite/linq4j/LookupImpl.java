@@ -214,12 +214,15 @@ class LookupImpl<K, V> extends AbstractEnumerable<Grouping<K, V>>
             Linq4j.iterableEnumerator(values());
         return new Enumerator<V>() {
           Enumerator<V> enumerator = Linq4j.emptyEnumerator();
-
+          int scanCount = 0;
           public V current() {
             return enumerator.current();
           }
 
           public boolean moveNext() {
+            if (scanCount++ % 1000 == 1 && Thread.interrupted()) {
+                throw new RuntimeException("Query timeout");
+            }
             for (;;) {
               if (enumerator.moveNext()) {
                 return true;

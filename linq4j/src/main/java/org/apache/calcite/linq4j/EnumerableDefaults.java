@@ -66,7 +66,6 @@ import static org.apache.calcite.linq4j.function.Functions.adapt;
  * Default implementations of methods in the {@link Enumerable} interface.
  */
 public abstract class EnumerableDefaults {
-
   /**
    * Applies an accumulator function over a sequence.
    */
@@ -799,8 +798,12 @@ public abstract class EnumerableDefaults {
       Function0<TAccumulate> accumulatorInitializer,
       Function2<TAccumulate, TSource, TAccumulate> accumulatorAdder,
       final Function2<TKey, TAccumulate, TResult> resultSelector) {
+    int scanCount = 0;
     try (Enumerator<TSource> os = enumerable.enumerator()) {
       while (os.moveNext()) {
+        if (scanCount++ % 1000 == 1) {
+          checkTimeoutQuery();
+        }
         TSource o = os.current();
         TKey key = keySelector.apply(o);
         TAccumulate accumulator = map.get(key);
@@ -1069,6 +1072,7 @@ public abstract class EnumerableDefaults {
       final boolean generateNullsOnRight) {
     return new AbstractEnumerable<TResult>() {
       public Enumerator<TResult> enumerator() {
+
         final Lookup<TKey, TInner> innerLookup =
             comparer == null
                 ? inner.toLookup(innerKeySelector)
@@ -1081,12 +1085,15 @@ public abstract class EnumerableDefaults {
               generateNullsOnLeft
                   ? new HashSet<>(innerLookup.keySet())
                   : null;
-
+          int scanCount = 0;
           public TResult current() {
             return resultSelector.apply(outers.current(), inners.current());
           }
 
           public boolean moveNext() {
+            if (scanCount++ % 1000 == 1) {
+              checkTimeoutQuery();
+            }
             for (;;) {
               if (inners.moveNext()) {
                 return true;
@@ -3321,6 +3328,12 @@ public abstract class EnumerableDefaults {
     }
 
     public void close() {
+    }
+  }
+
+  private static void checkTimeoutQuery() {
+    if (Thread.interrupted()) {
+      throw new RuntimeException("Query timeout");
     }
   }
 }
