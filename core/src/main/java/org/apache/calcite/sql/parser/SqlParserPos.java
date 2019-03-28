@@ -133,6 +133,11 @@ public class SqlParserPos implements Serializable {
     return endColumnNumber;
   }
 
+  /** Returns whether this SqlParserPos is quoted. */
+  public boolean isQuoted() {
+    return false;
+  }
+
   @Override public String toString() {
     return RESOURCE.parserContext(lineNumber, columnNumber).str();
   }
