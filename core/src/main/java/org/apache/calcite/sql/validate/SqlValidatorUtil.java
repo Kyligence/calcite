@@ -1108,7 +1108,8 @@ public class SqlValidatorUtil {
     public SqlNode visit(SqlIdentifier id) {
       // First check for builtin functions which don't have parentheses,
       // like "LOCALTIME".
-      final SqlCall call = SqlUtil.makeCall(getScope().getValidator().getOperatorTable(), id);
+      SqlValidator validator = getScope().getValidator();
+      final SqlCall call = validator.makeNullaryCall(id);
       if (call != null) {
         return call;
       }

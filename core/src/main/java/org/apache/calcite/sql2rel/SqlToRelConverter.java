@@ -3911,7 +3911,7 @@ public class SqlToRelConverter {
       Blackboard bb,
       SqlIdentifier identifier) {
     // first check for reserved identifiers like CURRENT_USER
-    final SqlCall call = SqlUtil.makeCall(opTab, identifier);
+    final SqlCall call = bb.getValidator().makeNullaryCall(identifier);
     if (call != null) {
       return bb.convertExpression(call);
     }
@@ -5366,7 +5366,7 @@ public class SqlToRelConverter {
 
     /* OVERRIDE POINT */
     private boolean isSimpleCount(SqlCall call) {
-      if (call.getOperator().isName("COUNT") && call.operandCount() == 1) {
+      if (call.getOperator().isName("COUNT", false) && call.operandCount() == 1) {
         final SqlNode parm = call.operand(0);
         if (parm instanceof SqlNumericLiteral && call.getFunctionQuantifier() == null) {
           return true;
