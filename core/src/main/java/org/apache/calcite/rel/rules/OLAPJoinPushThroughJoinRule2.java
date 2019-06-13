@@ -44,6 +44,7 @@ import com.google.common.base.Predicate;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import javax.annotation.Nullable;
 
 /**
@@ -99,7 +100,7 @@ public class OLAPJoinPushThroughJoinRule2 extends RelOptRule {
     final Permutation inverseProjectPermu = projectPermu.inverse();
     //        Preconditions.checkState(relA == call.rel(3));
     //        Preconditions.checkState(relB == call.rel(4));
-    Preconditions.checkNotNull(projectPermu);
+    Objects.requireNonNull(projectPermu);
 
     //            topJoin
     //           /        \

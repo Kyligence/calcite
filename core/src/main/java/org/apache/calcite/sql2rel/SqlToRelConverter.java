@@ -177,6 +177,7 @@ import com.google.common.collect.ImmutableList.Builder;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Iterables;
+import com.google.common.collect.Lists;
 
 import org.slf4j.Logger;
 
@@ -2559,7 +2560,7 @@ public class SqlToRelConverter {
     case AND:
     case EQUALS:
       RexCall call = (RexCall) node;
-      List<RexNode> list = Lists.newArrayList();
+      List<RexNode> list = new ArrayList();
       List<RexNode> operands = Lists.newArrayList(call.getOperands());
       for (int i = 0; i < operands.size(); i++) {
         RexNode operand = operands.get(i);

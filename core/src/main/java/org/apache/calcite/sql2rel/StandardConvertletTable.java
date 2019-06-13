@@ -1405,7 +1405,7 @@ public class StandardConvertletTable extends ReflectiveConvertletTable {
       return nodes;
     }
     RelDataTypeFactory dtFactory = rexBuilder.getTypeFactory();
-    List<RexNode> convertedNodes = Lists.newArrayList();
+    List<RexNode> convertedNodes = new ArrayList();
     for (RexNode node : nodes) {
       SqlTypeName type = node.getType().getSqlTypeName();
       if (type != SqlTypeName.TIMESTAMP) {
