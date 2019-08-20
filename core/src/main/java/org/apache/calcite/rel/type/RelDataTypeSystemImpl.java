@@ -105,7 +105,7 @@ public abstract class RelDataTypeSystemImpl implements RelDataTypeSystem {
       // farrago supports only 0 (see
       // SqlTypeName.getDefaultPrecision), but it should be 6
       // (microseconds) per SQL99 part 2 section 6.1 syntax rule 30.
-      return 0;
+      return 6;
     default:
       return -1;
     }
