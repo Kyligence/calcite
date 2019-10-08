@@ -315,7 +315,9 @@ public class RexImpTable {
     map.put(PI, new CallImplementor() {
       @Override public Expression implement(RexToLixTranslator translator,
           RexCall call, NullAs nullAs) {
-        return Expressions.constant(Math.PI);
+        // OVERRIDE POINT #14734 fix query contains PI
+        ConstantExpression pi = Expressions.constant(Math.PI);
+        return nullAs.handle(pi);
       }
     });
 
