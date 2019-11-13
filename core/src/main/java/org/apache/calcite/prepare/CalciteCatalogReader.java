@@ -159,7 +159,10 @@ public class CalciteCatalogReader implements Prepare.CatalogReader {
           schemaNameList.addAll(schema.getPath());
         } else { // if can't find default schema, it will find other schema.
           for (CalciteSchema subSchema : rootSchema.getSubSchemaMap().values()) {
-            schemaNameList.addAll(subSchema.getPath());
+            if (!subSchema.getFunctionNames().isEmpty()) {
+              schemaNameList.addAll(subSchema.getPath());
+              break;
+            }
           }
         }
       }
