@@ -235,7 +235,7 @@ public class SqlToRelConverter {
   /** Size of the smallest IN list that will be converted to a semijoin to a
    * static table. */
   /* OVERRIDE POINT */
-  public static final int DEFAULT_IN_SUB_QUERY_THRESHOLD = 20;
+  public static final int DEFAULT_IN_SUB_QUERY_THRESHOLD = Integer.MAX_VALUE;
 
   @Deprecated // to be removed before 2.0
   public static final int DEFAULT_IN_SUBQUERY_THRESHOLD =
