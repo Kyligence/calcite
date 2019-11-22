@@ -44,6 +44,8 @@ import java.util.Map;
 import java.util.Objects;
 import javax.annotation.Nonnull;
 
+import static org.apache.calcite.prepare.CalcitePrepareImpl.DIVIDE_FORCE_RETURN_DOUBLE;
+
 /**
  * Abstract base for implementations of {@link RelDataTypeFactory}.
  */
@@ -497,6 +499,22 @@ public abstract class RelDataTypeFactoryImpl implements RelDataTypeFactory {
       RelDataType type2) {
     assert createDecimalProduct(type1, type2) != null;
     return false;
+  }
+
+  public RelDataType createDoubleQuotient(
+      RelDataType type1,
+      RelDataType type2) {
+    if (SqlTypeUtil.isIntType(type1)
+        && SqlTypeUtil.isIntType(type2)) {
+      if (DIVIDE_FORCE_RETURN_DOUBLE.get() == null) {
+        return createSqlType(SqlTypeName.DOUBLE);
+      }
+      if (DIVIDE_FORCE_RETURN_DOUBLE.get() != null
+          && DIVIDE_FORCE_RETURN_DOUBLE.get()) {
+        return createSqlType(SqlTypeName.DOUBLE);
+      }
+    }
+    return null;
   }
 
   /**

@@ -451,6 +451,17 @@ public abstract class ReturnTypes {
       chain(DECIMAL_PRODUCT_NULLABLE, ARG0_INTERVAL_NULLABLE,
           LEAST_RESTRICTIVE);
 
+  public static final SqlReturnTypeInference DOUBLE_QUOTIENT =
+      new SqlReturnTypeInference() {
+        public RelDataType inferReturnType(
+            SqlOperatorBinding opBinding) {
+          RelDataTypeFactory typeFactory = opBinding.getTypeFactory();
+          RelDataType type1 = opBinding.getOperandType(0);
+          RelDataType type2 = opBinding.getOperandType(1);
+          return typeFactory.createDoubleQuotient(type1, type2);
+        }
+      };
+
   /**
    * Type-inference strategy whereby the result type of a call is the decimal
    * product of two exact numeric operands where at least one of the operands
@@ -485,6 +496,9 @@ public abstract class ReturnTypes {
           DECIMAL_QUOTIENT_NULLABLE, ARG0_INTERVAL_NULLABLE, LEAST_RESTRICTIVE);
 
   /* OVERRIDE POINT */
+  static final SqlReturnTypeInference DOUBLE_QUOTIENT_FORCE_NULLABLE =
+      cascade(DOUBLE_QUOTIENT, SqlTypeTransforms.FORCE_NULLABLE);
+
   static final SqlReturnTypeInference DECIMAL_QUOTIENT_FORCE_NULLABLE =
           cascade(DECIMAL_QUOTIENT, SqlTypeTransforms.FORCE_NULLABLE);
 
@@ -496,6 +510,7 @@ public abstract class ReturnTypes {
 
   public static final SqlReturnTypeInference QUOTIENT_FORCE_NULLABLE =
           chain(
+                  DOUBLE_QUOTIENT_FORCE_NULLABLE,
                   DECIMAL_QUOTIENT_FORCE_NULLABLE,
                   ARG0_INTERVAL_FORCE_NULLABLE, LEAST_RESTRICTIVE_FORCE_NULLABLE);
 

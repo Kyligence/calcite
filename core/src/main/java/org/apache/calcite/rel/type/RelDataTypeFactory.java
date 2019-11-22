@@ -289,6 +289,10 @@ public interface RelDataTypeFactory {
       RelDataType type1,
       RelDataType type2);
 
+  RelDataType createDoubleQuotient(
+      RelDataType type1,
+      RelDataType type2);
+
   /**
    * Infers the return type of a decimal division. Decimal division involves
    * at least one decimal operand and requires both operands to have exact
