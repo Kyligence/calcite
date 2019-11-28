@@ -66,8 +66,11 @@ import org.apache.calcite.util.ImmutableBitSet;
 import org.apache.calcite.util.Pair;
 import org.apache.calcite.util.Util;
 
+import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
+import com.google.common.collect.Sets;
 
 import java.util.ArrayDeque;
 import java.util.ArrayList;
@@ -75,6 +78,7 @@ import java.util.Collections;
 import java.util.Deque;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.regex.Pattern;
 
 /**
@@ -307,6 +311,74 @@ public abstract class ReduceExpressionsRule extends RelOptRule {
     public JoinReduceExpressionsRule(Class<? extends Join> joinClass,
         RelBuilderFactory relBuilderFactory) {
       this(joinClass, true, relBuilderFactory);
+    }
+
+    @Override public boolean matches(RelOptRuleCall call) {
+      return super.matches(call) && !checkIsColumnEqualsConstants(call);
+    }
+
+    private boolean checkIsColumnEqualsConstants(RelOptRuleCall call) {
+      final Join join = call.rel(0);
+      final RexNode joinCondition = join.getCondition();
+      if (!(joinCondition instanceof RexCall)) {
+        return false;
+      }
+      ImmutableList<RexNode> operands = ((RexCall) joinCondition).operands;
+      List<Pair<RexInputRef, RexInputRef>> columnToColumns = Lists.newArrayList();
+      Map<RexInputRef, Set<RexLiteral>> columnToConstants = Maps.newHashMap();
+      for (RexNode rexNode: operands) {
+        if (!(rexNode instanceof RexCall)) {
+          continue;
+        }
+        if (SqlKind.EQUALS == rexNode.getKind()) {
+          ImmutableList<RexNode> rexNodesOperands = ((RexCall) rexNode).operands;
+          RexNode left = rexNodesOperands.get(0);
+          RexNode right = rexNodesOperands.get(1);
+          if (left instanceof RexInputRef && right instanceof RexInputRef) {
+            columnToColumns.add(new Pair(left, right));
+          } else if ((left instanceof RexInputRef && right instanceof RexLiteral)
+                  || (right instanceof RexInputRef && left instanceof RexLiteral)) {
+            RexNode key = left;
+            RexNode value = right;
+            if (right instanceof RexInputRef) {
+              key = right;
+              value = left;
+            }
+            Set<RexLiteral> rexLiterals = columnToConstants.get(key);
+            if (rexLiterals == null) {
+              rexLiterals = Sets.newHashSet();
+              columnToConstants.put((RexInputRef) key, rexLiterals);
+            }
+            rexLiterals.add((RexLiteral) value);
+          }
+        }
+      }
+      if (columnToColumns.isEmpty() || columnToConstants.isEmpty()) {
+        return false;
+      }
+      RexInputRef left;
+      RexInputRef right;
+      Set<RexLiteral> leftValues;
+      Set<RexLiteral> rightValues;
+      for (Pair<RexInputRef, RexInputRef> columnToColumn : columnToColumns) {
+        left = columnToColumn.left;
+        right = columnToColumn.right;
+        leftValues = columnToConstants.get(left) == null ? Sets.<RexLiteral>newHashSet()
+                : Sets.newHashSet(columnToConstants.get(left));
+        if (leftValues.isEmpty()) {
+          continue;
+        }
+        rightValues = columnToConstants.get(right) == null ? Sets.<RexLiteral>newHashSet()
+                : Sets.newHashSet(columnToConstants.get(right));
+        if (rightValues.isEmpty()) {
+          continue;
+        }
+        leftValues.retainAll(rightValues);
+        if (!leftValues.isEmpty()) {
+          return true;
+        }
+      }
+      return false;
     }
 
     public JoinReduceExpressionsRule(Class<? extends Join> joinClass,
