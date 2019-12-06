@@ -329,6 +329,37 @@ public abstract class SqlUtil {
     writer.endList(frame);
   }
 
+  public static void unparseInSyntax(
+          SqlOperator operator,
+          SqlCall call,
+          SqlWriter writer,
+          int leftPrec,
+          int rightPrec) {
+    assert call.operandCount() >= 2;
+    final SqlWriter.Frame frame =
+            writer.startList(
+                    (operator instanceof SqlSetOperator)
+                            ? SqlWriter.FrameTypeEnum.SETOP
+                            : SqlWriter.FrameTypeEnum.SIMPLE);
+    call.operand(0).unparse(writer, leftPrec, operator.getLeftPrec());
+    final boolean needsSpace = operator.needsSpace();
+    writer.setNeedWhitespace(needsSpace);
+    writer.sep(operator.getName());
+    writer.setNeedWhitespace(needsSpace);
+    if (call.operand(1).getKind().name().equals("LITERAL")) {
+      writer.sep("(");
+      for (int i = 1; i < call.operandCount() - 1; i++) {
+        call.operand(i).unparse(writer, operator.getRightPrec(), rightPrec);
+        writer.sep(",");
+      }
+      call.operand(call.operandCount() - 1).unparse(writer, operator.getRightPrec(), rightPrec);
+      writer.sep(")");
+    } else {
+      call.operand(1).unparse(writer, operator.getRightPrec(), rightPrec);
+    }
+    writer.endList(frame);
+  }
+
   /**
    * Concatenates string literals.
    *

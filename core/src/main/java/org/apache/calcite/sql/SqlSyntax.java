@@ -67,6 +67,20 @@ public enum SqlSyntax {
   },
 
   /**
+   * In operator syntax, as in "x in (y,z)".
+   */
+  IN {
+    public void unparse(
+            SqlWriter writer,
+            SqlOperator operator,
+            SqlCall call,
+            int leftPrec,
+            int rightPrec) {
+      SqlUtil.unparseInSyntax(operator, call, writer, leftPrec, rightPrec);
+    }
+  },
+
+  /**
    * Prefix unary operator syntax, as in "- x".
    */
   PREFIX {

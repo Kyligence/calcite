@@ -26,6 +26,7 @@ import org.apache.calcite.sql.SqlCallBinding;
 import org.apache.calcite.sql.SqlKind;
 import org.apache.calcite.sql.SqlNode;
 import org.apache.calcite.sql.SqlNodeList;
+import org.apache.calcite.sql.SqlSyntax;
 import org.apache.calcite.sql.type.ComparableOperandTypeChecker;
 import org.apache.calcite.sql.type.InferTypes;
 import org.apache.calcite.sql.type.OperandTypes;
@@ -73,6 +74,10 @@ public class SqlInOperator extends SqlBinaryOperator {
   }
 
   //~ Methods ----------------------------------------------------------------
+
+  @Override public SqlSyntax getSyntax() {
+    return SqlSyntax.IN;
+  }
 
   @Deprecated // to be removed before 2.0
   public boolean isNotIn() {
