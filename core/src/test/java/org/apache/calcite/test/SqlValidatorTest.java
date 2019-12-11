@@ -7632,7 +7632,7 @@ public class SqlValidatorTest extends SqlValidatorTestCase {
     sql("SELECT DISTINCT deptno, 33 FROM emp HAVING ^deptno^ > 55")
         .fails("Expression 'DEPTNO' is not being grouped");
     // same query under a different conformance finds a different error first
-    sql("SELECT DISTINCT ^deptno^, 33 FROM emp HAVING deptno > 55")
+    sql("SELECT DISTINCT deptno, 33 FROM emp HAVING ^deptno^ > 55")
         .tester(tester.withConformance(SqlConformanceEnum.LENIENT))
         .fails("Expression 'DEPTNO' is not being grouped");
     sql("SELECT DISTINCT 33 FROM emp HAVING ^deptno^ > 55")
@@ -7664,6 +7664,36 @@ public class SqlValidatorTest extends SqlValidatorTestCase {
         + "  select distinct deptno from emp) order by 1");
 
     check("SELECT DISTINCT 5, 10+5, 'string' from emp");
+  }
+
+  @Test public void testGroupByAlias() {
+    //test group by alias, when the underlying column in the expression is the same as the alias
+    sql("select DEPTNO+1 as DEPTNO from emp group by DEPTNO+1")
+        .tester(tester.withConformance(SqlConformanceEnum.LENIENT))
+        .ok();
+
+    //test group by alias, when there is two same expr in select
+    sql("select DEPTNO+1,DEPTNO+1 from emp group by DEPTNO+1")
+        .tester(tester.withConformance(SqlConformanceEnum.LENIENT))
+        .ok();
+
+    //test group by alias, when there is two same expr and same alias in select
+    sql("select DEPTNO+1 as DEPTNO,DEPTNO+1 as DEPTNO from emp group by DEPTNO+1")
+         .tester(tester.withConformance(SqlConformanceEnum.LENIENT))
+         .ok();
+
+    //test group by alias, when there is two different expr and same alias in select
+    sql("select DEPTNO+1 as DEPTNO,DEPTNO+2 as DEPTNO from emp group by DEPTNO+1,DEPTNO+2")
+         .tester(tester.withConformance(SqlConformanceEnum.LENIENT))
+         .ok();
+
+    //test group by alias, when there is two same alias named A as A
+    sql("select DEPTNO,DEPTNO from emp group by DEPTNO")
+         .tester(tester.withConformance(SqlConformanceEnum.LENIENT))
+         .ok();
+    sql("select DEPTNO as DEPTNO,DEPTNO as DEPTNO from emp group by DEPTNO")
+         .tester(tester.withConformance(SqlConformanceEnum.LENIENT))
+         .ok();
   }
 
   @Test public void testSelectWithoutFrom() {

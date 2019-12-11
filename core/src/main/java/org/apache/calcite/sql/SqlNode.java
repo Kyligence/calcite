@@ -17,6 +17,7 @@
 package org.apache.calcite.sql;
 
 import org.apache.calcite.sql.dialect.AnsiSqlDialect;
+import org.apache.calcite.sql.fun.SqlCase;
 import org.apache.calcite.sql.parser.SqlParserPos;
 import org.apache.calcite.sql.pretty.SqlPrettyWriter;
 import org.apache.calcite.sql.util.SqlString;
@@ -313,6 +314,46 @@ public abstract class SqlNode implements Cloneable {
       }
     }
     return litmus.succeed();
+  }
+
+  /**
+   * Returns whether there is a underlying column in sqlnode, that is same as the alias.
+   *
+   * @param alias alias
+   * @return
+   */
+  public boolean hasUnderlyingColumnSameAsAlias(String alias) {
+    if (this instanceof SqlBasicCall) {
+      SqlNode[] operands = ((SqlBasicCall) this).getOperands();
+      boolean ret = false;
+      for (int i = 0; i < operands.length; i++) {
+        if (operands[i] != null) {
+          ret = ret || operands[i].hasUnderlyingColumnSameAsAlias(alias);
+        }
+      }
+      return ret;
+    } else if (this instanceof SqlCase) {
+      List<SqlNode> operandList = ((SqlCase) this).getOperandList();
+      boolean ret = false;
+      for (int i = 0; i < operandList.size(); i++) {
+        if (operandList.get(i) != null) {
+          ret = ret || operandList.get(i).hasUnderlyingColumnSameAsAlias(alias);
+        }
+      }
+      return ret;
+    } else if (this instanceof SqlNodeList) {
+      List<SqlNode> list = ((SqlNodeList) this).getList();
+      boolean ret = false;
+      for (int i = 0; i < list.size(); i++) {
+        if (list.get(i) != null) {
+          ret = ret || list.get(i).hasUnderlyingColumnSameAsAlias(alias);
+        }
+      }
+      return ret;
+    } else if (this instanceof SqlIdentifier) {
+      return this.toString().equals(alias);
+    }
+    return false;
   }
 }
 

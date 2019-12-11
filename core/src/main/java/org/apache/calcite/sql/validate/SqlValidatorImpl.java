@@ -5738,7 +5738,9 @@ public class SqlValidatorImpl implements SqlValidatorWithHints {
         int n = 0;
         for (SqlNode s : select.getSelectList()) {
           final String alias = SqlValidatorUtil.getAlias(s, -1);
-          if (alias != null && nameMatcher.matches(alias, name)) {
+          if (alias != null && nameMatcher.matches(alias, name)
+              && s instanceof SqlBasicCall
+              && !((SqlBasicCall) s).getOperands()[0].hasUnderlyingColumnSameAsAlias(alias)) {
             expr = s;
             n++;
           }
