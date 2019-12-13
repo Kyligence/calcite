@@ -281,7 +281,7 @@ public enum BuiltInMethod {
   TRANSLATE3(SqlFunctions.class, "translate3", String.class, String.class, String.class),
   LTRIM(SqlFunctions.class, "ltrim", String.class),
   RTRIM(SqlFunctions.class, "rtrim", String.class),
-  LIKE(SqlFunctions.class, "like", String.class, String.class),
+  LIKE(SqlFunctions.class, "like", Object.class, String.class),
   SIMILAR(SqlFunctions.class, "similar", String.class, String.class),
   IS_TRUE(SqlFunctions.class, "isTrue", Boolean.class),
   IS_NOT_FALSE(SqlFunctions.class, "isNotFalse", Boolean.class),

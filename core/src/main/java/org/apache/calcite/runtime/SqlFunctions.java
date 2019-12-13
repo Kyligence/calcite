@@ -387,15 +387,15 @@ public class SqlFunctions {
   }
 
   /** SQL {@code LIKE} function. */
-  public static boolean like(String s, String pattern) {
+  public static boolean like(Object s, String pattern) {
     final String regex = Like.sqlToRegexLike(pattern, null);
-    return Pattern.matches(regex, s);
+    return Pattern.matches(regex, s.toString());
   }
 
   /** SQL {@code LIKE} function with escape. */
-  public static boolean like(String s, String pattern, String escape) {
+  public static boolean like(Object s, String pattern, String escape) {
     final String regex = Like.sqlToRegexLike(pattern, escape);
-    return Pattern.matches(regex, s);
+    return Pattern.matches(regex, s.toString());
   }
 
   /** SQL {@code SIMILAR} function. */

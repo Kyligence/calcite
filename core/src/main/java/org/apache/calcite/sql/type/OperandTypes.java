@@ -405,6 +405,10 @@ public abstract class OperandTypes {
    * Operand type-checking strategy where three operands must all be in the
    * same string type family.
    */
+
+  public static final SqlSingleOperandTypeChecker ANY_STRING_STRING =
+          family(SqlTypeFamily.ANY, SqlTypeFamily.STRING, SqlTypeFamily.STRING);
+
   public static final SqlSingleOperandTypeChecker STRING_SAME_SAME_SAME =
       OperandTypes.and(STRING_STRING_STRING, SAME_SAME_SAME);
 
@@ -429,6 +433,8 @@ public abstract class OperandTypes {
       family(SqlTypeFamily.ANY, SqlTypeFamily.ANY);
   public static final SqlSingleOperandTypeChecker ANY_NUMERIC =
       family(SqlTypeFamily.ANY, SqlTypeFamily.NUMERIC);
+  public static final SqlSingleOperandTypeChecker ANY_STRING =
+          family(SqlTypeFamily.ANY, SqlTypeFamily.STRING);
 
   /**
    * Parameter type-checking strategy type must a nullable time interval,

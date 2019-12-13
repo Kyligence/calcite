@@ -29,7 +29,6 @@ import org.apache.calcite.sql.type.InferTypes;
 import org.apache.calcite.sql.type.OperandTypes;
 import org.apache.calcite.sql.type.ReturnTypes;
 import org.apache.calcite.sql.type.SqlOperandCountRanges;
-import org.apache.calcite.sql.type.SqlTypeUtil;
 
 /**
  * An operator describing the <code>LIKE</code> and <code>SIMILAR</code>
@@ -76,7 +75,7 @@ public class SqlLikeOperator extends SqlSpecialOperator {
         false,
         ReturnTypes.BOOLEAN_NULLABLE,
         InferTypes.FIRST_KNOWN,
-        OperandTypes.STRING_SAME_SAME_SAME);
+        OperandTypes.ANY_STRING_STRING);
     this.negated = negated;
   }
 
@@ -100,14 +99,14 @@ public class SqlLikeOperator extends SqlSpecialOperator {
       boolean throwOnFailure) {
     switch (callBinding.getOperandCount()) {
     case 2:
-      if (!OperandTypes.STRING_SAME_SAME.checkOperandTypes(
+      if (!OperandTypes.ANY_STRING.checkOperandTypes(
           callBinding,
           throwOnFailure)) {
         return false;
       }
       break;
     case 3:
-      if (!OperandTypes.STRING_SAME_SAME_SAME.checkOperandTypes(
+      if (!OperandTypes.ANY_STRING_STRING.checkOperandTypes(
           callBinding,
           throwOnFailure)) {
         return false;
@@ -121,10 +120,11 @@ public class SqlLikeOperator extends SqlSpecialOperator {
           + callBinding.getCall() + ": " + callBinding.getOperandCount());
     }
 
-    return SqlTypeUtil.isCharTypeComparable(
-        callBinding,
-        callBinding.operands(),
-        throwOnFailure);
+//    return SqlTypeUtil.isCharTypeComparable(
+//        callBinding,
+//        callBinding.operands(),
+//        throwOnFailure);
+    return true;  // for support other type match like
   }
 
   public void unparse(
