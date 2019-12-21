@@ -20,12 +20,12 @@ limitations under the License.
   <parent>
     <groupId>org.apache.calcite</groupId>
     <artifactId>calcite</artifactId>
-    <version>1.16.0-kylin-3.x-r18</version>
+    <version>1.16.0-kylin-3.x-r19</version>
   </parent>
 
   <artifactId>calcite-cassandra</artifactId>
   <packaging>jar</packaging>
-  <version>1.16.0-kylin-3.x-r18</version>
+  <version>1.16.0-kylin-3.x-r19</version>
   <name>Calcite Cassandra</name>
   <description>Cassandra adapter for Calcite</description>
 
