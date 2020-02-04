@@ -20,12 +20,12 @@ limitations under the License.
   <parent>
     <groupId>org.apache.calcite</groupId>
     <artifactId>calcite</artifactId>
-    <version>1.16.0-kylin-3.x-r22</version>
+    <version>1.16.0-kylin-3.x-r23</version>
   </parent>
 
   <artifactId>calcite-spark</artifactId>
   <packaging>jar</packaging>
-  <version>1.16.0-kylin-3.x-r22</version>
+  <version>1.16.0-kylin-3.x-r23</version>
   <name>Calcite Spark</name>
 
   <properties>
