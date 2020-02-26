@@ -946,6 +946,7 @@ public class RexToLixTranslator {
       if (toPrimitive != null) {
         switch (toPrimitive) {
         case CHAR:
+        case BYTE:
         case SHORT:
         case INT:
         case LONG:
