@@ -659,7 +659,7 @@ public class RexBuilder {
               multiplier.divide(divider, RoundingMode.UNNECESSARY)));
     case -1:
       // E.g. multiplyDivide(e, 10, 1000) ==> e / 100
-      return makeCall(SqlStdOperatorTable.DIVIDE_INTEGER, e,
+      return makeCall(SqlStdOperatorTable.DIVIDE_DATE, e,
           makeExactLiteral(
               divider.divide(multiplier, RoundingMode.UNNECESSARY)));
     default:
