@@ -593,9 +593,8 @@ public class SqlToRelConverter {
     }
 
     final RelDataType validatedRowType = validator.getValidatedNodeType(query);
-    RelRoot origResult = RelRoot.of(result, validatedRowType, query.getKind())
-        .withCollation(collation);
-    return hackSelectStar(origQuery, origResult);
+    return RelRoot.of(result, validatedRowType, query.getKind())
+            .withCollation(collation);
   }
 
   /* OVERRIDE POINT */
