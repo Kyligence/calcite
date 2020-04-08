@@ -892,8 +892,12 @@ public class StandardConvertletTable extends ReflectiveConvertletTable {
 
     // check all expressions are constants but one
     RexNode oneNonConst = null;
+    final List<RelDataType> nonCharacterTypes = Lists.newArrayList();
     for (RexNode expr : exprs) {
       if (expr instanceof RexLiteral || expr instanceof RexDynamicParam) {
+        if (expr.getType().getFamily() != SqlTypeFamily.CHARACTER) {
+          nonCharacterTypes.add(expr.getType());
+        }
         continue;
       }
       // got a non-constant
@@ -903,7 +907,14 @@ public class StandardConvertletTable extends ReflectiveConvertletTable {
       oneNonConst = expr;
     }
 
-    return oneNonConst == null ? null : oneNonConst.getType();
+    if (oneNonConst == null) {
+      return null;
+    } else {
+      if (oneNonConst.getType().getFamily() != SqlTypeFamily.CHARACTER) {
+        nonCharacterTypes.add(oneNonConst.getType());
+      }
+      return cx.getTypeFactory().leastRestrictive(nonCharacterTypes);
+    }
   }
 
   private static RelDataType consistentType(SqlRexContext cx,
