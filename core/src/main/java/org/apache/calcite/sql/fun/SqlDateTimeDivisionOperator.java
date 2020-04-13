@@ -17,8 +17,8 @@
 
 package org.apache.calcite.sql.fun;
 
+import org.apache.calcite.sql.SqlBinaryOperator;
 import org.apache.calcite.sql.SqlKind;
-import org.apache.calcite.sql.SqlSpecialOperator;
 import org.apache.calcite.sql.type.InferTypes;
 import org.apache.calcite.sql.type.OperandTypes;
 import org.apache.calcite.sql.type.ReturnTypes;
@@ -33,7 +33,7 @@ import org.apache.calcite.sql.type.ReturnTypes;
  * otherwise, spark will be interpreting this expression as double type
  *
  */
-public class SqlDateTimeDivisionOperator extends SqlSpecialOperator {
+public class SqlDateTimeDivisionOperator extends SqlBinaryOperator {
   public SqlDateTimeDivisionOperator() {
     super(
         "/",
