@@ -1256,6 +1256,18 @@ public abstract class SqlTypeUtil {
       return true;
     }
 
+    // HACK POINT: allow date = timestamp (date = timestamp)
+    if (type1 instanceof BasicSqlType && type2 instanceof BasicSqlType) {
+      SqlTypeName typeName1 = ((BasicSqlType) type1).typeName;
+      SqlTypeName typeName2 = ((BasicSqlType) type2).typeName;
+      if (typeName1 == SqlTypeName.DATE
+              && typeName2 == SqlTypeName.TIMESTAMP
+              || typeName1 == SqlTypeName.TIMESTAMP
+              && typeName2 == SqlTypeName.DATE) {
+        return true;
+      }
+    }
+
     // HACK POINT: allow boolean = integer (integer = boolean)
     if (type1 instanceof BasicSqlType && type2 instanceof BasicSqlType) {
       SqlTypeName typeName1 = ((BasicSqlType) type1).typeName;
