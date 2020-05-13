@@ -88,6 +88,7 @@ import org.apache.calcite.sql.SqlKind;
 import org.apache.calcite.sql.SqlLiteral;
 import org.apache.calcite.sql.SqlNode;
 import org.apache.calcite.sql.SqlOperator;
+import org.apache.calcite.sql.fun.SqlCastFunction;
 import org.apache.calcite.sql.fun.SqlStdOperatorTable;
 import org.apache.calcite.sql.type.MultisetSqlType;
 import org.apache.calcite.sql.type.SqlTypeName;
@@ -2641,7 +2642,17 @@ public abstract class RelOptUtil {
   private static RexShuttle pushShuttle(final Project project) {
     return new RexShuttle() {
       @Override public RexNode visitInputRef(RexInputRef ref) {
-        return project.getProjects().get(ref.getIndex());
+        RexNode ret = project.getProjects().get(ref.getIndex());
+        if (ret instanceof RexCall) {
+          RexCall call = (RexCall) ret;
+          if (call.op instanceof SqlCastFunction) {
+            RexNode innerNode = call.operands.get(0);
+            if (call.type == innerNode.getType()) {
+              ret = innerNode;
+            }
+          }
+        }
+        return ret;
       }
     };
   }
