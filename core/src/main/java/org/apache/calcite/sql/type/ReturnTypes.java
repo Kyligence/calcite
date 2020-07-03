@@ -252,6 +252,11 @@ public abstract class ReturnTypes {
       cascade(INTEGER, SqlTypeTransforms.TO_NULLABLE);
 
   /**
+   * Type-inference strategy whereby the result type of a call is an Tinyint.
+   */
+  public static final SqlReturnTypeInference TINY_INT = explicit(SqlTypeName.TINYINT);
+
+  /**
    * Type-inference strategy whereby the result type of a call is a Bigint
    */
   public static final SqlReturnTypeInference BIGINT =
