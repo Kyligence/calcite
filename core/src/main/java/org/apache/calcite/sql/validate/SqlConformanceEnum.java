@@ -147,6 +147,7 @@ public enum SqlConformanceEnum implements SqlConformance {
 
   public boolean isBangEqualAllowed() {
     switch (this) {
+    case DEFAULT:
     case LENIENT:
     case MYSQL_5:
     case ORACLE_10:
