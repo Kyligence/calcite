@@ -624,7 +624,14 @@ public abstract class ReduceExpressionsRule extends RelOptRule {
     }
 
     final List<RexNode> reducedValues = Lists.newArrayList();
-    executor.reduce(simplify.rexBuilder, constExps2, reducedValues);
+
+
+    if (Boolean.parseBoolean(
+            System.getProperty("kylin.query.calcite-skip-fold-constant-in-project", "false"))) {
+      reducedValues.addAll(constExps2);
+    } else {
+      executor.reduce(simplify.rexBuilder, constExps2, reducedValues);
+    }
 
     // Use RexNode.digest to judge whether each newly generated RexNode
     // is equivalent to the original one.
