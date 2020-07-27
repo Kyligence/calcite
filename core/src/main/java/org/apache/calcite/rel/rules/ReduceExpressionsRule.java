@@ -627,7 +627,7 @@ public abstract class ReduceExpressionsRule extends RelOptRule {
 
 
     if (Boolean.parseBoolean(
-            System.getProperty("kylin.query.calcite-skip-fold-constant-in-project", "false"))) {
+            System.getProperty("calcite.skip-fold-constant-in-project", "false"))) {
       reducedValues.addAll(constExps2);
     } else {
       executor.reduce(simplify.rexBuilder, constExps2, reducedValues);
