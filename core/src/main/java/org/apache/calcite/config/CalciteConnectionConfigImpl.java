@@ -203,6 +203,10 @@ public class CalciteConnectionConfigImpl extends ConnectionConfigImpl
     return CalciteConnectionProperty.PROJECT_UNDER_RELROOT.wrap(properties)
             .getBoolean(true);
   }
+
+  public boolean skipConstantFoldingInProject() {
+    return false;
+  }
 }
 
 // End CalciteConnectionConfigImpl.java
