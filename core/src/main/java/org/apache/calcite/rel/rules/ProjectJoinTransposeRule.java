@@ -24,11 +24,13 @@ import org.apache.calcite.rel.core.Project;
 import org.apache.calcite.rel.core.RelFactories;
 import org.apache.calcite.rel.core.SemiJoin;
 import org.apache.calcite.rel.type.RelDataTypeField;
+import org.apache.calcite.rex.RexInputRef;
 import org.apache.calcite.rex.RexNode;
 import org.apache.calcite.rex.RexOver;
 import org.apache.calcite.tools.RelBuilderFactory;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 /**
@@ -49,6 +51,8 @@ public class ProjectJoinTransposeRule extends RelOptRule {
   public static final ProjectJoinTransposeRule INSTANCE =
             new ProjectJoinTransposeRule(SKIP_OVER_CONDITION,
                     RelFactories.LOGICAL_BUILDER);
+
+  public static final String KY = "_KY_";
 
   //~ Instance fields --------------------------------------------------------
 
@@ -76,6 +80,32 @@ public class ProjectJoinTransposeRule extends RelOptRule {
   }
 
   //~ Methods ----------------------------------------------------------------
+  private boolean projectSameInputFields(Project originProject, Join originJoin) {
+    List<RelDataTypeField> inputFields = originJoin.getRowType().getFieldList();
+    Iterator<RelDataTypeField> inputIterator = inputFields.iterator();
+    Iterator<RexNode> projectsIterator = originProject.getProjects().iterator();
+    while (inputIterator.hasNext()) {
+      RelDataTypeField inputField = inputIterator.next();
+      if (inputField.getName().contains(KY)) {
+        continue;
+      }
+
+      if (!projectsIterator.hasNext()) {
+        return false;
+      }
+
+      RexNode project = projectsIterator.next();
+      if (!(project instanceof RexInputRef)) {
+        return false;
+      }
+
+      RelDataTypeField projectField = inputFields.get(((RexInputRef) project).getIndex());
+      if (!projectField.equals(inputField)) {
+        return false;
+      }
+    }
+    return !projectsIterator.hasNext();
+  }
 
   // implement RelOptRule
   public void onMatch(RelOptRuleCall call) {
@@ -85,6 +115,11 @@ public class ProjectJoinTransposeRule extends RelOptRule {
     if (join instanceof SemiJoin) {
       return; // TODO: support SemiJoin
     }
+
+    if (projectSameInputFields(origProj, join)) {
+      return;
+    }
+
     // locate all fields referenced in the projection and join condition;
     // determine which inputs are referenced in the projection and
     // join condition; if all fields are being referenced and there are no
