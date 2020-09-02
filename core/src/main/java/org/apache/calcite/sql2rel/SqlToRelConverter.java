@@ -3228,9 +3228,7 @@ public class SqlToRelConverter {
    */
   @Deprecated // to be removed before 2.0
   public boolean isTrimUnusedFields() {
-//    return config.isTrimUnusedFields();
-    /* OVERRIDE POINT */
-    return false;
+    return true;
   }
 
   /**
