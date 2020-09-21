@@ -446,6 +446,7 @@ public abstract class EnumerableDefaults {
     final Enumerator<TSource> os = enumerable.enumerator();
     final Set<TSource> set = new HashSet<>();
     while (os.moveNext()) {
+      checkInterrupted();
       set.add(os.current());
     }
     os.close();
@@ -1366,10 +1367,12 @@ public abstract class EnumerableDefaults {
       rightUnmatched = null;
     }
     while (lefts.moveNext()) {
+      checkInterrupted();
       int leftMatchCount = 0;
       final TSource left = lefts.current();
       final Enumerator<TInner> rights = Linq4j.iterableEnumerator(rightList);
       while (rights.moveNext()) {
+        checkInterrupted();
         TInner right = rights.current();
         if (predicate.apply(left, right)) {
           ++leftMatchCount;
@@ -1387,11 +1390,18 @@ public abstract class EnumerableDefaults {
       final Enumerator<TInner> rights =
           Linq4j.iterableEnumerator(rightUnmatched);
       while (rights.moveNext()) {
+        checkInterrupted();
         TInner right = rights.current();
         result.add(resultSelector.apply(null, right));
       }
     }
     return Linq4j.asEnumerable(result);
+  }
+
+  private static void checkInterrupted() {
+    if (Thread.currentThread().isInterrupted()) {
+      throw new EnumerableInterruptedException();
+    }
   }
 
   /** Joins two inputs that are sorted on the key. */
