@@ -85,6 +85,7 @@ public class SqlFunctions {
   private static final DecimalFormat DOUBLE_FORMAT =
       NumberUtil.decimalFormat("0.0E0");
 
+  private static final String EMPTY_STR = "";
   private static final TimeZone LOCAL_TZ = TimeZone.getDefault();
 
   private static final Function1<List<Object>, Enumerable<Object>> LIST_AS_ENUMERABLE =
@@ -137,7 +138,13 @@ public class SqlFunctions {
     if (s == null) {
       return null;
     }
-    return s.substring(from - 1, Math.min(from - 1 + for_, s.length()));
+    int len = s.length();
+    int start = (from > 0) ? from - 1 : ((from < 0) ? len + from : 0);
+    int end = Math.min(len, start + for_);
+    if (start >= end || start >= len) {
+      return EMPTY_STR;
+    }
+    return s.substring(start, end);
   }
 
   public static String substring(String s, long from, long for_) {
