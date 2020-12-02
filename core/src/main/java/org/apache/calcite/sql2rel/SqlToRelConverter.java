@@ -255,6 +255,8 @@ public class SqlToRelConverter {
   public final SqlToRelConverter.Config config;
   private final RelBuilder relBuilder;
 
+  private Map<SqlValidatorNamespace, RelNode> nameToRelNode = Maps.newHashMap();
+
   /**
    * Fields used in name resolution for correlated sub-queries.
    */
@@ -2194,8 +2196,14 @@ public class SqlToRelConverter {
     case INTERSECT:
     case EXCEPT:
     case UNION:
-      final RelNode rel = convertQueryRecursive(from, false, null).project();
-      bb.setRoot(rel, true);
+      SqlValidatorNamespace namespace = validator.getNamespace(from).resolve();
+      if (namespace != null && nameToRelNode.get(namespace) != null) {
+        bb.setRoot(nameToRelNode.get(namespace), true);
+      } else {
+        final RelNode rel = convertQueryRecursive(from, false, null).project();
+        nameToRelNode.put(namespace, rel);
+        bb.setRoot(rel, true);
+      }
       return;
 
     case VALUES:
