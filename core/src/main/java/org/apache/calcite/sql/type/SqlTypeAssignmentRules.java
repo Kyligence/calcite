@@ -328,6 +328,8 @@ public class SqlTypeAssignmentRules {
             .add(SqlTypeName.TIME_WITH_LOCAL_TIME_ZONE)
             .add(SqlTypeName.CHAR)
             .add(SqlTypeName.VARCHAR)
+            .add(SqlTypeName.INTEGER)
+            .add(SqlTypeName.BIGINT)
             .build());
 
     // TIMESTAMP WITH LOCAL TIME ZONE is castable from...
@@ -340,6 +342,8 @@ public class SqlTypeAssignmentRules {
             .add(SqlTypeName.TIME_WITH_LOCAL_TIME_ZONE)
             .add(SqlTypeName.CHAR)
             .add(SqlTypeName.VARCHAR)
+            .add(SqlTypeName.INTEGER)
+            .add(SqlTypeName.BIGINT)
             .build());
 
     INSTANCE = new SqlTypeAssignmentRules(rules.map);
