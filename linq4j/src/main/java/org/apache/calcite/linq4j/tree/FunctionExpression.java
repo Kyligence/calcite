@@ -25,6 +25,7 @@ import java.lang.reflect.Proxy;
 import java.lang.reflect.Type;
 import java.lang.reflect.TypeVariable;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
@@ -146,8 +147,15 @@ public final class FunctionExpression<F extends Function<?>>
       final String parameterBoxTypeName = Types.className(parameterBoxType);
       params.add(parameterExpression.declString());
       bridgeParams.add(parameterExpression.declString(Object.class));
-      bridgeArgs.add("(" + parameterBoxTypeName + ") "
-          + parameterExpression.name);
+      List<String> numTypes = Arrays.asList("Integer", "Long", "Double", "java.math.BigDecimal",
+              "Short", "Byte");
+      if (numTypes.contains(parameterBoxTypeName)) {
+        bridgeArgs.add(parameterExpression.name + " == null ? (" + parameterBoxTypeName
+                + ") null : new " + parameterBoxTypeName + "(String.valueOf("
+                + parameterExpression.name + "))");
+      } else {
+        bridgeArgs.add("(" + parameterBoxTypeName + ") " + parameterExpression.name);
+      }
 
       boxBridgeParams.add(parameterExpression.declString(parameterBoxType));
       boxBridgeArgs.add(parameterExpression.name
