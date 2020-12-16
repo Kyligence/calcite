@@ -851,6 +851,7 @@ public class RexSimplify {
         return rexBuilder.makeLiteral(false);
       }
     }
+
     return RexUtil.composeConjunction(rexBuilder, terms, false);
   }
 
@@ -1303,6 +1304,25 @@ public class RexSimplify {
         rangeTerms.put(ref.toString(),
             Pair.of(r, (List<RexNode>) newBounds.build()));
       }
+
+      if (removeLowerBound || removeUpperBound) {
+        for (Map.Entry<String, Pair<Range<C>, List<RexNode>>> stringPairEntry : rangeTerms.entrySet()) {
+          Pair<Range<C>, List<RexNode>> pair = stringPairEntry.getValue();
+          Range<C> range = pair.left;
+          if (range.hasLowerBound() && range.hasUpperBound()
+                  && range.upperEndpoint().equals(range.lowerEndpoint())) {
+            if (terms.containsAll(pair.right)) {
+              for (RexNode rexNode : pair.right) {
+                Collections.replaceAll(terms, rexNode, rexBuilder.makeLiteral(true));
+              }
+              List<RexNode> nodes = ((RexCall) pair.right.get(0)).getOperands();
+              terms.add(rexBuilder.makeCall(SqlStdOperatorTable.EQUALS, nodes));
+            }
+          }
+      }
+    }
+
+
     }
     // Default
     return null;

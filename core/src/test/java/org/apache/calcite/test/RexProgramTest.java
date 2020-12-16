@@ -1201,9 +1201,9 @@ public class RexProgramTest {
     checkSimplify2(and(le(aRef, literal1), gt(aRef, literal1)),
         "AND(<=(?0.a, 1), >(?0.a, 1))",
         "false");
-
-    checkSimplify(and(le(aRef, literal1), ge(aRef, literal1)),
-        "AND(<=(?0.a, 1), >=(?0.a, 1))");
+//   ignore for now, only when withUnknownAsFalse = true, we convert col >= val && col <= val to col = val
+//    checkSimplify(and(le(aRef, literal1), ge(aRef, literal1)),
+//        "AND(<=(?0.a, 1), >=(?0.a, 1))");
 
     checkSimplify2(and(lt(aRef, literal1), eq(aRef, literal1), ge(aRef, literal1)),
         "AND(<(?0.a, 1), =(?0.a, 1), >=(?0.a, 1))",
@@ -1294,7 +1294,30 @@ public class RexProgramTest {
         "false");
 
     checkSimplifyFilter(and(le(aRef, literal1), ge(aRef, literal1)),
-        "AND(<=(?0.a, 1), >=(?0.a, 1))");
+        "=(?0.a, 1)");
+
+    checkSimplifyFilter(and(le(literal1, aRef), ge(literal1, aRef)),
+            "=(1, ?0.a)");
+
+    checkSimplifyFilter(and(le(aRef, literal1), ge(aRef, literal1), ge(aRef, literal5)),
+            "false");
+
+    checkSimplifyFilter(and(le(aRef, literal1), ge(aRef, literal1), lt(aRef, literal5)),
+            "=(?0.a, 1)");
+
+    checkSimplifyFilter(and(le(aRef, literal5), ge(aRef, literal5), ge(aRef, literal1)),
+            "=(?0.a, 5)");
+
+    checkSimplifyFilter(or(and(le(aRef, literal5), ge(aRef, literal5)), ge(aRef, literal1)),
+            "OR(=(?0.a, 5), >=(?0.a, 1))");
+
+    checkSimplifyFilter(and(le(aRef, literal5), ge(aRef, literal5), eq(aRef, literal1)),
+            "false");
+    checkSimplifyFilter(and(le(aRef, literal5), eq(aRef, literal1), ge(aRef, literal5)),
+            "false");
+
+    checkSimplifyFilter(and(eq(aRef, literal1), le(aRef, literal5), ge(aRef, literal5)),
+            "false");
 
     checkSimplifyFilter(and(lt(aRef, literal1), eq(aRef, literal1), ge(aRef, literal1)),
         "false");
