@@ -1306,8 +1306,8 @@ public class RexSimplify {
       }
 
       if (removeLowerBound || removeUpperBound) {
-        for (Map.Entry<String, Pair<Range<C>, List<RexNode>>> stringPairEntry : rangeTerms.entrySet()) {
-          Pair<Range<C>, List<RexNode>> pair = stringPairEntry.getValue();
+        for (Map.Entry<String, Pair<Range<C>, List<RexNode>>> entry : rangeTerms.entrySet()) {
+          Pair<Range<C>, List<RexNode>> pair = entry.getValue();
           Range<C> range = pair.left;
           if (range.hasLowerBound() && range.hasUpperBound()
                   && range.upperEndpoint().equals(range.lowerEndpoint())) {
@@ -1319,8 +1319,8 @@ public class RexSimplify {
               terms.add(rexBuilder.makeCall(SqlStdOperatorTable.EQUALS, nodes));
             }
           }
+        }
       }
-    }
 
 
     }

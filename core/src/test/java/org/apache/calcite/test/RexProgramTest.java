@@ -1201,7 +1201,8 @@ public class RexProgramTest {
     checkSimplify2(and(le(aRef, literal1), gt(aRef, literal1)),
         "AND(<=(?0.a, 1), >(?0.a, 1))",
         "false");
-//   ignore for now, only when withUnknownAsFalse = true, we convert col >= val && col <= val to col = val
+//   ignore for now, only when withUnknownAsFalse = true,
+//   we convert col >= val && col <= val to col = val
 //    checkSimplify(and(le(aRef, literal1), ge(aRef, literal1)),
 //        "AND(<=(?0.a, 1), >=(?0.a, 1))");
 
