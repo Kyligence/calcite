@@ -148,7 +148,7 @@ public final class FunctionExpression<F extends Function<?>>
       params.add(parameterExpression.declString());
       bridgeParams.add(parameterExpression.declString(Object.class));
       List<String> numTypes = Arrays.asList("Integer", "Long", "Double", "java.math.BigDecimal",
-              "Short", "Byte");
+              "Short", "Byte", "Float");
       if (numTypes.contains(parameterBoxTypeName)) {
         bridgeArgs.add(parameterExpression.name + " == null ? (" + parameterBoxTypeName
                 + ") null : new " + parameterBoxTypeName + "(String.valueOf("
