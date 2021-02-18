@@ -19,6 +19,8 @@ package org.apache.calcite.rel.rules;
 import org.apache.calcite.plan.RelOptRule;
 import org.apache.calcite.plan.RelOptRuleCall;
 import org.apache.calcite.plan.RelOptUtil;
+import org.apache.calcite.plan.hep.HepRelVertex;
+import org.apache.calcite.plan.volcano.RelSubset;
 import org.apache.calcite.rel.RelNode;
 import org.apache.calcite.rel.SingleRel;
 import org.apache.calcite.rel.core.Aggregate;
@@ -80,31 +82,24 @@ public abstract class PruneEmptyRules {
           "Union") {
         public void onMatch(RelOptRuleCall call) {
           final LogicalUnion union = call.rel(0);
-          final List<RelNode> inputs = call.getChildRels(union);
+          final List<RelNode> inputs = union.getInputs();
           assert inputs != null;
-          final List<RelNode> newInputs = new ArrayList<>();
+          final RelBuilder builder = call.builder();
+          int nonEmptyInputs = 0;
           for (RelNode input : inputs) {
             if (!isEmpty(input)) {
-              newInputs.add(input);
+              builder.push(input);
+              nonEmptyInputs++;
             }
           }
-          assert newInputs.size() < inputs.size()
-              : "planner promised us at least one Empty child";
-          final RelBuilder builder = call.builder();
-          switch (newInputs.size()) {
-          case 0:
+          assert nonEmptyInputs < inputs.size()
+                  : "planner promised us at least one Empty child: "
+                  + RelOptUtil.toString(union);
+          if (nonEmptyInputs == 0) {
             builder.push(union).empty();
-            break;
-          case 1:
-            builder.push(
-                RelOptUtil.createCastRel(
-                    newInputs.get(0),
-                    union.getRowType(),
-                    true));
-            break;
-          default:
-            builder.push(LogicalUnion.create(newInputs, union.all));
-            break;
+          } else {
+            builder.union(union.all, nonEmptyInputs);
+            builder.convert(union.getRowType(), true);
           }
           call.transformTo(builder.build());
         }
@@ -188,8 +183,24 @@ public abstract class PruneEmptyRules {
       };
 
   private static boolean isEmpty(RelNode node) {
-    return node instanceof Values
-        && ((Values) node).getTuples().isEmpty();
+    if (node instanceof Values) {
+      return ((Values) node).getTuples().isEmpty();
+    }
+    if (node instanceof HepRelVertex) {
+      return isEmpty(((HepRelVertex) node).getCurrentRel());
+    }
+    // Note: relation input might be a RelSubset, so we just iterate over the relations
+    // in order to check if the subset is equivalent to an empty relation.
+    if (!(node instanceof RelSubset)) {
+      return false;
+    }
+    RelSubset subset = (RelSubset) node;
+    for (RelNode rel : subset.getRels()) {
+      if (isEmpty(rel)) {
+        return true;
+      }
+    }
+    return false;
   }
 
   /**
