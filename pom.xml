@@ -116,7 +116,7 @@ limitations under the License.
     <scala.version>2.10.3</scala.version>
     <scott-data-hsqldb.version>0.1</scott-data-hsqldb.version>
     <servlet.version>3.0.1</servlet.version>
-    <slf4j.version>1.7.13</slf4j.version>
+    <slf4j.version>1.7.30</slf4j.version>
     <spark.version>1.6.1</spark.version>
     <sqlline.version>1.2.0</sqlline.version>
     <xalan.version>2.7.1</xalan.version>
@@ -155,7 +155,7 @@ limitations under the License.
   <!-- No dependencies here. Declare dependency VERSIONS in
        dependencyManagement, below, and each dependency in the module that uses
        it. -->
-  <dependencies />
+  <dependencies/>
 
   <dependencyManagement>
     <dependencies>
