@@ -15,9 +15,6 @@
  * limitations under the License.
  */
 package org.apache.calcite.linq4j.tree;
-
-import static org.apache.calcite.linq4j.tree.ExpressionType.LessThan;
-
 import java.lang.reflect.Type;
 import java.util.Objects;
 
@@ -161,15 +158,9 @@ public class BinaryExpression extends Expression {
     if (writer.requireParentheses(this, lprec, rprec)) {
       return;
     }
-    if (nodeType == LessThan) {
-      writer.append("(");
-    }
     expression0.accept(writer, lprec, nodeType.lprec);
     writer.append(nodeType.op);
     expression1.accept(writer, nodeType.rprec, rprec);
-    if (nodeType == LessThan) {
-      writer.append(")");
-    }
   }
 
   private RuntimeException cannotEvaluate() {
