@@ -120,7 +120,7 @@ limitations under the License.
     <spark.version>1.6.1</spark.version>
     <sqlline.version>1.2.0</sqlline.version>
     <xalan.version>2.7.1</xalan.version>
-    <xerces.version>2.9.1</xerces.version>
+    <xerces.version>2.12.1</xerces.version>
   </properties>
 
   <issueManagement>
@@ -155,7 +155,7 @@ limitations under the License.
   <!-- No dependencies here. Declare dependency VERSIONS in
        dependencyManagement, below, and each dependency in the module that uses
        it. -->
-  <dependencies />
+  <dependencies/>
 
   <dependencyManagement>
     <dependencies>
