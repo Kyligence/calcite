@@ -196,6 +196,7 @@ import static org.apache.calcite.sql.fun.SqlStdOperatorTable.SUM;
 import static org.apache.calcite.sql.fun.SqlStdOperatorTable.SUM0;
 import static org.apache.calcite.sql.fun.SqlStdOperatorTable.SYSTEM_USER;
 import static org.apache.calcite.sql.fun.SqlStdOperatorTable.TAN;
+import static org.apache.calcite.sql.fun.SqlStdOperatorTable.TIMESTAMP_DIFF;
 import static org.apache.calcite.sql.fun.SqlStdOperatorTable.TRIM;
 import static org.apache.calcite.sql.fun.SqlStdOperatorTable.TRUNCATE;
 import static org.apache.calcite.sql.fun.SqlStdOperatorTable.UNARY_MINUS;
@@ -318,6 +319,7 @@ public class RexImpTable {
     defineMethod(SIN, "sin", NullPolicy.STRICT);
     defineMethod(TAN, "tan", NullPolicy.STRICT);
     defineMethod(TRUNCATE, "struncate", NullPolicy.STRICT);
+    defineMethod(TIMESTAMP_DIFF, "timestampdiff", NullPolicy.STRICT);
 
     map.put(PI, new CallImplementor() {
       @Override public Expression implement(RexToLixTranslator translator,

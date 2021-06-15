@@ -327,8 +327,9 @@ public class StandardConvertletTable extends ReflectiveConvertletTable {
     registerOp(SqlStdOperatorTable.CEIL, floorCeilConvertlet);
 
     registerOp(SqlStdOperatorTable.TIMESTAMP_ADD, new TimestampAddConvertlet());
-    registerOp(SqlStdOperatorTable.TIMESTAMP_DIFF,
-        new TimestampDiffConvertlet());
+
+    // KE-27654 # Disable calcite timestampdiff converter.
+    // registerOp(SqlStdOperatorTable.TIMESTAMP_DIFF, new TimestampDiffConvertlet());
 
     // Convert "element(<expr>)" to "$element_slice(<expr>)", if the
     // expression is a multiset of scalars.

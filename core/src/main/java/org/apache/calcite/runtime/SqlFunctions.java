@@ -20,6 +20,7 @@ import org.apache.calcite.DataContext;
 import org.apache.calcite.avatica.util.ByteString;
 import org.apache.calcite.avatica.util.DateTimeUtils;
 import org.apache.calcite.avatica.util.Spaces;
+import org.apache.calcite.avatica.util.TimeUnit;
 import org.apache.calcite.avatica.util.TimeUnitRange;
 import org.apache.calcite.linq4j.AbstractEnumerable;
 import org.apache.calcite.linq4j.CartesianProductEnumerator;
@@ -2004,6 +2005,23 @@ public class SqlFunctions {
     } else {
       return s;
     }
+  }
+
+  /** TimestampDiff is not implemented here. */
+  public static BigDecimal timestampdiff(TimeUnit unit, int int1, int int2) {
+    throw new RuntimeException("TimestampDiff is not implemented in calcite.");
+  }
+
+  public static BigDecimal timestampdiff(TimeUnit unit, long long1, int int2) {
+    throw new RuntimeException("TimestampDiff is not implemented in calcite.");
+  }
+
+  public static BigDecimal timestampdiff(TimeUnit unit, long long1, long long2) {
+    throw new RuntimeException("TimestampDiff is not implemented in calcite.");
+  }
+
+  public static BigDecimal timestampdiff(TimeUnit unit, int int1, long long2) {
+    throw new RuntimeException("TimestampDiff is not implemented in calcite.");
   }
 
   /** Helper for CAST(... AS BINARY(maxLength)). */
