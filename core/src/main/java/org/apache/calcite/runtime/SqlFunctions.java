@@ -133,11 +133,21 @@ public class SqlFunctions {
 
   /** SQL SUBSTRING(string FROM ... FOR ...) function. */
   // override
-  public static String substring(String s, int from, int for_) {
-    if (s == null) {
+  public static String substring(String c, int s, int l) {
+    if (c == null) {
       return null;
     }
-    return s.substring(from - 1, Math.min(from - 1 + for_, s.length()));
+    int lc = c.length();
+    if (s < 0) {
+      s += lc + 1;
+    }
+    int e = s + l;
+    if (s > lc || e < 1) {
+      return "";
+    }
+    int s1 = Math.max(s, 1);
+    int e1 = Math.min(s1 + l, lc + 1);
+    return c.substring(s1 - 1, e1 - 1);
   }
 
   public static String substring(String s, long from, long for_) {
@@ -149,8 +159,9 @@ public class SqlFunctions {
   }
 
   /** SQL SUBSTRING(string FROM ...) function. */
+  // override
   public static String substring(String s, int from) {
-    return s.substring(from - 1);
+    return substring(s, from, s.length() + 1);
   }
 
   public static String substring(String s, long from) {
@@ -161,8 +172,22 @@ public class SqlFunctions {
   }
 
   /** SQL SUBSTRING(binary FROM ... FOR ...) function. */
-  public static ByteString substring(ByteString b, int from, int for_) {
-    return b.substring(from - 1, Math.min(from - 1 + for_, b.length()));
+  // override
+  public static ByteString substring(ByteString c, int s, int l) {
+    if (c == null) {
+      return null;
+    }
+    int lc = c.length();
+    if (s < 0) {
+      s += lc + 1;
+    }
+    int e = s + l;
+    if (s > lc || e < 1) {
+      return ByteString.EMPTY;
+    }
+    int s1 = Math.max(s, 1);
+    int e1 = Math.min(s1 + l, lc + 1);
+    return c.substring(s1 - 1, e1 - 1);
   }
 
   public static ByteString substring(ByteString b, long from, long for_) {
@@ -174,8 +199,9 @@ public class SqlFunctions {
   }
 
   /** SQL SUBSTRING(binary FROM ...) function. */
+  // override
   public static ByteString substring(ByteString b, int from) {
-    return b.substring(from - 1);
+    return substring(b, from, b.length() + 1);
   }
 
   public static ByteString substring(ByteString b, long from) {
