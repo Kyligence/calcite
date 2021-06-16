@@ -109,7 +109,7 @@ limitations under the License.
     <natty.version>0.13</natty.version>
     <opencsv.version>2.3</opencsv.version>
     <oracle-jdbc6-driver.version>11.2.0.2.0</oracle-jdbc6-driver.version>
-    <pig.version>0.16.0</pig.version>
+    <pig.version>0.17.0</pig.version>
     <aggdesigner.version>6.0</aggdesigner.version>
     <postgresql.version>9.3-1102-jdbc3</postgresql.version>
     <quidem.version>0.8</quidem.version>
@@ -155,7 +155,7 @@ limitations under the License.
   <!-- No dependencies here. Declare dependency VERSIONS in
        dependencyManagement, below, and each dependency in the module that uses
        it. -->
-  <dependencies />
+  <dependencies/>
 
   <dependencyManagement>
     <dependencies>
