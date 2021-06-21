@@ -191,6 +191,27 @@ public class CsvTest {
     sql("smart", "select name from DEPTS").ok();
   }
 
+  @Test public void testTimestampDiff() throws SQLException {
+    sql("smart",
+            "select TIMESTAMPDIFF(day, date'2018-01-01', date'2018-10-10')").ok();
+  }
+
+  @Test public void testTimestampDiff2() throws SQLException {
+    sql("smart",
+            "select TIMESTAMPDIFF(day, timestamp'2018-01-01 00:00:00', date'2018-10-10')").ok();
+  }
+
+  @Test public void testTimestampDiff3() throws SQLException {
+    sql("smart",
+            "select TIMESTAMPDIFF(day, timestamp'2018-01-01 00:00:00', "
+                    + "timestamp'2018-10-10 00:00:00')").ok();
+  }
+
+  @Test public void testTimestampDiff4() throws SQLException {
+    sql("smart",
+            "select TIMESTAMPDIFF(day, date'2018-01-01', timestamp'2018-10-10 00:00:00')").ok();
+  }
+
   /** Test case for
    * <a href="https://issues.apache.org/jira/browse/CALCITE-898">[CALCITE-898]
    * Type inference multiplying Java long by SQL INTEGER</a>. */
