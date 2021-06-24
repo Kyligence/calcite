@@ -20,7 +20,6 @@ import org.apache.calcite.DataContext;
 import org.apache.calcite.avatica.util.ByteString;
 import org.apache.calcite.avatica.util.DateTimeUtils;
 import org.apache.calcite.avatica.util.Spaces;
-import org.apache.calcite.avatica.util.TimeUnit;
 import org.apache.calcite.avatica.util.TimeUnitRange;
 import org.apache.calcite.linq4j.AbstractEnumerable;
 import org.apache.calcite.linq4j.CartesianProductEnumerator;
@@ -2004,75 +2003,6 @@ public class SqlFunctions {
       return s.substring(0, maxLength);
     } else {
       return s;
-    }
-  }
-
-  /** TimestampDiff is implemented as org.apache.spark.sql.udf.TimestampDiffImpl. */
-  public static BigDecimal timestampdiff(TimeUnit unit, int date1, int date2) {
-    // Align to Spark function datediff:
-    // org.apache.spark.sql.catalyst.expressions.DateDiff
-    if (unit == TimeUnit.DAY) {
-      return BigDecimal.valueOf(date2 - date1);
-    }
-    long before = daysToMillis(date1);
-    long after = daysToMillis(date2);
-    return convertDuration(unit, before, after);
-  }
-
-  public static BigDecimal timestampdiff(TimeUnit unit, long timestamp1, int date2) {
-    long before = timestamp1;
-    long after = daysToMillis(date2);
-    return convertDuration(unit, before, after);
-  }
-
-  public static BigDecimal timestampdiff(TimeUnit unit, long timestamp1, long timestamp2) {
-    long before = timestamp1;
-    long after = timestamp2;
-    return convertDuration(unit, before, after);
-  }
-
-  public static BigDecimal timestampdiff(TimeUnit unit, int date1, long timestamp2) {
-    long before = daysToMillis(date1);
-    long after = timestamp2;
-    return convertDuration(unit, before, after);
-  }
-
-  private static long daysToMillis(int date) {
-    return date * DateTimeUtils.MILLIS_PER_DAY;
-  }
-
-  private static final long DAYS_PER_WEEK = 7L;
-  private static final long MONTHS_PER_QUARTER = 3L;
-  private static final long QUARTERS_PER_YEAR = 4L;
-
-  private static BigDecimal convertDuration(TimeUnit unit, long bMillis, long aMillis) {
-    switch (unit) {
-    case MILLISECOND:
-      return BigDecimal.valueOf(aMillis - bMillis);
-    case SECOND:
-      return BigDecimal.valueOf((aMillis - bMillis) / DateTimeUtils.MILLIS_PER_SECOND);
-    case MINUTE:
-      return BigDecimal.valueOf((aMillis - bMillis) / DateTimeUtils.MILLIS_PER_MINUTE);
-    case HOUR:
-      return BigDecimal.valueOf((aMillis - bMillis) / DateTimeUtils.MILLIS_PER_HOUR);
-    case DAY:
-      return BigDecimal.valueOf((aMillis - bMillis) / DateTimeUtils.MILLIS_PER_DAY);
-    case WEEK:
-      return BigDecimal.valueOf((aMillis - bMillis) / DateTimeUtils.MILLIS_PER_DAY / DAYS_PER_WEEK);
-    case MONTH:
-      return BigDecimal.valueOf(subtractMonths(aMillis, bMillis));
-    case QUARTER:
-      return BigDecimal.valueOf(subtractMonths(aMillis, bMillis) / MONTHS_PER_QUARTER);
-    case YEAR:
-      return BigDecimal.valueOf(
-              subtractMonths(aMillis, bMillis) / MONTHS_PER_QUARTER / QUARTERS_PER_YEAR);
-    default:
-      String format = "Illegal unit: %s"
-              + " only support [YEAR, SQL_TSI_YEAR, QUARTER, SQL_TSI_QUARTER, MONTH, "
-              + "SQL_TSI_MONTH, WEEK, SQL_TSI_WEEK, DAY, SQL_TSI_DAY,"
-              + " HOUR, SQL_TSI_HOUR, MINUTE, SQL_TSI_MINUTE, SECOND, "
-              + "SQL_TSI_SECOND, FRAC_SECOND, SQL_TSI_FRAC_SECOND] for now.";
-      throw new IllegalArgumentException(String.format(Locale.ROOT, format, unit.toString()));
     }
   }
 
