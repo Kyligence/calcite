@@ -498,7 +498,7 @@ public class HepPlanner extends AbstractRelOptPlanner {
       RelOptRule rule,
       HepRelVertex vertex,
       boolean forceConversions) {
-    if (!belongsToDag(vertex)) {
+    if (!graph.vertexSet().contains(vertex)) {
       return null;
     }
     RelTrait parentTrait = null;
