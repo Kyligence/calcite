@@ -186,6 +186,8 @@ public class CalcitePrepareImpl implements CalcitePrepare {
 
   public static final ThreadLocal<Integer> INTEGER_DIVIDE_INTEGER_SCALE = new ThreadLocal<>();
 
+  public static final ThreadLocal<Boolean> FIX_INTEGER_DIVIDE_INTEGER_TYPE = new ThreadLocal<>();
+
   public static final boolean COMMUTE =
       Util.getBooleanProperty("calcite.enable.join.commute");
 
