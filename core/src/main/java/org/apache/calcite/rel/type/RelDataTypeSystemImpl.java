@@ -223,8 +223,8 @@ public abstract class RelDataTypeSystemImpl implements RelDataTypeSystem {
 
   @Override public RelDataType deriveAvgAggType(RelDataTypeFactory typeFactory,
       RelDataType argumentType) {
-    Boolean fix_result_type = CalcitePrepareImpl.FIX_INTEGER_DIVIDE_INTEGER_TYPE.get();
-    if (fix_result_type != null && fix_result_type
+    Boolean fixResultType = CalcitePrepareImpl.FIX_INTEGER_DIVIDE_INTEGER_TYPE.get();
+    if (fixResultType != null && fixResultType
             && SqlTypeFamily.INTEGER.getTypeNames().contains(argumentType.getSqlTypeName())) {
       Integer scale = CalcitePrepareImpl.INTEGER_DIVIDE_INTEGER_SCALE.get();
       return typeFactory.createTypeWithNullability(
