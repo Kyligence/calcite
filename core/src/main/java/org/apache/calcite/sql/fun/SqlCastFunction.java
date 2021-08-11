@@ -32,11 +32,9 @@ import org.apache.calcite.sql.SqlOperatorBinding;
 import org.apache.calcite.sql.SqlSyntax;
 import org.apache.calcite.sql.SqlUtil;
 import org.apache.calcite.sql.SqlWriter;
-import org.apache.calcite.sql.type.BasicSqlType;
 import org.apache.calcite.sql.type.InferTypes;
 import org.apache.calcite.sql.type.SqlOperandCountRanges;
 import org.apache.calcite.sql.type.SqlTypeFamily;
-import org.apache.calcite.sql.type.SqlTypeName;
 import org.apache.calcite.sql.type.SqlTypeUtil;
 import org.apache.calcite.sql.validate.SqlMonotonicity;
 import org.apache.calcite.sql.validate.SqlValidatorImpl;
@@ -91,9 +89,6 @@ public class SqlCastFunction extends SqlFunction {
     assert opBinding.getOperandCount() == 2;
     RelDataType ret = opBinding.getOperandType(1);
     RelDataType firstType = opBinding.getOperandType(0);
-    if (firstType.getSqlTypeName() == SqlTypeName.NULL) {
-      return firstType;
-    }
     ret =
         opBinding.getTypeFactory().createTypeWithNullability(
             ret,
