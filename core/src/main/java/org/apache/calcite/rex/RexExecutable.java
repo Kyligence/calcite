@@ -88,6 +88,7 @@ public class RexExecutable {
     } catch (RuntimeException e) {
       // One or more of the expressions failed.
       // Don't reduce any of the expressions.
+      reducedValues.clear();
       reducedValues.addAll(constExps);
       values = new Object[constExps.size()];
     }

@@ -27,7 +27,7 @@ limitations under the License.
   <groupId>org.apache.calcite</groupId>
   <artifactId>calcite</artifactId>
   <packaging>pom</packaging>
-  <version>1.16.0-kylin-3.x-r58</version>
+  <version>1.16.0-kylin-3.x-r59</version>
 
   <!-- More project information. -->
   <name>Calcite</name>
@@ -58,7 +58,7 @@ limitations under the License.
 
     <!-- This list is in alphabetical order. -->
     <airlift-tpch.version>0.1</airlift-tpch.version>
-    <avatica.version>1.11.0.x-3.x-r2</avatica.version>
+    <avatica.version>1.11.0.x-3.x-r3</avatica.version>
     <build-helper-maven-plugin.version>3.0.0</build-helper-maven-plugin.version>
     <cassandra-driver-core.version>3.4.0</cassandra-driver-core.version>
     <checksum-maven-plugin.version>1.2</checksum-maven-plugin.version>
