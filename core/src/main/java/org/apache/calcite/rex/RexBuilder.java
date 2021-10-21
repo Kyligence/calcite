@@ -1509,6 +1509,8 @@ public class RexBuilder {
           throw new AssertionError();
         }
         return DateString.fromCalendarFields((Calendar) o);
+      } else if (o instanceof Long) {
+        return DateString.fromDaysSinceEpoch(((Long) o).intValue());
       } else {
         return DateString.fromDaysSinceEpoch((Integer) o);
       }
