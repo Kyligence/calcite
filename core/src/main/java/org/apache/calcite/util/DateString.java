@@ -29,7 +29,7 @@ import javax.annotation.Nonnull;
  *
  * <p>Immutable, internally represented as a string (in ISO format).
  */
-public class DateString implements Comparable<DateString> {
+public class DateString implements Comparable<Object> {
   private static final Pattern PATTERN =
       Pattern.compile("[0-9][0-9][0-9][0-9]-[0-9][0-9]-[0-9][0-9]");
 
@@ -86,8 +86,16 @@ public class DateString implements Comparable<DateString> {
     return v.hashCode();
   }
 
-  @Override public int compareTo(@Nonnull DateString o) {
-    return v.compareTo(o.v);
+  @Override public int compareTo(@Nonnull Object o) {
+    if (o instanceof DateString) {
+      return v.compareTo(((DateString) o).v);
+    }
+
+    if (o instanceof TimestampString) {
+      return Long.compare(this.getMillisSinceEpoch(), ((TimestampString) o).getMillisSinceEpoch());
+    }
+
+    return v.compareTo(o.toString());
   }
 
   /** Creates a DateString from a Calendar. */

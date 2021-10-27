@@ -30,7 +30,7 @@ import java.util.regex.Pattern;
  * <p>Immutable, internally represented as a string (in ISO format),
  * and can support unlimited precision (milliseconds, nanoseconds).
  */
-public class TimestampString implements Comparable<TimestampString> {
+public class TimestampString implements Comparable<Object> {
   private static final Pattern PATTERN =
       Pattern.compile("[0-9][0-9][0-9][0-9]-[0-9][0-9]-[0-9][0-9]"
           + " "
@@ -109,8 +109,16 @@ public class TimestampString implements Comparable<TimestampString> {
     return v.hashCode();
   }
 
-  @Override public int compareTo(TimestampString o) {
-    return v.compareTo(o.v);
+  @Override public int compareTo(Object o) {
+    if (o instanceof TimestampString) {
+      return v.compareTo(((TimestampString) o).v);
+    }
+
+    if (o instanceof DateString) {
+      return Long.compare(this.getMillisSinceEpoch(), ((DateString) o).getMillisSinceEpoch());
+    }
+
+    return v.compareTo(o.toString());
   }
 
   /** Creates a TimestampString from a Calendar. */
