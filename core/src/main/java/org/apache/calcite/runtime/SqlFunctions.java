@@ -1983,6 +1983,15 @@ public class SqlFunctions {
     return s.indexOf(seek, from0) + 1;
   }
 
+  /** SQL {@code POSITION(seek IN string FROM long)} function. */
+  public static int position(String seek, String s, long from) {
+    if (from > Integer.MAX_VALUE || from < 0) {
+      return 0;
+    } else {
+      return position(seek, s, Long.valueOf(from).intValue());
+    }
+  }
+
   /** SQL {@code POSITION(seek IN string FROM integer)} function for byte
    * strings. */
   public static int position(ByteString seek, ByteString s, int from) {
@@ -1999,6 +2008,16 @@ public class SqlFunctions {
       return 0;
     }
     return p + from;
+  }
+
+  /** SQL {@code POSITION(seek IN string FROM integer)} function for byte
+   * strings. */
+  public static int position(ByteString seek, ByteString s, long from) {
+    if (from > Integer.MAX_VALUE || from < 0) {
+      return 0;
+    } else {
+      return position(seek, s, Long.valueOf(from).intValue());
+    }
   }
 
   /** Helper for rounding. Truncate(12345, 1000) returns 12000. */
