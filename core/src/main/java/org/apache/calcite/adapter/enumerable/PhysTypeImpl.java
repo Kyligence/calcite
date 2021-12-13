@@ -52,6 +52,7 @@ import java.util.List;
 
 import static org.apache.calcite.adapter.enumerable.EnumUtils.javaRowClass;
 import static org.apache.calcite.adapter.enumerable.EnumUtils.overridingMethodDecl;
+import static org.apache.calcite.prepare.CalcitePrepareImpl.OPTIMIZE_JAVA_ROW_FORMAT;
 
 /** Implementation of {@link PhysType}. */
 public class PhysTypeImpl implements PhysType {
@@ -80,6 +81,9 @@ public class PhysTypeImpl implements PhysType {
       JavaTypeFactory typeFactory,
       RelDataType rowType,
       JavaRowFormat format) {
+    if (OPTIMIZE_JAVA_ROW_FORMAT.get() == null || !OPTIMIZE_JAVA_ROW_FORMAT.get()) {
+      return of(typeFactory, rowType, format, false);
+    }
     return of(typeFactory, rowType, format, true);
   }
 
