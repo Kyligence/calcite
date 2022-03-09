@@ -305,6 +305,8 @@ public class SqlStdOperatorTable extends ReflectiveSqlOperatorTable {
   /**
    * Logical equals operator, '<code>=</code>'.
    */
+  /* OVERRIDE POINT */
+  //https://github.com/Kyligence/KAP/issues/13872
   public static final SqlBinaryOperator EQUALS =
       new SqlBinaryOperator(
           "=",
@@ -313,7 +315,7 @@ public class SqlStdOperatorTable extends ReflectiveSqlOperatorTable {
           true,
           ReturnTypes.BOOLEAN_NULLABLE,
           InferTypes.FIRST_KNOWN,
-          OperandTypes.COMPARABLE_UNORDERED_COMPARABLE_UNORDERED);
+          OperandTypes.COMPARABLE_NO_CONVERT_TO_VARYING);
 
   /**
    * Logical greater-than operator, '<code>&gt;</code>'.
@@ -500,6 +502,8 @@ public class SqlStdOperatorTable extends ReflectiveSqlOperatorTable {
   /**
    * Logical not-equals operator, '<code>&lt;&gt;</code>'.
    */
+  /* OVERRIDE POINT */
+  //https://github.com/Kyligence/KAP/issues/13872
   public static final SqlBinaryOperator NOT_EQUALS =
       new SqlBinaryOperator(
           "<>",
@@ -508,7 +512,7 @@ public class SqlStdOperatorTable extends ReflectiveSqlOperatorTable {
           true,
           ReturnTypes.BOOLEAN_NULLABLE,
           InferTypes.FIRST_KNOWN,
-          OperandTypes.COMPARABLE_UNORDERED_COMPARABLE_UNORDERED);
+          OperandTypes.COMPARABLE_NO_CONVERT_TO_VARYING);
 
   /**
    * Logical <code>OR</code> operator.

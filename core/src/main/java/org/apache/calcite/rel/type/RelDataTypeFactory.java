@@ -201,6 +201,9 @@ public interface RelDataTypeFactory {
    */
   RelDataType leastRestrictive(List<RelDataType> types);
 
+  /* OVERRIDE POINT */
+  RelDataType leastRestrictive(List<RelDataType> types, boolean convertToVarying);
+
   /**
    * Creates a SQL type with no precision or scale.
    *

@@ -408,6 +408,12 @@ public abstract class OperandTypes {
       new ComparableOperandTypeChecker(2, RelDataTypeComparability.UNORDERED,
           SqlOperandTypeChecker.Consistency.LEAST_RESTRICTIVE);
 
+  /* OVERRIDE POINT */
+  //https://github.com/Kyligence/KAP/issues/13872
+  public static final SqlOperandTypeChecker COMPARABLE_NO_CONVERT_TO_VARYING =
+          new ComparableOperandTypeChecker(2, RelDataTypeComparability.UNORDERED,
+                  SqlOperandTypeChecker.Consistency.LEAST_RESTRICTIVE_NO_CONVERT_TO_VARYING);
+
   /**
    * Operand type-checking strategy where two operands must both be in the
    * same string type family.

@@ -851,7 +851,7 @@ public class StandardConvertletTable extends ReflectiveConvertletTable {
     return list;
   }
 
-  private static List<RexNode> convertExpressionList(SqlRexContext cx,
+  public static List<RexNode> convertExpressionList(SqlRexContext cx,
       List<SqlNode> nodes, SqlOperandTypeChecker.Consistency consistency) {
     final List<RexNode> exprs = Lists.newArrayList();
     for (SqlNode node : nodes) {
@@ -882,7 +882,8 @@ public class StandardConvertletTable extends ReflectiveConvertletTable {
   // For LEAST_RESTRICTIVE consistency, which is the '=' operator, convert constants implicitly
   private static RelDataType consistentType2(SqlRexContext cx,
       Consistency consistency, List<RexNode> exprs) {
-    if (Consistency.LEAST_RESTRICTIVE != consistency) {
+    if (Consistency.LEAST_RESTRICTIVE != consistency
+            && Consistency.LEAST_RESTRICTIVE_NO_CONVERT_TO_VARYING != consistency) {
       return null;
     }
     if (exprs.size() <= 1) {
@@ -942,6 +943,10 @@ public class StandardConvertletTable extends ReflectiveConvertletTable {
       // fall through
     case LEAST_RESTRICTIVE:
       return cx.getTypeFactory().leastRestrictive(types);
+    /* OVERRIDE POINT */
+    //https://github.com/Kyligence/KAP/issues/13872
+    case LEAST_RESTRICTIVE_NO_CONVERT_TO_VARYING:
+      return cx.getTypeFactory().leastRestrictive(types, false);
     default:
       return null;
     }

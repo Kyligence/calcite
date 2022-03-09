@@ -144,13 +144,19 @@ public class SqlTypeFactoryImpl extends RelDataTypeFactoryImpl {
     return canonize(newType);
   }
 
+  /* OVERRIDE POINT */
   @Override public RelDataType leastRestrictive(List<RelDataType> types) {
+    return leastRestrictive(types, true);
+  }
+
+  @Override public RelDataType leastRestrictive(List<RelDataType> types,
+                                                boolean convertToVarying) {
     assert types != null;
     assert types.size() >= 1;
 
     RelDataType type0 = types.get(0);
     if (type0.getSqlTypeName() != null) {
-      RelDataType resultType = leastRestrictiveSqlType(types);
+      RelDataType resultType = leastRestrictiveSqlType(types, convertToVarying);
       if (resultType != null) {
         return resultType;
       }
@@ -220,7 +226,8 @@ public class SqlTypeFactoryImpl extends RelDataTypeFactoryImpl {
         : "use createSqlIntervalType() instead";
   }
 
-  private RelDataType leastRestrictiveSqlType(List<RelDataType> types) {
+  private RelDataType leastRestrictiveSqlType(List<RelDataType> types,
+                                              boolean convertToVarying) {
     RelDataType resultType = null;
     int nullCount = 0;
     int nullableCount = 0;
@@ -314,7 +321,7 @@ public class SqlTypeFactoryImpl extends RelDataTypeFactoryImpl {
 
           SqlTypeName newTypeName = type.getSqlTypeName();
 
-          if (typeSystem.shouldConvertRaggedUnionTypesToVarying()) {
+          if (convertToVarying && typeSystem.shouldConvertRaggedUnionTypesToVarying()) {
             if (resultType.getPrecision() != type.getPrecision()) {
               if (newTypeName == SqlTypeName.CHAR) {
                 newTypeName = SqlTypeName.VARCHAR;

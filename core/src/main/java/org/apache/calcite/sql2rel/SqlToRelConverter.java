@@ -201,6 +201,7 @@ import java.util.Set;
 import java.util.TreeSet;
 
 import static org.apache.calcite.sql.SqlUtil.stripAs;
+import static org.apache.calcite.sql.type.SqlOperandTypeChecker.Consistency.LEAST_RESTRICTIVE_NO_CONVERT_TO_VARYING;
 
 /*
  * The code has synced with calcite. Hope one day, we could remove the hardcode override point.
@@ -1161,11 +1162,12 @@ public class SqlToRelConverter {
         // We're under the threshold, so convert to OR.
         if (subQuery.expr == null && valueList.size() < config.getInSubQueryThreshold()) {
           subQuery.expr =
-            convertInToOr(
-              bb,
-              leftKeys,
-              valueList,
-              (SqlInOperator) call.getOperator());
+              convertInToOr(
+                  bb, leftKeyNode,
+                  leftKeys,
+                  valueList,
+                  (SqlInOperator) call.getOperator());
+          return;
         }
         return;
 
@@ -1517,16 +1519,18 @@ public class SqlToRelConverter {
   /**
    * Converts "x IN (1, 2, ...)" to "x=1 OR x=2 OR ...".
    *
+   *
+   * @param leftKeyNode LHS
    * @param leftKeys   LHS
    * @param valuesList RHS
    * @param op         The operator (IN, NOT IN, &gt; SOME, ...)
    * @return converted expression
    */
   private RexNode convertInToOr(
-      final Blackboard bb,
-      final List<RexNode> leftKeys,
-      SqlNodeList valuesList,
-      SqlInOperator op) {
+          final Blackboard bb,
+          SqlNode leftKeyNode, final List<RexNode> leftKeys,
+          SqlNodeList valuesList,
+          SqlInOperator op) {
     final List<RexNode> comparisons = new ArrayList<>();
     for (SqlNode rightVals : valuesList) {
       RexNode rexComparison;
@@ -1538,11 +1542,23 @@ public class SqlToRelConverter {
         comparisonOp = SqlStdOperatorTable.EQUALS;
       }
       if (leftKeys.size() == 1) {
-        rexComparison =
-            rexBuilder.makeCall(comparisonOp,
-                leftKeys.get(0),
-                ensureSqlType(leftKeys.get(0).getType(),
-                    bb.convertExpression(rightVals)));
+        /* OVERRIDE POINT */
+        //https://github.com/Kyligence/KAP/issues/13872
+        if ((op == SqlStdOperatorTable.IN || op == SqlStdOperatorTable.NOT_IN)
+                && SqlTypeName.CHAR_TYPES.contains(leftKeys.get(0).getType().getSqlTypeName())) {
+          List<SqlNode> rex = ImmutableList.of(leftKeyNode, rightVals);
+          final List<RexNode> expr = StandardConvertletTable.convertExpressionList(bb, rex,
+                          LEAST_RESTRICTIVE_NO_CONVERT_TO_VARYING);
+          RelDataType type = rexBuilder.deriveReturnType(comparisonOp, expr);
+          rexComparison = rexBuilder.makeCall(type,
+                  comparisonOp, RexUtil.flatten(expr, op));
+        } else {
+          rexComparison =
+                  rexBuilder.makeCall(comparisonOp,
+                          leftKeys.get(0),
+                          ensureSqlType(leftKeys.get(0).getType(),
+                                  bb.convertExpression(rightVals)));
+        }
       } else {
         assert rightVals instanceof SqlCall;
         final SqlBasicCall call = (SqlBasicCall) rightVals;
