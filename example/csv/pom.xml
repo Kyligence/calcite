@@ -20,12 +20,12 @@ limitations under the License.
   <parent>
     <groupId>org.apache.calcite</groupId>
     <artifactId>calcite-example</artifactId>
-    <version>1.16.0-kylin-4.x-r68</version>
+    <version>1.16.0-kylin-4.x-r69</version>
   </parent>
 
   <artifactId>calcite-example-csv</artifactId>
   <packaging>jar</packaging>
-  <version>1.16.0-kylin-4.x-r68</version>
+  <version>1.16.0-kylin-4.x-r69</version>
   <name>Calcite Example CSV</name>
   <description>An example Calcite provider that reads CSV files</description>
 
