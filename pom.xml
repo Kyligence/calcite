@@ -84,7 +84,7 @@ limitations under the License.
     <hydromatic-resource.version>0.6</hydromatic-resource.version>
     <hydromatic-toolbox.version>0.3</hydromatic-toolbox.version>
     <hydromatic-tpcds.version>0.4</hydromatic-tpcds.version>
-    <jackson.version>2.6.3</jackson.version>
+    <jackson.version>2.13.2</jackson.version>
     <janino.version>2.7.6</janino.version>
     <java-diff.version>1.1</java-diff.version>
     <javacc-maven-plugin.version>2.4</javacc-maven-plugin.version>
@@ -155,7 +155,7 @@ limitations under the License.
   <!-- No dependencies here. Declare dependency VERSIONS in
        dependencyManagement, below, and each dependency in the module that uses
        it. -->
-  <dependencies />
+  <dependencies/>
 
   <dependencyManagement>
     <dependencies>
