@@ -1486,9 +1486,17 @@ public class RexUtil {
    *
    * <p>Leaf nodes in the expression do not count towards the threshold.
    */
-  public static RexNode toCnf(RexBuilder rexBuilder, int maxCnfNodeCount,
-      RexNode rex) {
+  public static RexNode toCnf(RexBuilder rexBuilder, int maxCnfNodeCount, RexNode rex) {
     return new CnfHelper(rexBuilder, maxCnfNodeCount).toCnf(rex);
+  }
+
+  /**
+   * for example (a AND b) OR c -> (a OR c) AND (b OR c)
+   * maxCnfExprCount = 2    1. (a OR c)  2.(b OR c)
+   */
+  public static RexNode toCnf(RexBuilder rexBuilder, int maxCnfNodeCount, int maxCnfExprCount,
+        RexNode rex) {
+    return new CnfHelper(rexBuilder, maxCnfNodeCount, maxCnfExprCount).toCnf(rex);
   }
 
   /** Converts an expression to disjunctive normal form (DNF).
@@ -2213,10 +2221,16 @@ public class RexUtil {
     final RexBuilder rexBuilder;
     int currentCount;
     final int maxNodeCount; // negative means no limit
+    int maxExprCount = 10000;
 
     private CnfHelper(RexBuilder rexBuilder, int maxNodeCount) {
       this.rexBuilder = rexBuilder;
       this.maxNodeCount = maxNodeCount;
+    }
+
+    private CnfHelper(RexBuilder rexBuilder, int maxNodeCount, int maxExprCount) {
+      this(rexBuilder, maxNodeCount);
+      this.maxExprCount = maxExprCount;
     }
 
     public RexNode toCnf(RexNode rex) {
@@ -2263,6 +2277,9 @@ public class RexUtil {
           for (RexNode t : tailCnfs) {
             list.add(or(ImmutableList.of(h, t)));
           }
+        }
+        if (list.size() > maxExprCount) {
+          throw OverflowError.INSTANCE;
         }
         return and(list);
       case NOT:
