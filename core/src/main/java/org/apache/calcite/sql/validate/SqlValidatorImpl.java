@@ -133,6 +133,7 @@ import java.util.Objects;
 import java.util.Set;
 import java.util.TreeSet;
 
+import static java.util.Objects.requireNonNull;
 import static org.apache.calcite.sql.SqlUtil.stripAs;
 import static org.apache.calcite.util.Static.RESOURCE;
 
@@ -490,7 +491,14 @@ public class SqlValidatorImpl implements SqlValidatorWithHints {
     aliases.add(alias);
 
     inferUnknownTypes(targetType, scope, expanded);
-    final RelDataType type = deriveType(selectScope, expanded);
+    RelDataType type = deriveType(selectScope, expanded);
+    // Re-derive SELECT ITEM's data type that may be nullable in AggregatingSelectScope when it
+    // appears in advanced grouping elements such as CUBE, ROLLUP , GROUPING SETS.
+    // For example, SELECT CASE WHEN c = 1 THEN '1' ELSE '23' END AS x FROM t GROUP BY CUBE(x),
+    // the 'x' should be nullable even if x's literal values are not null.
+    if (selectScope instanceof AggregatingSelectScope) {
+      type = requireNonNull(selectScope.nullifyType(stripAs(expanded), type));
+    }
     setValidatedNodeType(expanded, type);
     types.add(Pair.of(alias, type));
     return false;
