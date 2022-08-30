@@ -672,6 +672,8 @@ public class SqlJdbcFunctionCall extends SqlFunction {
       map.put("ATAN", simple(SqlStdOperatorTable.ATAN));
       map.put("ATAN2", simple(SqlStdOperatorTable.ATAN2));
       map.put("CEILING", simple(SqlStdOperatorTable.CEIL));
+      // upgrade calcite, define KylinSqlDialect more better
+      map.put("CHAR", simple(SqlStdOperatorTable.CHAR));
       map.put("COS", simple(SqlStdOperatorTable.COS));
       map.put("COT", simple(SqlStdOperatorTable.COT));
       map.put("DEGREES", simple(SqlStdOperatorTable.DEGREES));

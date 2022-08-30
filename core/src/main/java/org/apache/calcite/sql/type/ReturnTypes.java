@@ -299,6 +299,19 @@ public abstract class ReturnTypes {
    */
   public static final SqlReturnTypeInference VARCHAR_2000 =
       explicit(SqlTypeName.VARCHAR, 2000);
+
+  /**
+   * Type-inference strategy whereby the result type of a call is a Char.
+   */
+  public static final SqlReturnTypeInference CHAR =
+          explicit(SqlTypeName.CHAR);
+
+  /**
+   * Type-inference strategy whereby the result type of a call is a nullable
+   * CHAR(1).
+   */
+  public static final SqlReturnTypeInference CHAR_FORCE_NULLABLE =
+          ReturnTypes.cascade(ReturnTypes.CHAR, SqlTypeTransforms.FORCE_NULLABLE);
   /**
    * Type-inference strategy for Histogram agg support
    */

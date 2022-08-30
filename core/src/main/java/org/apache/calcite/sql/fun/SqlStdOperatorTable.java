@@ -2023,6 +2023,14 @@ public class SqlStdOperatorTable extends ReflectiveSqlOperatorTable {
                   ReturnTypes.ARG0_NULLABLE_VARYING, null,
                   OperandTypes.CBSTRING_INTEGER, SqlFunctionCategory.STRING);
 
+  public static final SqlFunction CHAR =
+          new SqlFunction("CHAR",
+                  SqlKind.OTHER_FUNCTION,
+                  ReturnTypes.CHAR_FORCE_NULLABLE,
+                  null,
+                  OperandTypes.INTEGER,
+                  SqlFunctionCategory.STRING);
+
   /**
    * The sequence next value function: <code>NEXT VALUE FOR sequence</code>
    */
