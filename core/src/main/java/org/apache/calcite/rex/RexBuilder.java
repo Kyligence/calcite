@@ -37,6 +37,7 @@ import org.apache.calcite.sql.SqlUtil;
 import org.apache.calcite.sql.fun.SqlCountAggFunction;
 import org.apache.calcite.sql.fun.SqlStdOperatorTable;
 import org.apache.calcite.sql.type.ArraySqlType;
+import org.apache.calcite.sql.type.BasicSqlType;
 import org.apache.calcite.sql.type.MapSqlType;
 import org.apache.calcite.sql.type.MultisetSqlType;
 import org.apache.calcite.sql.type.SqlTypeFamily;
@@ -547,6 +548,19 @@ public class RexBuilder {
         }
         return literal2;
       }
+      if (type instanceof BasicSqlType
+        && type.getSqlTypeName() == SqlTypeName.DECIMAL) {
+          BigDecimal newValue = null;
+          if (value instanceof BigDecimal) {
+            newValue = ((BigDecimal) value);
+          } else if (value instanceof NlsString) {
+            newValue = new BigDecimal(((NlsString) value).getValue());
+          }
+          if (newValue != null) {
+            newValue = newValue.setScale(type.getScale(), BigDecimal.ROUND_HALF_UP);
+            return makeLiteral(newValue, type, SqlTypeName.DECIMAL);
+          }
+      }
     } else if (SqlTypeUtil.isExactNumeric(type)
         && SqlTypeUtil.isInterval(exp.getType())) {
       return makeCastIntervalToExact(type, exp);
@@ -913,6 +927,11 @@ public class RexBuilder {
         p = 0;
       }
       o = ((TimestampString) o).round(p);
+    case DECIMAL:
+      if (o instanceof BigDecimal) {
+
+      }
+      o = ((BigDecimal) o).setScale(2, BigDecimal.ROUND_HALF_UP);
     }
     return new RexLiteral(o, type, typeName);
   }
