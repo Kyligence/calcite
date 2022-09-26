@@ -927,11 +927,6 @@ public class RexBuilder {
         p = 0;
       }
       o = ((TimestampString) o).round(p);
-    case DECIMAL:
-      if (o instanceof BigDecimal) {
-
-      }
-      o = ((BigDecimal) o).setScale(2, BigDecimal.ROUND_HALF_UP);
     }
     return new RexLiteral(o, type, typeName);
   }
