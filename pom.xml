@@ -27,7 +27,7 @@ limitations under the License.
   <groupId>org.apache.calcite</groupId>
   <artifactId>calcite</artifactId>
   <packaging>pom</packaging>
-  <version>1.116.0-kylin-4.x-r022</version>
+  <version>1.116.0-kylin-4.x-r023</version>
 
   <!-- More project information. -->
   <name>Calcite</name>
@@ -625,6 +625,9 @@ limitations under the License.
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-checkstyle-plugin</artifactId>
+        <configuration>
+          <skip>true</skip>
+        </configuration>
         <executions>
           <execution>
             <id>validate</id>
@@ -997,7 +1000,6 @@ limitations under the License.
                 <configuration>
                   <runOnlyAtExecutionRoot>true</runOnlyAtExecutionRoot>
                   <appendAssemblyId>false</appendAssemblyId>
-                  <descriptor>src/main/config/assemblies/source-assembly.xml</descriptor>
                   <finalName>apache-calcite-${project.version}-src</finalName>
                   <tarLongFileMode>gnu</tarLongFileMode>
                 </configuration>

@@ -913,6 +913,22 @@ public class RexBuilder {
         p = 0;
       }
       o = ((TimestampString) o).round(p);
+      break;
+    case DECIMAL:
+      if (o != null) {
+        assert o instanceof BigDecimal;
+        if (type.getScale() >= 0 && ((BigDecimal) o).scale() > type.getScale()) {
+          o = ((BigDecimal) o).setScale(type.getScale(), RoundingMode.HALF_UP);
+        }
+      }
+      break;
+    default:
+      break;
+    }
+    if (typeName == SqlTypeName.DECIMAL
+            && !SqlTypeUtil.isValidDecimalValue((BigDecimal) o, type)) {
+      throw new IllegalArgumentException(
+              "Cannot convert " + o + " to " + type  + " due to overflow");
     }
     return new RexLiteral(o, type, typeName);
   }
