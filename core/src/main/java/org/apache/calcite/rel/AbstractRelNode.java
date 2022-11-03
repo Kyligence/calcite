@@ -438,14 +438,7 @@ public abstract class AbstractRelNode implements RelNode {
         }
         sb.append(value.left);
         sb.append('=');
-        if (value.right instanceof RelNode) {
-          RelNode input = (RelNode) value.right;
-          sb.append(input.getRelTypeName());
-          sb.append('#');
-          sb.append(input.getId());
-        } else {
-          sb.append(value.right);
-        }
+        sb.append(value.right);
       }
       sb.append(')');
       digest = sb.toString();
