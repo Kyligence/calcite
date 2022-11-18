@@ -1134,16 +1134,18 @@ limitations under the License.
 
 
   <distributionManagement>
-    <snapshotRepository>
-      <id>user-snapshots</id>
-      <name>User Project SNAPSHOTS</name>
-      <url>https://repository.kyligence.io/repository/maven-snapshots/</url>
-    </snapshotRepository>
     <repository>
-      <id>user-releases</id>
-      <name>User Project Release</name>
-      <url>https://repository.kyligence.io/repository/maven-releases/</url>
+      <id>${repository.id}</id>
+      <url>${repository.url}</url>
+      <name>${repository.name}</name>
+      <layout>default</layout>
     </repository>
+    <snapshotRepository>
+      <id>${repository.id.snapshots}</id>
+      <url>${repository.url.snapshots}</url>
+      <name>${repository.name.snapshots}</name>
+      <layout>default</layout>
+    </snapshotRepository>
   </distributionManagement>
 
 </project>
