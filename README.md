@@ -22,19 +22,18 @@ limitations under the License.
 
 KyCalcite is a customized calcite for better kylin use. 
 
-Naming convension of different branch is kylin-{CALCITE_VERSION}.x, e.g. kylin-1.13.0.x
+Naming convension of different branch is kycalcite-{CALCITE_VERSION}.x-{KE_MAJOR_VERSION}.x, e.g. kycalcite-1.16.0.x-4.x
 
-Naming convension of different releases (the name could be used for creating git tag, or pom version name), is {CALCITE_VERSION}-kylin-r{RELEASE_NUMBER}, e.g. 1.13.0-kylin-r1
+Naming convension of different releases (the name could be used for creating git tag, or pom version name), is {CALCITE_VERSION}-kylin-{KE_MAJOR_VERSION}.x-r{RELEASE_NUMBER}, e.g. 1.16.0-kylin-4.x-r4
 
 For new KyCalcite releases we need to deploy it to our own Nexus server (kynexus.chinaeast.cloudapp.chinacloudapi.cn:8081), if you don't have enough permission please contact hongbin.ma@kyligence.io
-
-**Since sonar does not allow overriding formal releases, you might choose to use a snapshot version name, e.g. 1.13.0-kylin-r1-SNAPSHOT**
 
 steps:
 
 1. publish the new kycalcite to nexus server
 2. change kap and kylin's calcite pom dependency version
 3. create a tag for the commit on which the new kycalcite is built from. Don't forget to push tags to server
+4. run jenkins 4.x-kycalcite deploy job
 
 
 # Apache Calcite
