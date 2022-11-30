@@ -104,10 +104,6 @@ public class RelJsonWriter implements RelWriter {
     return SqlExplainLevel.ALL_ATTRIBUTES;
   }
 
-  public RelWriter input(String term, RelNode input) {
-    return this;
-  }
-
   public RelWriter item(String term, Object value) {
     values.add(Pair.of(term, value));
     return this;
@@ -123,13 +119,6 @@ public class RelJsonWriter implements RelWriter {
     final List<Object> list = new ArrayList<>();
     values.add(Pair.of(tag, (Object) list));
     return list;
-  }
-
-  public RelWriter itemIf(String term, Object value, boolean condition) {
-    if (condition) {
-      item(term, value);
-    }
-    return this;
   }
 
   public RelWriter done(RelNode node) {

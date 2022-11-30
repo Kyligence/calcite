@@ -132,6 +132,7 @@ limitations under the License.
     <xalan.version>2.7.1</xalan.version>
     <xerces.version>2.9.1</xerces.version>
     <sketches.version>0.9.0</sketches.version>
+    <jmh.version>1.12</jmh.version>
   </properties>
 
   <issueManagement>
@@ -499,6 +500,11 @@ limitations under the License.
         <artifactId>jcip-annotations</artifactId>
         <version>${jcip-annotations.version}</version>
         <scope>test</scope>
+      </dependency>
+      <dependency>
+        <groupId>org.openjdk.jmh</groupId>
+        <artifactId>jmh-core</artifactId>
+        <version>${jmh.version}</version>
       </dependency>
     </dependencies>
   </dependencyManagement>
