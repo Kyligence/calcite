@@ -27,6 +27,7 @@ import org.apache.calcite.rex.RexBuilder;
 import org.apache.calcite.rex.RexCall;
 import org.apache.calcite.rex.RexCallBinding;
 import org.apache.calcite.rex.RexDynamicParam;
+import org.apache.calcite.rex.RexInputRef;
 import org.apache.calcite.rex.RexLiteral;
 import org.apache.calcite.rex.RexNode;
 import org.apache.calcite.rex.RexRangeRef;
@@ -859,7 +860,7 @@ public class StandardConvertletTable extends ReflectiveConvertletTable {
     }
     if (exprs.size() > 1) {
       RelDataType type =
-              consistentType(cx, consistency, RexUtil.types(exprs));
+              consistentType(cx, consistency, RexUtil.types(exprs), exprs);
 
       /* OVERRIDE POINT */
       if (type == null) {
@@ -907,9 +908,14 @@ public class StandardConvertletTable extends ReflectiveConvertletTable {
   }
 
   private static RelDataType consistentType(SqlRexContext cx,
-      SqlOperandTypeChecker.Consistency consistency, List<RelDataType> types) {
+      SqlOperandTypeChecker.Consistency consistency, List<RelDataType> types, List<RexNode> exprs) {
     switch (consistency) {
     case COMPARE:
+      if (Boolean.parseBoolean(
+              System.getProperty("calcite.convert-date-to-timeStamp-enabled", "false"))
+              && isDateCompareWithTimeStamp(types, exprs)) {
+        return castDateToTimeStamp(types);
+      }
       final Set<RelDataTypeFamily> families =
           Sets.newHashSet(RexUtil.families(types));
       if (families.size() < 2) {
@@ -946,6 +952,11 @@ public class StandardConvertletTable extends ReflectiveConvertletTable {
     /* OVERRIDE POINT */
     //https://github.com/Kyligence/KAP/issues/13872
     case LEAST_RESTRICTIVE_NO_CONVERT_TO_VARYING:
+      if (Boolean.parseBoolean(
+              System.getProperty("calcite.convert-date-to-timeStamp-enabled", "false"))
+              && isDateCompareWithTimeStamp(types, exprs)) {
+        return castDateToTimeStamp(types);
+      }
       return cx.getTypeFactory().leastRestrictive(types, false);
     default:
       return null;
@@ -986,6 +997,33 @@ public class StandardConvertletTable extends ReflectiveConvertletTable {
     default:
       return rex;
     }
+  }
+
+  public static boolean isDateCompareWithTimeStamp(List<RelDataType> types, List<RexNode> exprs) {
+
+    if (types.size() != 2 || exprs.size() != 2) {
+      return false;
+    }
+
+    RelDataType leftType = types.get(0);
+    RelDataType rightType = types.get(1);
+
+    RexNode leftNode = exprs.get(0);
+    RexNode rightNode = exprs.get(1);
+
+    if (leftNode instanceof RexInputRef && rightNode instanceof RexLiteral) {
+      return leftType.getFamily().equals(SqlTypeFamily.TIMESTAMP)
+              && rightType.getFamily().equals(SqlTypeFamily.DATE);
+    }
+    if (leftNode instanceof RexLiteral && rightNode instanceof RexInputRef) {
+      return leftType.getFamily().equals(SqlTypeFamily.DATE)
+              && rightType.getFamily().equals(SqlTypeFamily.TIMESTAMP);
+    }
+    return false;
+  }
+
+  public static RelDataType castDateToTimeStamp(List<RelDataType> types) {
+    return types.get(0).getFamily().equals(SqlTypeFamily.TIMESTAMP) ? types.get(0) : types.get(1);
   }
 
   private RexNode convertIsDistinctFrom(
