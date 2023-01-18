@@ -203,6 +203,7 @@ import static org.apache.calcite.sql.fun.SqlStdOperatorTable.UNARY_MINUS;
 import static org.apache.calcite.sql.fun.SqlStdOperatorTable.UNARY_PLUS;
 import static org.apache.calcite.sql.fun.SqlStdOperatorTable.UPPER;
 import static org.apache.calcite.sql.fun.SqlStdOperatorTable.USER;
+import static org.apache.calcite.sql.fun.SqlStdOperatorTable.CONCAT_FUNCTION;
 
 /**
  * Contains implementations of Rex operators as Java code.
@@ -242,6 +243,7 @@ public class RexImpTable {
         NullPolicy.STRICT);
     defineMethod(CONCAT, BuiltInMethod.STRING_CONCAT.method,
         NullPolicy.STRICT);
+    defineMethod(CONCAT_FUNCTION, BuiltInMethod.MULTI_STRING_CONCAT.method, NullPolicy.STRICT);
     defineMethod(OVERLAY, BuiltInMethod.OVERLAY.method, NullPolicy.STRICT);
     defineMethod(POSITION, BuiltInMethod.POSITION.method, NullPolicy.STRICT);
 

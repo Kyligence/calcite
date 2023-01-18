@@ -178,6 +178,9 @@ public abstract class SqlOperatorBaseTest {
   public static final String LITERAL_OUT_OF_RANGE_MESSAGE =
       "(?s).*Numeric literal.*out of range.*";
 
+  public static final String INVALID_ARGUMENTS_NUMBER =
+          "Invalid number of arguments to function .* Was expecting .* arguments";
+
   public static final boolean TODO = false;
 
   /**
@@ -2036,6 +2039,15 @@ public abstract class SqlOperatorBaseTest {
         "VARCHAR(33335) NOT NULL");
     tester.checkNull("x'ff' || cast(null as varbinary)");
     tester.checkNull(" cast(null as ANY) || cast(null as ANY) ");
+    tester.checkString("concat('a', 'b', 'c')", "abc",
+            "VARCHAR(3) NOT NULL");
+    tester.checkString("concat(cast('a' as varchar), cast('b' as varchar), "
+            + "cast('c' as varchar))", "abc", "VARCHAR NOT NULL");
+    tester.checkNull("concat('a', 'b', cast(null as char(2)))");
+    tester.checkNull("concat(cast(null as ANY), 'b', cast(null as char(2)))");
+    tester.checkString("concat('', '', 'a')", "a", "VARCHAR(1) NOT NULL");
+    tester.checkString("concat('', '', '')", "", "VARCHAR(0) NOT NULL");
+    tester.checkFails("^concat()^", INVALID_ARGUMENTS_NUMBER, false);
   }
 
   @Test public void testModOperator() {
