@@ -22,7 +22,8 @@ import org.apache.calcite.util.Sources;
 import org.apache.commons.lang3.StringUtils;
 
 import com.alibaba.innodb.java.reader.util.Utils;
-import com.google.common.collect.ImmutableMap;
+
+import io.kyligence.kap.guava20.shaded.common.collect.ImmutableMap;
 
 import org.junit.jupiter.api.Test;
 

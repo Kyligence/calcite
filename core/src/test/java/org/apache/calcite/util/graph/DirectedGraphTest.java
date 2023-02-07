@@ -16,10 +16,10 @@
  */
 package org.apache.calcite.util.graph;
 
-import com.google.common.collect.ImmutableList;
-import com.google.common.collect.ImmutableSet;
-import com.google.common.collect.Iterables;
-import com.google.common.collect.Lists;
+import io.kyligence.kap.guava20.shaded.common.collect.ImmutableList;
+import io.kyligence.kap.guava20.shaded.common.collect.ImmutableSet;
+import io.kyligence.kap.guava20.shaded.common.collect.Iterables;
+import io.kyligence.kap.guava20.shaded.common.collect.Lists;
 
 import org.hamcrest.CoreMatchers;
 import org.junit.jupiter.api.Test;

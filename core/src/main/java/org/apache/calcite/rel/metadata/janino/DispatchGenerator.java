@@ -20,7 +20,7 @@ import org.apache.calcite.rel.RelNode;
 import org.apache.calcite.rel.metadata.MetadataHandler;
 import org.apache.calcite.rel.metadata.RelMetadataQuery;
 
-import com.google.common.collect.ImmutableSet;
+import io.kyligence.kap.guava20.shaded.common.collect.ImmutableSet;
 
 import org.checkerframework.checker.nullness.qual.Nullable;
 

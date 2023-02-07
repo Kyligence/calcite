@@ -16,8 +16,8 @@
  */
 package org.apache.calcite.sql.type;
 
-import com.google.common.collect.ImmutableMap;
-import com.google.common.collect.ImmutableSet;
+import io.kyligence.kap.guava20.shaded.common.collect.ImmutableMap;
+import io.kyligence.kap.guava20.shaded.common.collect.ImmutableSet;
 
 import org.checkerframework.checker.nullness.qual.Nullable;
 

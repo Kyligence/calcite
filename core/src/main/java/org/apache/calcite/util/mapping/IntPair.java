@@ -19,8 +19,8 @@ package org.apache.calcite.util.mapping;
 import org.apache.calcite.runtime.Utilities;
 import org.apache.calcite.util.Util;
 
-import com.google.common.base.Function;
-import com.google.common.collect.Ordering;
+import io.kyligence.kap.guava20.shaded.common.base.Function;
+import io.kyligence.kap.guava20.shaded.common.collect.Ordering;
 
 import org.checkerframework.checker.nullness.qual.Nullable;
 

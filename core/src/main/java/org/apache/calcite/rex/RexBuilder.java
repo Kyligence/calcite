@@ -51,12 +51,12 @@ import org.apache.calcite.util.TimeString;
 import org.apache.calcite.util.TimestampString;
 import org.apache.calcite.util.Util;
 
-import com.google.common.base.Preconditions;
-import com.google.common.collect.ImmutableList;
-import com.google.common.collect.ImmutableRangeSet;
-import com.google.common.collect.Range;
-import com.google.common.collect.RangeSet;
-import com.google.common.collect.TreeRangeSet;
+import io.kyligence.kap.guava20.shaded.common.base.Preconditions;
+import io.kyligence.kap.guava20.shaded.common.collect.ImmutableList;
+import io.kyligence.kap.guava20.shaded.common.collect.ImmutableRangeSet;
+import io.kyligence.kap.guava20.shaded.common.collect.Range;
+import io.kyligence.kap.guava20.shaded.common.collect.RangeSet;
+import io.kyligence.kap.guava20.shaded.common.collect.TreeRangeSet;
 
 import org.checkerframework.checker.nullness.qual.Nullable;
 import org.checkerframework.checker.nullness.qual.PolyNull;

@@ -21,7 +21,7 @@ import org.apache.calcite.materialize.Lattice;
 import org.apache.calcite.materialize.LatticeStatisticProvider;
 import org.apache.calcite.materialize.Lattices;
 
-import com.google.common.collect.ImmutableMap;
+import io.kyligence.kap.guava20.shaded.common.collect.ImmutableMap;
 
 import java.util.ArrayList;
 import java.util.List;

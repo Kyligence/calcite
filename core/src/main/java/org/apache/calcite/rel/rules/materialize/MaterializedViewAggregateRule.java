@@ -58,13 +58,13 @@ import org.apache.calcite.util.mapping.Mapping;
 import org.apache.calcite.util.mapping.MappingType;
 import org.apache.calcite.util.mapping.Mappings;
 
-import com.google.common.base.Preconditions;
-import com.google.common.collect.ArrayListMultimap;
-import com.google.common.collect.BiMap;
-import com.google.common.collect.ImmutableList;
-import com.google.common.collect.ImmutableMultimap;
-import com.google.common.collect.Iterables;
-import com.google.common.collect.Multimap;
+import io.kyligence.kap.guava20.shaded.common.base.Preconditions;
+import io.kyligence.kap.guava20.shaded.common.collect.ArrayListMultimap;
+import io.kyligence.kap.guava20.shaded.common.collect.BiMap;
+import io.kyligence.kap.guava20.shaded.common.collect.ImmutableList;
+import io.kyligence.kap.guava20.shaded.common.collect.ImmutableMultimap;
+import io.kyligence.kap.guava20.shaded.common.collect.Iterables;
+import io.kyligence.kap.guava20.shaded.common.collect.Multimap;
 
 import org.checkerframework.checker.nullness.qual.Nullable;
 import org.immutables.value.Value;

@@ -36,7 +36,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.fasterxml.jackson.databind.node.TextNode;
-import com.google.common.collect.ImmutableMap;
+
+import io.kyligence.kap.guava20.shaded.common.collect.ImmutableMap;
 
 import org.elasticsearch.client.Request;
 import org.elasticsearch.client.Response;

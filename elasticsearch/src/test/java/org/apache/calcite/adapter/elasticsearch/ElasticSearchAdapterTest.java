@@ -26,9 +26,10 @@ import org.apache.calcite.util.Bug;
 import org.apache.calcite.util.TestUtil;
 
 import com.fasterxml.jackson.databind.node.ObjectNode;
-import com.google.common.collect.ImmutableMap;
-import com.google.common.io.LineProcessor;
-import com.google.common.io.Resources;
+
+import io.kyligence.kap.guava20.shaded.common.collect.ImmutableMap;
+import io.kyligence.kap.guava20.shaded.common.io.LineProcessor;
+import io.kyligence.kap.guava20.shaded.common.io.Resources;
 
 import org.junit.jupiter.api.Assumptions;
 import org.junit.jupiter.api.BeforeAll;

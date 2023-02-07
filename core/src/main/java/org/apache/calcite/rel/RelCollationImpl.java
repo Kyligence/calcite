@@ -26,9 +26,9 @@ import org.apache.calcite.runtime.Utilities;
 import org.apache.calcite.util.Util;
 import org.apache.calcite.util.mapping.Mappings;
 
-import com.google.common.base.Preconditions;
-import com.google.common.collect.ImmutableList;
-import com.google.common.collect.UnmodifiableIterator;
+import io.kyligence.kap.guava20.shaded.common.base.Preconditions;
+import io.kyligence.kap.guava20.shaded.common.collect.ImmutableList;
+import io.kyligence.kap.guava20.shaded.common.collect.UnmodifiableIterator;
 
 import org.checkerframework.checker.nullness.qual.Nullable;
 

@@ -41,10 +41,10 @@ import org.apache.calcite.sql.test.SqlTester;
 import org.apache.calcite.tools.RelBuilder;
 import org.apache.calcite.util.ImmutableBitSet;
 
-import com.google.common.collect.ImmutableMap;
-import com.google.common.collect.ImmutableSortedSet;
-import com.google.common.collect.Iterables;
-import com.google.common.collect.Multimap;
+import io.kyligence.kap.guava20.shaded.common.collect.ImmutableMap;
+import io.kyligence.kap.guava20.shaded.common.collect.ImmutableSortedSet;
+import io.kyligence.kap.guava20.shaded.common.collect.Iterables;
+import io.kyligence.kap.guava20.shaded.common.collect.Multimap;
 
 import org.hamcrest.Matcher;
 

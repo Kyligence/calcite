@@ -37,7 +37,7 @@ import org.apache.calcite.sql.type.SqlTypeName;
 import org.apache.calcite.test.schemata.hr.HrSchema;
 import org.apache.calcite.util.Smalls;
 
-import com.google.common.collect.ImmutableList;
+import io.kyligence.kap.guava20.shaded.common.collect.ImmutableList;
 
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;

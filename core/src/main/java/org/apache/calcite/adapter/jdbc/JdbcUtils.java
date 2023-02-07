@@ -28,10 +28,10 @@ import org.apache.calcite.util.Util;
 
 import org.apache.commons.dbcp2.BasicDataSource;
 
-import com.google.common.cache.CacheBuilder;
-import com.google.common.cache.CacheLoader;
-import com.google.common.cache.LoadingCache;
-import com.google.common.primitives.Ints;
+import io.kyligence.kap.guava20.shaded.common.cache.CacheBuilder;
+import io.kyligence.kap.guava20.shaded.common.cache.CacheLoader;
+import io.kyligence.kap.guava20.shaded.common.cache.LoadingCache;
+import io.kyligence.kap.guava20.shaded.common.primitives.Ints;
 
 import org.checkerframework.checker.nullness.qual.Nullable;
 

@@ -29,7 +29,7 @@ import org.apache.calcite.test.schemata.hr.HrSchema;
 
 import org.apache.commons.dbcp2.BasicDataSource;
 
-import com.google.common.collect.Sets;
+import io.kyligence.kap.guava20.shaded.common.collect.Sets;
 
 import org.junit.jupiter.api.Test;
 

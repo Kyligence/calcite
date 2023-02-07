@@ -22,7 +22,7 @@ import org.apache.calcite.rel.RelNode;
 import org.apache.calcite.rex.RexNode;
 import org.apache.calcite.util.ImmutableIntList;
 
-import com.google.common.collect.ImmutableList;
+import io.kyligence.kap.guava20.shaded.common.collect.ImmutableList;
 
 import java.util.Objects;
 import java.util.Set;

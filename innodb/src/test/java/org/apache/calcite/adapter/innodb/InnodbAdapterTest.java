@@ -29,8 +29,9 @@ import org.apache.calcite.util.Sources;
 import org.apache.commons.collections.CollectionUtils;
 
 import com.alibaba.innodb.java.reader.util.Utils;
-import com.google.common.collect.ImmutableMap;
-import com.google.common.collect.Lists;
+
+import io.kyligence.kap.guava20.shaded.common.collect.ImmutableMap;
+import io.kyligence.kap.guava20.shaded.common.collect.Lists;
 
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;

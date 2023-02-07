@@ -18,7 +18,7 @@ package org.apache.calcite.interpreter;
 
 import org.apache.calcite.rel.core.SetOp;
 
-import com.google.common.collect.HashMultiset;
+import io.kyligence.kap.guava20.shaded.common.collect.HashMultiset;
 
 import java.util.Collection;
 import java.util.HashSet;

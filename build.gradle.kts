@@ -57,9 +57,24 @@ plugins {
     id("com.autonomousapps.dependency-analysis") apply false
 }
 
-repositories {
-    // At least for RAT
-    mavenCentral()
+allprojects {
+    repositories {
+        // At least for RAT
+        mavenLocal()
+        maven {
+            url = uri("https://repo-ofs.kyligence.com/repository/maven-releases/")
+            mavenContent {
+                releasesOnly()
+            }
+        }
+        maven {
+            url = uri("https://repo-ofs.kyligence.com/repository/maven-snapshots/")
+            mavenContent {
+                snapshotsOnly()
+            }
+        }
+        mavenCentral()
+    }
 }
 
 fun reportsForHumans() = !(System.getenv()["CI"]?.toBoolean() ?: false)

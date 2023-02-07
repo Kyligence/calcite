@@ -19,7 +19,7 @@ package org.apache.calcite.sql;
 import org.apache.calcite.sql.type.OperandTypes;
 import org.apache.calcite.sql.type.ReturnTypes;
 
-import com.google.common.collect.ImmutableSet;
+import io.kyligence.kap.guava20.shaded.common.collect.ImmutableSet;
 
 import java.util.Set;
 

@@ -28,9 +28,9 @@ import org.apache.calcite.sql.SqlDialectFactory;
 import org.apache.calcite.sql.SqlDialectFactoryImpl;
 import org.apache.calcite.util.BuiltInMethod;
 
-import com.google.common.base.Supplier;
-import com.google.common.base.Suppliers;
-import com.google.common.collect.ImmutableMap;
+import io.kyligence.kap.guava20.shaded.common.base.Supplier;
+import io.kyligence.kap.guava20.shaded.common.base.Suppliers;
+import io.kyligence.kap.guava20.shaded.common.collect.ImmutableMap;
 
 import org.checkerframework.checker.nullness.qual.Nullable;
 

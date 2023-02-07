@@ -27,7 +27,8 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.deser.std.StdDeserializer;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
-import com.google.common.collect.ImmutableSet;
+
+import io.kyligence.kap.guava20.shaded.common.collect.ImmutableSet;
 
 import java.io.IOException;
 import java.time.Duration;

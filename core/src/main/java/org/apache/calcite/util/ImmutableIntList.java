@@ -20,10 +20,10 @@ import org.apache.calcite.linq4j.function.Functions;
 import org.apache.calcite.runtime.FlatLists;
 import org.apache.calcite.util.mapping.Mappings;
 
-import com.google.common.base.Preconditions;
-import com.google.common.collect.Iterables;
-import com.google.common.collect.Lists;
-import com.google.common.collect.UnmodifiableListIterator;
+import io.kyligence.kap.guava20.shaded.common.base.Preconditions;
+import io.kyligence.kap.guava20.shaded.common.collect.Iterables;
+import io.kyligence.kap.guava20.shaded.common.collect.Lists;
+import io.kyligence.kap.guava20.shaded.common.collect.UnmodifiableListIterator;
 
 import org.checkerframework.checker.nullness.qual.Nullable;
 
@@ -316,7 +316,7 @@ public class ImmutableIntList extends FlatLists.AbstractFlatList<Integer> {
     }
   }
 
-  /** Extension to {@link com.google.common.collect.UnmodifiableListIterator}
+  /** Extension to {@link io.kyligence.kap.guava20.shaded.common.collect.UnmodifiableListIterator}
    * that operates by index.
    *
    * @param <E> element type */

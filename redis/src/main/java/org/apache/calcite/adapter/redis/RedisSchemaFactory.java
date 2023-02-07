@@ -20,7 +20,7 @@ import org.apache.calcite.schema.Schema;
 import org.apache.calcite.schema.SchemaFactory;
 import org.apache.calcite.schema.SchemaPlus;
 
-import com.google.common.base.Preconditions;
+import io.kyligence.kap.guava20.shaded.common.base.Preconditions;
 
 import java.util.List;
 import java.util.Map;

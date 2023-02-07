@@ -18,7 +18,7 @@ package org.apache.calcite.util;
 
 import org.apache.calcite.linq4j.function.Function0;
 
-import com.google.common.collect.ImmutableList;
+import io.kyligence.kap.guava20.shaded.common.collect.ImmutableList;
 
 import org.junit.jupiter.api.Test;
 

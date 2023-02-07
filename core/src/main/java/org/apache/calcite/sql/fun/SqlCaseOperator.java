@@ -45,7 +45,7 @@ import org.apache.calcite.sql.validate.implicit.TypeCoercion;
 import org.apache.calcite.util.Litmus;
 import org.apache.calcite.util.Pair;
 
-import com.google.common.collect.Iterables;
+import io.kyligence.kap.guava20.shaded.common.collect.Iterables;
 
 import org.checkerframework.checker.nullness.qual.Nullable;
 

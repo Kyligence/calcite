@@ -43,8 +43,8 @@ import org.apache.calcite.util.Util;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.codec.language.Soundex;
 
-import com.google.common.base.Splitter;
-import com.google.common.base.Strings;
+import io.kyligence.kap.guava20.shaded.common.base.Splitter;
+import io.kyligence.kap.guava20.shaded.common.base.Strings;
 
 import org.checkerframework.checker.nullness.qual.Nullable;
 import org.checkerframework.checker.nullness.qual.PolyNull;

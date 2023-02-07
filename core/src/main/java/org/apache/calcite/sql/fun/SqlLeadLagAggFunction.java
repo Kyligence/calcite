@@ -31,8 +31,8 @@ import org.apache.calcite.sql.type.SqlTypeTransform;
 import org.apache.calcite.sql.type.SqlTypeTransforms;
 import org.apache.calcite.util.Optionality;
 
-import com.google.common.base.Preconditions;
-import com.google.common.collect.ImmutableList;
+import io.kyligence.kap.guava20.shaded.common.base.Preconditions;
+import io.kyligence.kap.guava20.shaded.common.collect.ImmutableList;
 
 import java.util.List;
 

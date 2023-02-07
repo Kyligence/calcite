@@ -27,12 +27,13 @@ import org.apache.calcite.util.Pair;
 import org.apache.calcite.util.PartiallyOrderedSet;
 import org.apache.calcite.util.Util;
 
-import com.google.common.base.Preconditions;
-import com.google.common.collect.ImmutableList;
-import com.google.common.collect.ImmutableSortedSet;
-import com.google.common.collect.Iterables;
-import com.google.common.collect.Ordering;
 import com.yahoo.sketches.hll.HllSketch;
+
+import io.kyligence.kap.guava20.shaded.common.base.Preconditions;
+import io.kyligence.kap.guava20.shaded.common.collect.ImmutableList;
+import io.kyligence.kap.guava20.shaded.common.collect.ImmutableSortedSet;
+import io.kyligence.kap.guava20.shaded.common.collect.Iterables;
+import io.kyligence.kap.guava20.shaded.common.collect.Ordering;
 
 import org.checkerframework.checker.nullness.qual.Nullable;
 

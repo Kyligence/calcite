@@ -16,8 +16,8 @@
  */
 package org.apache.calcite.chinook;
 
-import com.google.common.base.Charsets;
-import com.google.common.io.CharStreams;
+import io.kyligence.kap.guava20.shaded.common.base.Charsets;
+import io.kyligence.kap.guava20.shaded.common.io.CharStreams;
 
 import java.io.IOException;
 import java.io.InputStream;

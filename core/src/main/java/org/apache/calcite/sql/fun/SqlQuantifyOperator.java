@@ -18,7 +18,7 @@ package org.apache.calcite.sql.fun;
 
 import org.apache.calcite.sql.SqlKind;
 
-import com.google.common.base.Preconditions;
+import io.kyligence.kap.guava20.shaded.common.base.Preconditions;
 
 import java.util.Objects;
 

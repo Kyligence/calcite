@@ -43,7 +43,7 @@ import org.apache.pig.impl.logicalLayer.FrontendException;
 import org.apache.pig.impl.util.PropertiesUtil;
 import org.apache.pig.newplan.logical.relational.LogicalPlan;
 
-import com.google.common.collect.ImmutableList;
+import io.kyligence.kap.guava20.shaded.common.collect.ImmutableList;
 
 import java.io.IOException;
 import java.io.InputStream;

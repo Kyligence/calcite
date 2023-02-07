@@ -30,7 +30,8 @@ import org.apache.commons.io.IOUtils;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.util.DefaultPrettyPrinter;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.google.common.base.Charsets;
+
+import io.kyligence.kap.guava20.shaded.common.base.Charsets;
 
 import org.checkerframework.checker.nullness.qual.Nullable;
 

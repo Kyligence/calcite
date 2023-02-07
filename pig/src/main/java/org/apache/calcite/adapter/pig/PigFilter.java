@@ -27,7 +27,7 @@ import org.apache.calcite.rex.RexInputRef;
 import org.apache.calcite.rex.RexLiteral;
 import org.apache.calcite.rex.RexNode;
 
-import com.google.common.base.Preconditions;
+import io.kyligence.kap.guava20.shaded.common.base.Preconditions;
 
 import java.util.ArrayList;
 import java.util.List;

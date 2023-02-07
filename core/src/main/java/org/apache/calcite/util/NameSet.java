@@ -16,7 +16,7 @@
  */
 package org.apache.calcite.util;
 
-import com.google.common.collect.Maps;
+import io.kyligence.kap.guava20.shaded.common.collect.Maps;
 
 import org.checkerframework.checker.nullness.qual.Nullable;
 

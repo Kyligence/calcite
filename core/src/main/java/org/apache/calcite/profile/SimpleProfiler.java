@@ -24,8 +24,8 @@ import org.apache.calcite.util.ImmutableBitSet;
 import org.apache.calcite.util.PartiallyOrderedSet;
 import org.apache.calcite.util.Util;
 
-import com.google.common.collect.ImmutableSortedSet;
-import com.google.common.collect.Iterables;
+import io.kyligence.kap.guava20.shaded.common.collect.ImmutableSortedSet;
+import io.kyligence.kap.guava20.shaded.common.collect.Iterables;
 
 import org.checkerframework.checker.initialization.qual.UnknownInitialization;
 import org.checkerframework.checker.nullness.qual.Nullable;

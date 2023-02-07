@@ -18,7 +18,7 @@ package org.apache.calcite.rel.type;
 
 import org.apache.calcite.linq4j.Ord;
 
-import com.google.common.collect.ImmutableList;
+import io.kyligence.kap.guava20.shaded.common.collect.ImmutableList;
 
 import java.util.List;
 

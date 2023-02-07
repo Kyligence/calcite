@@ -53,7 +53,8 @@ public abstract class WinAggResultContextImpl extends AggResultContextImpl
   @Deprecated // to be removed before 2.0
   protected WinAggResultContextImpl(BlockBuilder block,
       List<Expression> accumulator,
-      com.google.common.base.Function<BlockBuilder, WinAggFrameResultContext> frameContextBuilder) {
+      io.kyligence.kap.guava20.shaded.common.base.Function<BlockBuilder,
+      WinAggFrameResultContext> frameContextBuilder) {
     this(block, accumulator,
         (Function<BlockBuilder, WinAggFrameResultContext>) frameContextBuilder::apply);
   }

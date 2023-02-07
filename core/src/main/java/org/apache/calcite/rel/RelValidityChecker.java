@@ -19,7 +19,7 @@ package org.apache.calcite.rel;
 import org.apache.calcite.rel.core.CorrelationId;
 import org.apache.calcite.util.Litmus;
 
-import com.google.common.collect.ImmutableSet;
+import io.kyligence.kap.guava20.shaded.common.collect.ImmutableSet;
 
 import org.checkerframework.checker.nullness.qual.Nullable;
 

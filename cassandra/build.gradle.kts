@@ -26,7 +26,7 @@ dependencies {
     api(project(":linq4j"))
 
     api("com.datastax.oss:java-driver-core")
-    api("com.google.guava:guava")
+    api("io.kyligence.ke:kap-external-guava20")
     api("org.slf4j:slf4j-api")
 
     implementation("org.apache.calcite.avatica:avatica-core")

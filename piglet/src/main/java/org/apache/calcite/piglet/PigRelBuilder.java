@@ -49,8 +49,8 @@ import org.apache.pig.newplan.Operator;
 import org.apache.pig.newplan.logical.relational.LogicalRelationalOperator;
 import org.apache.pig.scripting.jython.JythonFunction;
 
-import com.google.common.collect.ImmutableList;
-import com.google.common.collect.ImmutableSet;
+import io.kyligence.kap.guava20.shaded.common.collect.ImmutableList;
+import io.kyligence.kap.guava20.shaded.common.collect.ImmutableSet;
 
 import java.util.ArrayList;
 import java.util.Arrays;

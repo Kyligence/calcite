@@ -37,16 +37,16 @@ import org.apache.calcite.util.RangeSets;
 import org.apache.calcite.util.Sarg;
 import org.apache.calcite.util.Util;
 
-import com.google.common.collect.ArrayListMultimap;
-import com.google.common.collect.BoundType;
-import com.google.common.collect.ImmutableList;
-import com.google.common.collect.ImmutableRangeSet;
-import com.google.common.collect.Iterables;
-import com.google.common.collect.Multimap;
-import com.google.common.collect.Range;
-import com.google.common.collect.RangeSet;
-import com.google.common.collect.Sets;
-import com.google.common.collect.TreeRangeSet;
+import io.kyligence.kap.guava20.shaded.common.collect.ArrayListMultimap;
+import io.kyligence.kap.guava20.shaded.common.collect.BoundType;
+import io.kyligence.kap.guava20.shaded.common.collect.ImmutableList;
+import io.kyligence.kap.guava20.shaded.common.collect.ImmutableRangeSet;
+import io.kyligence.kap.guava20.shaded.common.collect.Iterables;
+import io.kyligence.kap.guava20.shaded.common.collect.Multimap;
+import io.kyligence.kap.guava20.shaded.common.collect.Range;
+import io.kyligence.kap.guava20.shaded.common.collect.RangeSet;
+import io.kyligence.kap.guava20.shaded.common.collect.Sets;
+import io.kyligence.kap.guava20.shaded.common.collect.TreeRangeSet;
 
 import org.checkerframework.checker.nullness.qual.Nullable;
 
@@ -2908,6 +2908,10 @@ public class RexSimplify {
 
     /** Returns whether it is worth to fix and convert to {@code SEARCH} calls. */
     boolean needToFix() {
+      // Calcite 1.30 add SEARCH call, But KE needs to be consistent with the behavior,
+      // so cancel this function conversion
+      return false;
+
       // Fix and converts to SEARCH if:
       // 1. A Sarg has complexity greater than 1;
       // 2. The terms are reduced as simpler Sarg points;
@@ -2916,10 +2920,10 @@ public class RexSimplify {
       // Ignore 'negate' just to be compatible with previous versions of this
       // method. "build().complexity()" would be a better estimate, if we could
       // switch to it breaking lots of plans.
-      final Collection<RexSargBuilder> builders = map.values();
-      return builders.stream().anyMatch(b -> b.build(false).complexity() > 1)
-          || newTermsCount == 1
-          && builders.stream().allMatch(b -> simpleSarg(b.build()));
+      // final Collection<RexSargBuilder> builders = map.values();
+      // return builders.stream().anyMatch(b -> b.build(false).complexity() > 1)
+      //     || newTermsCount == 1
+      //     && builders.stream().allMatch(b -> simpleSarg(b.build()));
     }
 
     /**

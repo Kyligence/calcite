@@ -16,7 +16,7 @@
  */
 package org.apache.calcite.sql.type;
 
-import com.google.common.collect.ImmutableSet;
+import io.kyligence.kap.guava20.shaded.common.collect.ImmutableSet;
 
 import java.util.Map;
 import java.util.Objects;

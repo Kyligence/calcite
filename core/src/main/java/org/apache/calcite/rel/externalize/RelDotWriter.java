@@ -25,8 +25,8 @@ import org.apache.calcite.sql.SqlExplainLevel;
 import org.apache.calcite.util.Pair;
 import org.apache.calcite.util.Util;
 
-import com.google.common.collect.HashMultimap;
-import com.google.common.collect.Multimap;
+import io.kyligence.kap.guava20.shaded.common.collect.HashMultimap;
+import io.kyligence.kap.guava20.shaded.common.collect.Multimap;
 
 import org.checkerframework.checker.nullness.qual.Nullable;
 import org.immutables.value.Value;

@@ -20,7 +20,7 @@ import org.apache.calcite.sql.parser.SqlParserPos;
 import org.apache.calcite.sql.type.SqlTypeName;
 import org.apache.calcite.util.TimeString;
 
-import com.google.common.base.Preconditions;
+import io.kyligence.kap.guava20.shaded.common.base.Preconditions;
 
 import java.util.Objects;
 

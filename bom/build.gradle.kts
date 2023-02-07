@@ -61,7 +61,7 @@ dependencies {
         apiv("com.github.stephenc.jcip:jcip-annotations")
         apiv("com.google.errorprone:error_prone_annotations", "errorprone")
         apiv("com.google.errorprone:error_prone_type_annotations", "errorprone")
-        apiv("com.google.guava:guava")
+        apiv("io.kyligence.ke:kap-external-guava20")
         apiv("com.google.protobuf:protobuf-java", "protobuf")
         apiv("com.google.uzaygezen:uzaygezen-core", "uzaygezen")
         apiv("com.h2database:h2")

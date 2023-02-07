@@ -18,7 +18,7 @@ package org.apache.calcite.rel.mutable;
 
 import org.apache.calcite.rel.type.RelDataType;
 
-import com.google.common.collect.ImmutableList;
+import io.kyligence.kap.guava20.shaded.common.collect.ImmutableList;
 
 import java.util.List;
 

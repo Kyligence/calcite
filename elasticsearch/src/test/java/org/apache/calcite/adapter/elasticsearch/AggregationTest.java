@@ -26,7 +26,8 @@ import org.apache.calcite.util.Bug;
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
-import com.google.common.collect.ImmutableMap;
+
+import io.kyligence.kap.guava20.shaded.common.collect.ImmutableMap;
 
 import org.junit.jupiter.api.Assumptions;
 import org.junit.jupiter.api.BeforeAll;

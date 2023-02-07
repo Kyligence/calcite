@@ -26,8 +26,8 @@ import org.apache.calcite.schema.Table;
 import org.apache.calcite.schema.impl.MaterializedViewTable;
 import org.apache.calcite.util.ImmutableBitSet;
 
-import com.google.common.base.Suppliers;
-import com.google.common.collect.ImmutableList;
+import io.kyligence.kap.guava20.shaded.common.base.Suppliers;
+import io.kyligence.kap.guava20.shaded.common.collect.ImmutableList;
 
 import java.util.ArrayList;
 import java.util.Arrays;

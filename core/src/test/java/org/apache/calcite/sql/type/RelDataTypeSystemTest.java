@@ -21,7 +21,7 @@ import org.apache.calcite.rel.type.RelDataTypeFactory;
 import org.apache.calcite.rel.type.RelDataTypeSystemImpl;
 import org.apache.calcite.sql.fun.SqlStdOperatorTable;
 
-import com.google.common.collect.Lists;
+import io.kyligence.kap.guava20.shaded.common.collect.Lists;
 
 import org.junit.jupiter.api.Test;
 

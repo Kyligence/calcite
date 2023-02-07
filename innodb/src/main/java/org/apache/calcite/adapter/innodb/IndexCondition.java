@@ -25,13 +25,14 @@ import org.apache.calcite.util.Pair;
 import org.apache.commons.collections.CollectionUtils;
 
 import com.alibaba.innodb.java.reader.comparator.ComparisonOperator;
-import com.google.common.collect.ImmutableList;
+
+import io.kyligence.kap.guava20.shaded.common.collect.ImmutableList;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-import static com.google.common.base.Preconditions.checkState;
+import static io.kyligence.kap.guava20.shaded.common.base.Preconditions.checkState;
 
 /**
  * Index condition.

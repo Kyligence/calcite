@@ -22,7 +22,7 @@ dependencies {
     jmhImplementation(platform(project(":bom")))
     jmhImplementation(project(":core"))
     jmhImplementation(project(":linq4j"))
-    jmhImplementation("com.google.guava:guava")
+    jmhImplementation("io.kyligence.ke:kap-external-guava20")
     jmhImplementation("org.codehaus.janino:commons-compiler")
     jmhImplementation("org.openjdk.jmh:jmh-core")
     jmhImplementation("org.openjdk.jmh:jmh-generator-annprocess")

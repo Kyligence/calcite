@@ -16,7 +16,7 @@
  */
 package org.apache.calcite.sql;
 
-import com.google.common.collect.ImmutableList;
+import io.kyligence.kap.guava20.shaded.common.collect.ImmutableList;
 
 /**
  * SqlTumbleTableFunction implements an operator for tumbling.

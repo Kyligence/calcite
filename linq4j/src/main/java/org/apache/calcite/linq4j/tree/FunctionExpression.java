@@ -19,8 +19,8 @@ package org.apache.calcite.linq4j.tree;
 import org.apache.calcite.linq4j.function.Function;
 import org.apache.calcite.linq4j.function.Functions;
 
-import com.google.common.collect.ImmutableList;
-import com.google.common.collect.Lists;
+import io.kyligence.kap.guava20.shaded.common.collect.ImmutableList;
+import io.kyligence.kap.guava20.shaded.common.collect.Lists;
 
 import org.checkerframework.checker.nullness.qual.Nullable;
 

@@ -22,11 +22,11 @@ import org.apache.calcite.sql.util.ListSqlOperatorTable;
 import org.apache.calcite.sql.util.SqlOperatorTables;
 import org.apache.calcite.util.Util;
 
-import com.google.common.cache.CacheBuilder;
-import com.google.common.cache.CacheLoader;
-import com.google.common.cache.LoadingCache;
-import com.google.common.collect.ImmutableList;
-import com.google.common.collect.ImmutableSet;
+import io.kyligence.kap.guava20.shaded.common.cache.CacheBuilder;
+import io.kyligence.kap.guava20.shaded.common.cache.CacheLoader;
+import io.kyligence.kap.guava20.shaded.common.cache.LoadingCache;
+import io.kyligence.kap.guava20.shaded.common.collect.ImmutableList;
+import io.kyligence.kap.guava20.shaded.common.collect.ImmutableSet;
 
 import java.lang.reflect.Field;
 import java.util.Set;

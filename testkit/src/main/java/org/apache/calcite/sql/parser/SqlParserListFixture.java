@@ -19,7 +19,7 @@ package org.apache.calcite.sql.parser;
 import org.apache.calcite.sql.SqlDialect;
 import org.apache.calcite.sql.test.SqlTestFactory;
 
-import com.google.common.collect.ImmutableList;
+import io.kyligence.kap.guava20.shaded.common.collect.ImmutableList;
 
 import org.checkerframework.checker.nullness.qual.Nullable;
 

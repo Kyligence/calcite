@@ -16,9 +16,9 @@
  */
 package org.apache.calcite.util;
 
-import com.google.common.collect.ImmutableSortedMap;
-import com.google.common.collect.ImmutableSortedSet;
-import com.google.common.collect.TreeMultimap;
+import io.kyligence.kap.guava20.shaded.common.collect.ImmutableSortedMap;
+import io.kyligence.kap.guava20.shaded.common.collect.ImmutableSortedSet;
+import io.kyligence.kap.guava20.shaded.common.collect.TreeMultimap;
 
 import java.util.Collection;
 import java.util.HashMap;

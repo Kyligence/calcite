@@ -67,11 +67,11 @@ import org.apache.calcite.util.Util;
 import org.apache.calcite.util.mapping.Mapping;
 import org.apache.calcite.util.mapping.Mappings;
 
-import com.google.common.annotations.VisibleForTesting;
-import com.google.common.collect.ImmutableList;
-import com.google.common.collect.LinkedHashMultimap;
-import com.google.common.collect.Multimap;
-import com.google.common.collect.Sets;
+import io.kyligence.kap.guava20.shaded.common.annotations.VisibleForTesting;
+import io.kyligence.kap.guava20.shaded.common.collect.ImmutableList;
+import io.kyligence.kap.guava20.shaded.common.collect.LinkedHashMultimap;
+import io.kyligence.kap.guava20.shaded.common.collect.Multimap;
+import io.kyligence.kap.guava20.shaded.common.collect.Sets;
 
 import org.checkerframework.checker.nullness.qual.Nullable;
 

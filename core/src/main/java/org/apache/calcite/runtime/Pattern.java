@@ -16,8 +16,8 @@
  */
 package org.apache.calcite.runtime;
 
-import com.google.common.base.Preconditions;
-import com.google.common.collect.ImmutableList;
+import io.kyligence.kap.guava20.shaded.common.base.Preconditions;
+import io.kyligence.kap.guava20.shaded.common.collect.ImmutableList;
 
 import java.util.Objects;
 import java.util.Stack;

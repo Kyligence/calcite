@@ -18,7 +18,7 @@ package org.apache.calcite.sql.validate;
 
 import org.apache.calcite.sql.SqlIdentifier;
 
-import com.google.common.collect.Ordering;
+import io.kyligence.kap.guava20.shaded.common.collect.Ordering;
 
 import java.util.Comparator;
 import java.util.List;

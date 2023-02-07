@@ -18,7 +18,7 @@ package org.apache.calcite.util;
 
 import org.apache.commons.io.input.ReaderInputStream;
 
-import com.google.common.io.CharSource;
+import io.kyligence.kap.guava20.shaded.common.io.CharSource;
 
 import org.checkerframework.checker.nullness.qual.Nullable;
 

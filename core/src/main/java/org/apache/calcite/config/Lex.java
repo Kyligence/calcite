@@ -19,7 +19,7 @@ package org.apache.calcite.config;
 import org.apache.calcite.avatica.util.Casing;
 import org.apache.calcite.avatica.util.Quoting;
 
-import com.google.common.collect.ImmutableSet;
+import io.kyligence.kap.guava20.shaded.common.collect.ImmutableSet;
 
 import java.util.Objects;
 import java.util.Set;

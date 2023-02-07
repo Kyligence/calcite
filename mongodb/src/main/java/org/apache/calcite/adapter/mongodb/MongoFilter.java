@@ -33,8 +33,8 @@ import org.apache.calcite.rex.RexUtil;
 import org.apache.calcite.util.JsonBuilder;
 import org.apache.calcite.util.Pair;
 
-import com.google.common.collect.HashMultimap;
-import com.google.common.collect.Multimap;
+import io.kyligence.kap.guava20.shaded.common.collect.HashMultimap;
+import io.kyligence.kap.guava20.shaded.common.collect.Multimap;
 
 import org.checkerframework.checker.nullness.qual.Nullable;
 

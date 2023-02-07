@@ -95,7 +95,7 @@ public class SqlBasicTypeNameSpec extends SqlTypeNameSpec {
       int scale,
       @Nullable String charSetName,
       SqlParserPos pos) {
-    super(new SqlIdentifier(typeName.name(), pos), pos);
+    super(new SqlIdentifier(typeName.getName(), pos), pos);
     this.sqlTypeName = typeName;
     this.precision = precision;
     this.scale = scale;

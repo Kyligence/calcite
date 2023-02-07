@@ -17,7 +17,8 @@
 package org.apache.calcite.test;
 
 import com.datastax.oss.driver.api.core.CqlSession;
-import com.google.common.collect.ImmutableMap;
+
+import io.kyligence.kap.guava20.shaded.common.collect.ImmutableMap;
 
 import org.cassandraunit.CQLDataLoader;
 import org.cassandraunit.dataset.cql.ClassPathCQLDataSet;

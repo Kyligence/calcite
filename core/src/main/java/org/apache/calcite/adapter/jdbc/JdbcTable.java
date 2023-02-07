@@ -54,7 +54,7 @@ import org.apache.calcite.sql.util.SqlString;
 import org.apache.calcite.util.Pair;
 import org.apache.calcite.util.Util;
 
-import com.google.common.base.Suppliers;
+import io.kyligence.kap.guava20.shaded.common.base.Suppliers;
 
 import org.checkerframework.checker.nullness.qual.Nullable;
 

@@ -28,7 +28,7 @@ import org.apache.calcite.sql.validate.SqlUserDefinedFunction;
 
 import org.apache.pig.FuncSpec;
 
-import com.google.common.collect.ImmutableList;
+import io.kyligence.kap.guava20.shaded.common.collect.ImmutableList;
 
 /** Pig user-defined function. */
 public class PigUserDefinedFunction extends SqlUserDefinedFunction {

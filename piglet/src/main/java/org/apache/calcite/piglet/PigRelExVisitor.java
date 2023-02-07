@@ -64,8 +64,8 @@ import org.apache.pig.newplan.logical.expression.UserFuncExpression;
 import org.apache.pig.newplan.logical.relational.LOInnerLoad;
 import org.apache.pig.newplan.logical.relational.LogicalRelationalOperator;
 
-import com.google.common.collect.ImmutableList;
-import com.google.common.collect.Lists;
+import io.kyligence.kap.guava20.shaded.common.collect.ImmutableList;
+import io.kyligence.kap.guava20.shaded.common.collect.Lists;
 
 import java.math.BigDecimal;
 import java.util.ArrayDeque;

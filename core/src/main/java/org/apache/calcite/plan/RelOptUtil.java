@@ -101,12 +101,12 @@ import org.apache.calcite.util.mapping.Mapping;
 import org.apache.calcite.util.mapping.MappingType;
 import org.apache.calcite.util.mapping.Mappings;
 
-import com.google.common.collect.ImmutableList;
-import com.google.common.collect.ImmutableSet;
-import com.google.common.collect.Iterables;
-import com.google.common.collect.LinkedHashMultimap;
-import com.google.common.collect.Lists;
-import com.google.common.collect.Multimap;
+import io.kyligence.kap.guava20.shaded.common.collect.ImmutableList;
+import io.kyligence.kap.guava20.shaded.common.collect.ImmutableSet;
+import io.kyligence.kap.guava20.shaded.common.collect.Iterables;
+import io.kyligence.kap.guava20.shaded.common.collect.LinkedHashMultimap;
+import io.kyligence.kap.guava20.shaded.common.collect.Lists;
+import io.kyligence.kap.guava20.shaded.common.collect.Multimap;
 
 import org.checkerframework.checker.initialization.qual.NotOnlyInitialized;
 import org.checkerframework.checker.initialization.qual.UnknownInitialization;
@@ -149,18 +149,18 @@ public abstract class RelOptUtil {
 
   @SuppressWarnings("Guava")
   @Deprecated // to be removed before 2.0
-  public static final com.google.common.base.Predicate<Filter>
+  public static final io.kyligence.kap.guava20.shaded.common.base.Predicate<Filter>
       FILTER_PREDICATE = f -> !f.containsOver();
 
   @SuppressWarnings("Guava")
   @Deprecated // to be removed before 2.0
-  public static final com.google.common.base.Predicate<Project>
+  public static final io.kyligence.kap.guava20.shaded.common.base.Predicate<Project>
       PROJECT_PREDICATE =
       RelOptUtil::notContainsWindowedAgg;
 
   @SuppressWarnings("Guava")
   @Deprecated // to be removed before 2.0
-  public static final com.google.common.base.Predicate<Calc> CALC_PREDICATE =
+  public static final io.kyligence.kap.guava20.shaded.common.base.Predicate<Calc> CALC_PREDICATE =
       RelOptUtil::notContainsWindowedAgg;
 
   //~ Methods ----------------------------------------------------------------

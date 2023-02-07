@@ -17,9 +17,10 @@
 package org.apache.calcite.adapter.elasticsearch;
 
 import com.fasterxml.jackson.databind.node.ObjectNode;
-import com.google.common.base.Preconditions;
-import com.google.common.collect.AbstractSequentialIterator;
-import com.google.common.collect.Iterators;
+
+import io.kyligence.kap.guava20.shaded.common.base.Preconditions;
+import io.kyligence.kap.guava20.shaded.common.collect.AbstractSequentialIterator;
+import io.kyligence.kap.guava20.shaded.common.collect.Iterators;
 
 import java.util.Collections;
 import java.util.Iterator;

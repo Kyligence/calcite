@@ -20,7 +20,7 @@ import org.apache.calcite.util.Sources;
 import org.apache.calcite.util.TestUtil;
 import org.apache.calcite.util.Util;
 
-import com.google.common.collect.Ordering;
+import io.kyligence.kap.guava20.shaded.common.collect.Ordering;
 
 import java.io.PrintStream;
 import java.sql.Connection;

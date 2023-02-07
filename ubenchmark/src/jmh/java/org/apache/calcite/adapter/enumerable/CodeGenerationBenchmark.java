@@ -36,8 +36,8 @@ import org.apache.calcite.runtime.Typed;
 import org.apache.calcite.runtime.Utilities;
 import org.apache.calcite.tools.RelBuilder;
 
-import com.google.common.cache.Cache;
-import com.google.common.cache.CacheBuilder;
+import io.kyligence.kap.guava20.shaded.common.cache.Cache;
+import io.kyligence.kap.guava20.shaded.common.cache.CacheBuilder;
 
 import org.codehaus.commons.compiler.CompilerFactoryFactory;
 import org.codehaus.commons.compiler.IClassBodyEvaluator;

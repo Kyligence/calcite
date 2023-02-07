@@ -34,14 +34,15 @@ import com.alibaba.innodb.java.reader.schema.Column;
 import com.alibaba.innodb.java.reader.schema.TableDef;
 import com.alibaba.innodb.java.reader.schema.provider.TableDefProvider;
 import com.alibaba.innodb.java.reader.schema.provider.impl.SqlFileTableDefProvider;
-import com.google.common.collect.ImmutableMap;
+
+import io.kyligence.kap.guava20.shaded.common.collect.ImmutableMap;
 
 import java.util.List;
 import java.util.Map;
 
-import static com.google.common.base.Preconditions.checkArgument;
-
 import static java.util.stream.Collectors.toList;
+
+import static io.kyligence.kap.guava20.shaded.common.base.Preconditions.checkArgument;
 
 /**
  * Schema for an InnoDB data source.

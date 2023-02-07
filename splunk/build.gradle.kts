@@ -24,7 +24,7 @@ plugins {
 dependencies {
     api(project(":core"))
     api(project(":linq4j"))
-    api("com.google.guava:guava")
+    api("io.kyligence.ke:kap-external-guava20")
     api("org.apache.calcite.avatica:avatica-core")
     api("org.slf4j:slf4j-api")
 

@@ -34,7 +34,7 @@ import org.apache.calcite.schema.impl.ReflectiveFunctionBase;
 import org.apache.calcite.sql.validate.SqlMoniker;
 import org.apache.calcite.util.BuiltInMethod;
 
-import com.google.common.collect.Iterables;
+import io.kyligence.kap.guava20.shaded.common.collect.Iterables;
 
 import org.checkerframework.checker.nullness.qual.Nullable;
 

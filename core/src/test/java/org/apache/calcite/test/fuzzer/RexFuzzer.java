@@ -28,9 +28,9 @@ import org.apache.calcite.sql.type.SqlTypeName;
 import org.apache.calcite.util.Pair;
 import org.apache.calcite.util.Sarg;
 
-import com.google.common.collect.Range;
-import com.google.common.collect.RangeSet;
-import com.google.common.collect.TreeRangeSet;
+import io.kyligence.kap.guava20.shaded.common.collect.Range;
+import io.kyligence.kap.guava20.shaded.common.collect.RangeSet;
+import io.kyligence.kap.guava20.shaded.common.collect.TreeRangeSet;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;

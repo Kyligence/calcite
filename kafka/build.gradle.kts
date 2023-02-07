@@ -20,7 +20,7 @@ dependencies {
     api("org.apache.kafka:kafka-clients")
     api("org.checkerframework:checker-qual")
 
-    implementation("com.google.guava:guava")
+    implementation("io.kyligence.ke:kap-external-guava20")
 
     testImplementation(project(":testkit"))
     testRuntimeOnly("org.apache.logging.log4j:log4j-slf4j-impl")

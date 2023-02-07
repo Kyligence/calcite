@@ -16,9 +16,9 @@
  */
 package org.apache.calcite.util;
 
-import com.google.common.annotations.VisibleForTesting;
-import com.google.common.base.Suppliers;
-import com.google.common.collect.ImmutableSortedSet;
+import io.kyligence.kap.guava20.shaded.common.annotations.VisibleForTesting;
+import io.kyligence.kap.guava20.shaded.common.base.Suppliers;
+import io.kyligence.kap.guava20.shaded.common.collect.ImmutableSortedSet;
 
 import org.junit.jupiter.api.Assertions;
 
@@ -292,12 +292,12 @@ public abstract class TestUtil {
     // The list should not contain any classes that are removed in future
     // versions of Guava.
     return new VersionChecker()
-        .tryClass(2, "com.google.common.collect.ImmutableList")
-        .tryClass(14, "com.google.common.reflect.Parameter")
-        .tryClass(17, "com.google.common.base.VerifyException")
-        .tryClass(21, "com.google.common.io.RecursiveDeleteOption")
-        .tryClass(23, "com.google.common.util.concurrent.FluentFuture")
-        .tryClass(26, "com.google.common.util.concurrent.ExecutionSequencer")
+        .tryClass(2, "io.kyligence.kap.guava20.shaded.common.collect.ImmutableList")
+        .tryClass(14, "io.kyligence.kap.guava20.shaded.common.reflect.Parameter")
+        .tryClass(17, "io.kyligence.kap.guava20.shaded.common.base.VerifyException")
+        .tryClass(21, "io.kyligence.kap.guava20.shaded.common.io.RecursiveDeleteOption")
+        .tryClass(23, "io.kyligence.kap.guava20.shaded.common.util.concurrent.FluentFuture")
+        .tryClass(26, "io.kyligence.kap.guava20.shaded.common.util.concurrent.ExecutionSequencer")
         .bestVersion;
   }
 

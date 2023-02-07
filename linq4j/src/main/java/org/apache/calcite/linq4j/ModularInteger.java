@@ -16,7 +16,7 @@
  */
 package org.apache.calcite.linq4j;
 
-import com.google.common.base.Preconditions;
+import io.kyligence.kap.guava20.shaded.common.base.Preconditions;
 
 import org.checkerframework.checker.nullness.qual.Nullable;
 

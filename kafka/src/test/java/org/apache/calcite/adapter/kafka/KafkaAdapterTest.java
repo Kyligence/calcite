@@ -19,7 +19,7 @@ package org.apache.calcite.adapter.kafka;
 import org.apache.calcite.config.CalciteConnectionProperty;
 import org.apache.calcite.test.CalciteAssert;
 
-import com.google.common.io.Resources;
+import io.kyligence.kap.guava20.shaded.common.io.Resources;
 
 import org.junit.jupiter.api.Test;
 

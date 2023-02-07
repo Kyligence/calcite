@@ -16,18 +16,18 @@
  */
 package org.apache.calcite.util;
 
-import com.google.common.collect.BoundType;
-import com.google.common.collect.ImmutableRangeSet;
-import com.google.common.collect.Range;
-import com.google.common.collect.RangeSet;
-import com.google.common.collect.TreeRangeSet;
+import io.kyligence.kap.guava20.shaded.common.collect.BoundType;
+import io.kyligence.kap.guava20.shaded.common.collect.ImmutableRangeSet;
+import io.kyligence.kap.guava20.shaded.common.collect.Range;
+import io.kyligence.kap.guava20.shaded.common.collect.RangeSet;
+import io.kyligence.kap.guava20.shaded.common.collect.TreeRangeSet;
 
 import java.util.Iterator;
 import java.util.Set;
 import java.util.function.BiConsumer;
 import java.util.function.Function;
 
-/** Utilities for Guava {@link com.google.common.collect.RangeSet}. */
+/** Utilities for Guava {@link io.kyligence.kap.guava20.shaded.common.collect.RangeSet}. */
 @SuppressWarnings({"BetaApi", "UnstableApiUsage"})
 public class RangeSets {
   private RangeSets() {}

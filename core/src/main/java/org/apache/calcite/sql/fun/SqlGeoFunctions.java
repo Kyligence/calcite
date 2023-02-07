@@ -35,7 +35,8 @@ import org.apache.calcite.util.ImmutableBitSet;
 
 import com.esri.core.geometry.Envelope;
 import com.esri.core.geometry.Geometry;
-import com.google.common.collect.ImmutableList;
+
+import io.kyligence.kap.guava20.shaded.common.collect.ImmutableList;
 
 import org.checkerframework.checker.nullness.qual.Nullable;
 
