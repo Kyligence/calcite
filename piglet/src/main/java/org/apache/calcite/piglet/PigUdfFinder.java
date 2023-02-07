@@ -16,7 +16,7 @@
  */
 package org.apache.calcite.piglet;
 
-import com.google.common.collect.ImmutableMap;
+import org.apache.kylin.guava30.shaded.common.collect.ImmutableMap;
 
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;

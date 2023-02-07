@@ -16,7 +16,7 @@
  */
 package org.apache.calcite.runtime;
 
-import com.google.common.collect.Ordering;
+import org.apache.kylin.guava30.shaded.common.collect.Ordering;
 
 import java.util.HashMap;
 import java.util.List;

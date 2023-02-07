@@ -19,7 +19,7 @@ package org.apache.calcite.rel.hint;
 import org.apache.calcite.linq4j.function.Experimental;
 import org.apache.calcite.rel.RelNode;
 
-import com.google.common.collect.ImmutableList;
+import org.apache.kylin.guava30.shaded.common.collect.ImmutableList;
 
 import java.util.ArrayList;
 import java.util.LinkedHashSet;

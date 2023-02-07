@@ -18,7 +18,7 @@ package org.apache.calcite.adapter.innodb;
 
 import org.apache.calcite.linq4j.tree.Types;
 
-import com.google.common.collect.ImmutableMap;
+import org.apache.kylin.guava30.shaded.common.collect.ImmutableMap;
 
 import java.lang.reflect.Method;
 import java.util.List;

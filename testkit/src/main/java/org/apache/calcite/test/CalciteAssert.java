@@ -86,10 +86,10 @@ import org.apache.calcite.util.Sources;
 import org.apache.calcite.util.TestUtil;
 import org.apache.calcite.util.Util;
 
-import com.google.common.collect.ImmutableList;
-import com.google.common.collect.ImmutableMultiset;
-import com.google.common.collect.ImmutableSet;
-import com.google.common.collect.Lists;
+import org.apache.kylin.guava30.shaded.common.collect.ImmutableList;
+import org.apache.kylin.guava30.shaded.common.collect.ImmutableMultiset;
+import org.apache.kylin.guava30.shaded.common.collect.ImmutableSet;
+import org.apache.kylin.guava30.shaded.common.collect.Lists;
 
 import net.hydromatic.foodmart.data.hsqldb.FoodmartHsqldb;
 import net.hydromatic.scott.data.hsqldb.ScottHsqldb;
@@ -1708,7 +1708,7 @@ public class CalciteAssert {
     @SuppressWarnings("Guava")
     @Deprecated // to be removed before 2.0
     public final AssertQuery queryContains(
-        com.google.common.base.Function<List, Void> predicate1) {
+        org.apache.kylin.guava30.shaded.common.base.Function<List, Void> predicate1) {
       return queryContains((Consumer<List>) predicate1::apply);
     }
 

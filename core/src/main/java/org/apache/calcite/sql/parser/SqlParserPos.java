@@ -18,7 +18,7 @@ package org.apache.calcite.sql.parser;
 
 import org.apache.calcite.sql.SqlNode;
 
-import com.google.common.collect.Lists;
+import org.apache.kylin.guava30.shaded.common.collect.Lists;
 
 import org.checkerframework.checker.nullness.qual.Nullable;
 

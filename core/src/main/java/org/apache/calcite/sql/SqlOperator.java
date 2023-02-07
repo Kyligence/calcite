@@ -33,12 +33,11 @@ import org.apache.calcite.sql.validate.SqlValidator;
 import org.apache.calcite.sql.validate.SqlValidatorImpl;
 import org.apache.calcite.sql.validate.SqlValidatorScope;
 import org.apache.calcite.sql.validate.SqlValidatorUtil;
-import org.apache.calcite.util.ImmutableNullableList;
 import org.apache.calcite.util.Litmus;
 import org.apache.calcite.util.Util;
 
-import com.google.common.collect.ImmutableList;
-import com.google.common.collect.Iterables;
+import org.apache.kylin.guava30.shaded.common.collect.ImmutableList;
+import org.apache.kylin.guava30.shaded.common.collect.Iterables;
 
 import org.checkerframework.checker.nullness.qual.Nullable;
 import org.checkerframework.dataflow.qual.Pure;
@@ -275,7 +274,7 @@ public abstract class SqlOperator {
       SqlParserPos pos,
       @Nullable SqlNode... operands) {
     pos = pos.plusAll(operands);
-    return new SqlBasicCall(this, ImmutableNullableList.copyOf(operands), pos,
+    return new SqlBasicCall(this, operands, pos,
         functionQualifier);
   }
 

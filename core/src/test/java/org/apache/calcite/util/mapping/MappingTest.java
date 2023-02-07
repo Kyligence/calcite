@@ -16,7 +16,7 @@
  */
 package org.apache.calcite.util.mapping;
 
-import com.google.common.collect.ImmutableMap;
+import org.apache.kylin.guava30.shaded.common.collect.ImmutableMap;
 
 import org.junit.jupiter.api.Test;
 

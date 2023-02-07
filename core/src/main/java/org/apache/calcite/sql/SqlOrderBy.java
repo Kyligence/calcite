@@ -97,9 +97,10 @@ public class SqlOrderBy extends SqlCall {
         writer.list(SqlWriter.FrameTypeEnum.ORDER_BY_LIST, SqlWriter.COMMA,
             orderBy.orderList);
       }
-      if (orderBy.offset != null || orderBy.fetch != null) {
-        writer.fetchOffset(orderBy.fetch, orderBy.offset);
-      }
+      // Calcite 1.30
+      // For org.apache.kylin.sdk.datasource.framework.conv.ConvRownumSqlWriter#doWriteRowNum
+      // UT org.apache.kylin.sdk.datasource.framework.conv.SqlConverterTest#testConvRownumSqlWriter
+      writer.fetchOffset(orderBy.fetch, orderBy.offset);
       writer.endList(frame);
     }
   }

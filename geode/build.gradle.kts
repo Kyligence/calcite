@@ -28,7 +28,7 @@ dependencies {
     api("org.checkerframework:checker-qual")
     api("org.slf4j:slf4j-api")
 
-    implementation("com.google.guava:guava")
+    implementation("org.apache.kylin:kylin-external-guava30")
     implementation("org.apache.calcite.avatica:avatica-core")
     implementation("org.apache.commons:commons-lang3")
 

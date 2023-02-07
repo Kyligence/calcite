@@ -18,7 +18,7 @@ package org.apache.calcite.util;
 
 import org.apache.calcite.linq4j.function.Experimental;
 
-import com.google.common.collect.ImmutableSortedMap;
+import org.apache.kylin.guava30.shaded.common.collect.ImmutableSortedMap;
 
 import org.checkerframework.checker.nullness.qual.Nullable;
 

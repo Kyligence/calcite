@@ -37,13 +37,12 @@ import org.apache.calcite.tools.Program;
 import org.apache.calcite.tools.Programs;
 import org.apache.calcite.tools.RuleSets;
 
+import org.apache.kylin.guava30.shaded.common.collect.ImmutableList;
 import org.apache.pig.ExecType;
 import org.apache.pig.PigServer;
 import org.apache.pig.impl.logicalLayer.FrontendException;
 import org.apache.pig.impl.util.PropertiesUtil;
 import org.apache.pig.newplan.logical.relational.LogicalPlan;
-
-import com.google.common.collect.ImmutableList;
 
 import java.io.IOException;
 import java.io.InputStream;

@@ -23,16 +23,14 @@ import org.apache.calcite.rel.metadata.NullSentinel;
 import org.apache.calcite.runtime.SqlFunctions;
 import org.apache.calcite.sql.SqlKind;
 import org.apache.calcite.sql.type.SqlTypeName;
-import org.apache.calcite.util.DateString;
 import org.apache.calcite.util.NlsString;
 import org.apache.calcite.util.RangeSets;
 import org.apache.calcite.util.Sarg;
 import org.apache.calcite.util.TimeString;
-import org.apache.calcite.util.TimestampString;
 import org.apache.calcite.util.Util;
 
-import com.google.common.collect.ImmutableMap;
-import com.google.common.collect.RangeSet;
+import org.apache.kylin.guava30.shaded.common.collect.ImmutableMap;
+import org.apache.kylin.guava30.shaded.common.collect.RangeSet;
 
 import org.checkerframework.checker.nullness.qual.Nullable;
 
@@ -304,12 +302,14 @@ public class RexInterpreter implements RexVisitor<Comparable> {
   @SuppressWarnings({"BetaApi", "rawtypes", "unchecked", "UnstableApiUsage"})
   private static RangeSet translate(RangeSet rangeSet, SqlTypeName typeName) {
     switch (typeName) {
-    case DATE:
-      return RangeSets.copy(rangeSet, DateString::getDaysSinceEpoch);
+      // Since SqlKind#SEARCH will not be used and the compareTo method in DateString
+      // and TimestampString has been restored to 1.16, comment out this code to ensure correctness
+//    case DATE:
+//      return RangeSets.copy(rangeSet, DateString::getDaysSinceEpoch);
     case TIME:
       return RangeSets.copy(rangeSet, TimeString::getMillisOfDay);
-    case TIMESTAMP:
-      return RangeSets.copy(rangeSet, TimestampString::getMillisSinceEpoch);
+//    case TIMESTAMP:
+//      return RangeSets.copy(rangeSet, TimestampString::getMillisSinceEpoch);
     default:
       return rangeSet;
     }

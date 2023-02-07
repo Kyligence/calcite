@@ -21,9 +21,9 @@ import org.apache.calcite.plan.RelOptTable;
 import org.apache.calcite.util.ImmutableIntList;
 import org.apache.calcite.util.Util;
 
-import com.google.common.cache.Cache;
-import com.google.common.collect.ImmutableList;
-import com.google.common.util.concurrent.UncheckedExecutionException;
+import org.apache.kylin.guava30.shaded.common.cache.Cache;
+import org.apache.kylin.guava30.shaded.common.collect.ImmutableList;
+import org.apache.kylin.guava30.shaded.common.util.concurrent.UncheckedExecutionException;
 
 import java.util.List;
 import java.util.concurrent.ExecutionException;

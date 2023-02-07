@@ -27,6 +27,7 @@ import org.apache.calcite.sql.type.SqlTypeName;
 
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.kylin.guava30.shaded.common.collect.ImmutableMap;
 
 import com.alibaba.innodb.java.reader.TableReaderFactory;
 import com.alibaba.innodb.java.reader.column.ColumnType;
@@ -34,12 +35,11 @@ import com.alibaba.innodb.java.reader.schema.Column;
 import com.alibaba.innodb.java.reader.schema.TableDef;
 import com.alibaba.innodb.java.reader.schema.provider.TableDefProvider;
 import com.alibaba.innodb.java.reader.schema.provider.impl.SqlFileTableDefProvider;
-import com.google.common.collect.ImmutableMap;
 
 import java.util.List;
 import java.util.Map;
 
-import static com.google.common.base.Preconditions.checkArgument;
+import static org.apache.kylin.guava30.shaded.common.base.Preconditions.checkArgument;
 
 import static java.util.stream.Collectors.toList;
 

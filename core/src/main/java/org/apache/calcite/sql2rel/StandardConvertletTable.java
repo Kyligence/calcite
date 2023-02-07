@@ -81,8 +81,8 @@ import org.apache.calcite.sql.validate.SqlValidatorImpl;
 import org.apache.calcite.util.Pair;
 import org.apache.calcite.util.Util;
 
-import com.google.common.base.Preconditions;
-import com.google.common.collect.ImmutableList;
+import org.apache.kylin.guava30.shaded.common.base.Preconditions;
+import org.apache.kylin.guava30.shaded.common.collect.ImmutableList;
 
 import org.checkerframework.checker.initialization.qual.UnknownInitialization;
 import org.checkerframework.checker.nullness.qual.Nullable;
@@ -996,12 +996,21 @@ public class StandardConvertletTable extends ReflectiveConvertletTable {
     return largestCharType;
   }
 
-  private static List<RexNode> convertOperands(SqlRexContext cx,
+  /**
+   * OVERRIDE POINT
+   * Calcite 1.30 Keeps the same changes with AL-5295 as the previous Calcite version
+   * FYI: https://github.com/Kyligence/KAP/issues/13872
+   */
+  /*private static List<RexNode> convertOperands(SqlRexContext cx,
+      SqlCall call, SqlOperandTypeChecker.Consistency consistency) {
+    return convertOperands(cx, call, call.getOperandList(), consistency);
+  }*/
+  public static List<RexNode> convertOperands(SqlRexContext cx,
       SqlCall call, SqlOperandTypeChecker.Consistency consistency) {
     return convertOperands(cx, call, call.getOperandList(), consistency);
   }
 
-  private static List<RexNode> convertOperands(SqlRexContext cx,
+  /*private static List<RexNode> convertOperands(SqlRexContext cx,
       SqlCall call, List<SqlNode> nodes,
       SqlOperandTypeChecker.Consistency consistency) {
     final List<RexNode> exprs = new ArrayList<>();
@@ -1020,6 +1029,45 @@ public class StandardConvertletTable extends ReflectiveConvertletTable {
       RelDataType type =
               consistentType(cx, consistency, RexUtil.types(exprs));
 
+      *//* OVERRIDE POINT *//*
+      if (type == null) {
+        type = consistentType2(cx, consistency, exprs);
+      }
+
+      if (type != null) {
+        final List<RexNode> oldExprs = new ArrayList<>(exprs);
+        exprs.clear();
+        for (RexNode expr : oldExprs) {
+          exprs.add(cx.getRexBuilder().ensureType(type, expr, true));
+        }
+      }
+    }
+    return exprs;
+  }*/
+  public static List<RexNode> convertOperands(SqlRexContext cx,
+      SqlCall call, List<SqlNode> nodes,
+      SqlOperandTypeChecker.Consistency consistency) {
+    final List<RexNode> exprs = new ArrayList<>();
+    for (SqlNode node : nodes) {
+      exprs.add(cx.convertExpression(node));
+    }
+    // Calcite 1.30 Ensures expression is interpreted as a specified type. The returned
+    // expression may be wrapped with a cast. Comment out this code, as it may convert
+    // types to types that Spark cannot resolve.
+    /*if (call != null) {
+      final List<RelDataType> operandTypes =
+          cx.getValidator().getValidatedOperandTypes(call);
+      if (operandTypes != null) {
+        final List<RexNode> oldExprs = new ArrayList<>(exprs);
+        exprs.clear();
+        Pair.forEach(oldExprs, operandTypes, (expr, type) ->
+            exprs.add(cx.getRexBuilder().ensureType(type, expr, true)));
+      }
+    }*/
+    if (exprs.size() > 1) {
+      RelDataType type =
+          consistentType(cx, consistency, RexUtil.types(exprs));
+
       /* OVERRIDE POINT */
       if (type == null) {
         type = consistentType2(cx, consistency, exprs);
@@ -1036,10 +1084,15 @@ public class StandardConvertletTable extends ReflectiveConvertletTable {
     return exprs;
   }
 
+  /**
+   * OVERRIDE POINT
+   * Calcite 1.30 Keeps the same changes with AL-5295 as the previous Calcite version
+   * FYI: https://github.com/Kyligence/KAP/issues/13872
+   */
   /* OVERRIDE POINT */
   // https://github.com/Kyligence/KAP/issues/4037
   // For LEAST_RESTRICTIVE consistency, which is the '=' operator, convert constants implicitly
-  private static RelDataType consistentType2(SqlRexContext cx,
+  /*private static RelDataType consistentType2(SqlRexContext cx,
       Consistency consistency, List<RexNode> exprs) {
     if (Consistency.LEAST_RESTRICTIVE != consistency) {
       return null;
@@ -1065,8 +1118,92 @@ public class StandardConvertletTable extends ReflectiveConvertletTable {
     }
 
     return oneNonConst == null ? null : oneNonConst.getType();
+  }*/
+  private static RelDataType consistentType2(SqlRexContext cx,
+      Consistency consistency, List<RexNode> exprs) {
+    if (Consistency.LEAST_RESTRICTIVE != consistency
+        && Consistency.LEAST_RESTRICTIVE_NO_CONVERT_TO_VARYING != consistency) {
+      return null;
+    }
+    if (exprs.size() <= 1) {
+      return null;
+    }
+    if (isTimestampCompareWithCharacter(RexUtil.types(exprs))) {
+      return null;
+    }
+
+    // check all expressions are constants but one
+    RexNode oneNonConst = null;
+    for (RexNode expr : exprs) {
+      if (expr instanceof RexLiteral || expr instanceof RexDynamicParam) {
+        continue;
+      }
+      // got a non-constant
+      if (oneNonConst != null) {
+        return null; // give up, since there is more than one non-constant
+      }
+      oneNonConst = expr;
+    }
+
+    return oneNonConst == null ? null : oneNonConst.getType();
   }
 
+  /**
+   * OVERRIDE POINT
+   * Calcite 1.30 Keeps the same changes with AL-5295 as the previous Calcite version
+   * FYI: https://github.com/Kyligence/KAP/issues/13872
+   */
+  /*private static @Nullable RelDataType consistentType(SqlRexContext cx,
+      SqlOperandTypeChecker.Consistency consistency, List<RelDataType> types) {
+    switch (consistency) {
+    case COMPARE:
+      if (isDateCompareWithCharacter(types)) {
+        return findMaxPrecisionCharType(types);
+      }
+      if (isTimestampCompareWithCharacter(types)) {
+        return findMaxPrecisionCharType(types);
+      }
+      if (SqlTypeUtil.areSameFamily(types)) {
+        // All arguments are of same family. No need for explicit casts.
+        return null;
+      }
+      final List<RelDataType> nonCharacterTypes = new ArrayList<>();
+      for (RelDataType type : types) {
+        if (type.getFamily() != SqlTypeFamily.CHARACTER) {
+          nonCharacterTypes.add(type);
+        }
+      }
+      if (!nonCharacterTypes.isEmpty()) {
+        final int typeCount = types.size();
+        types = nonCharacterTypes;
+        if (nonCharacterTypes.size() < typeCount) {
+          final RelDataTypeFamily family =
+              nonCharacterTypes.get(0).getFamily();
+          if (family instanceof SqlTypeFamily) {
+            // The character arguments might be larger than the numeric
+            // argument. Give ourselves some headroom.
+            switch ((SqlTypeFamily) family) {
+            case INTEGER:
+            case NUMERIC:
+              nonCharacterTypes.add(
+                  cx.getTypeFactory().createSqlType(SqlTypeName.BIGINT));
+              break;
+            default:
+              break;
+            }
+          }
+        }
+      }
+      // fall through
+    case LEAST_RESTRICTIVE:
+      if (isDateCompareWithCharacter(types)) {
+        return findMaxPrecisionCharType(types);
+      }
+      return cx.getTypeFactory().leastRestrictive(types);
+    default:
+      return null;
+    }
+  }*/
   private static @Nullable RelDataType consistentType(SqlRexContext cx,
       SqlOperandTypeChecker.Consistency consistency, List<RelDataType> types) {
     switch (consistency) {
@@ -1114,6 +1251,12 @@ public class StandardConvertletTable extends ReflectiveConvertletTable {
         return findMaxPrecisionCharType(types);
       }
       return cx.getTypeFactory().leastRestrictive(types);
+    //https://github.com/Kyligence/KAP/issues/13872
+    case LEAST_RESTRICTIVE_NO_CONVERT_TO_VARYING:
+      if (isDateCompareWithCharacter(types)) {
+        return findMaxPrecisionCharType(types);
+      }
+      return cx.getTypeFactory().leastRestrictive(types, false);
     default:
       return null;
     }

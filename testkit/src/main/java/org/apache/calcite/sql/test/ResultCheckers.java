@@ -21,7 +21,7 @@ import org.apache.calcite.test.Matchers;
 import org.apache.calcite.util.ImmutableNullableSet;
 import org.apache.calcite.util.JdbcType;
 
-import com.google.common.collect.ImmutableSet;
+import org.apache.kylin.guava30.shaded.common.collect.ImmutableSet;
 
 import org.hamcrest.Matcher;
 

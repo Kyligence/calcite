@@ -21,6 +21,8 @@ import org.apache.calcite.linq4j.function.Experimental;
 import org.apache.calcite.linq4j.function.Strict;
 import org.apache.calcite.util.Util;
 
+import org.apache.kylin.guava30.shaded.common.collect.ImmutableList;
+
 import com.esri.core.geometry.Envelope;
 import com.esri.core.geometry.Geometry;
 import com.esri.core.geometry.Line;
@@ -31,7 +33,6 @@ import com.esri.core.geometry.OperatorIntersects;
 import com.esri.core.geometry.Point;
 import com.esri.core.geometry.Polyline;
 import com.esri.core.geometry.SpatialReference;
-import com.google.common.collect.ImmutableList;
 
 import java.util.Objects;
 

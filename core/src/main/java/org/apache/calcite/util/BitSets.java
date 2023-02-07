@@ -16,7 +16,7 @@
  */
 package org.apache.calcite.util;
 
-import com.google.common.collect.ImmutableSortedMap;
+import org.apache.kylin.guava30.shaded.common.collect.ImmutableSortedMap;
 
 import java.util.ArrayList;
 import java.util.BitSet;

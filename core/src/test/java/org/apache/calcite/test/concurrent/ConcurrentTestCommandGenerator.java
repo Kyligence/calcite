@@ -19,7 +19,7 @@ package org.apache.calcite.test.concurrent;
 import org.apache.calcite.jdbc.SqlTimeoutException;
 import org.apache.calcite.util.Util;
 
-import com.google.common.collect.ImmutableList;
+import org.apache.kylin.guava30.shaded.common.collect.ImmutableList;
 
 import java.io.PrintStream;
 import java.math.BigDecimal;

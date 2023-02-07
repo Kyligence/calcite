@@ -89,11 +89,11 @@ import org.apache.calcite.util.ReflectUtil;
 import org.apache.calcite.util.ReflectiveVisitor;
 import org.apache.calcite.util.Util;
 
-import com.google.common.collect.ImmutableList;
-import com.google.common.collect.ImmutableMap;
-import com.google.common.collect.ImmutableSet;
-import com.google.common.collect.Iterables;
-import com.google.common.collect.Ordering;
+import org.apache.kylin.guava30.shaded.common.collect.ImmutableList;
+import org.apache.kylin.guava30.shaded.common.collect.ImmutableMap;
+import org.apache.kylin.guava30.shaded.common.collect.ImmutableSet;
+import org.apache.kylin.guava30.shaded.common.collect.Iterables;
+import org.apache.kylin.guava30.shaded.common.collect.Ordering;
 
 import org.checkerframework.checker.nullness.qual.Nullable;
 
@@ -1147,7 +1147,7 @@ public class RelToSqlConverter extends SqlImplementor
     // Convert to table function call, "TABLE($function_name(xxx))"
     SqlNode tableCall =
         new SqlBasicCall(SqlStdOperatorTable.COLLECTION_TABLE,
-            ImmutableList.of(callNode), SqlParserPos.ZERO);
+            new SqlNode[]{callNode}, SqlParserPos.ZERO, null);
     SqlNode select =
         new SqlSelect(SqlParserPos.ZERO, null, SqlNodeList.SINGLETON_STAR,
             tableCall, null, null, null, null, null, null, null,

@@ -18,12 +18,12 @@ package org.apache.calcite.util;
 
 import org.apache.calcite.linq4j.Ord;
 
-import com.google.common.collect.ImmutableList;
-import com.google.common.collect.ImmutableRangeSet;
-import com.google.common.collect.Iterables;
-import com.google.common.collect.Range;
-import com.google.common.collect.RangeSet;
-import com.google.common.collect.TreeRangeSet;
+import org.apache.kylin.guava30.shaded.common.collect.ImmutableList;
+import org.apache.kylin.guava30.shaded.common.collect.ImmutableRangeSet;
+import org.apache.kylin.guava30.shaded.common.collect.Iterables;
+import org.apache.kylin.guava30.shaded.common.collect.Range;
+import org.apache.kylin.guava30.shaded.common.collect.RangeSet;
+import org.apache.kylin.guava30.shaded.common.collect.TreeRangeSet;
 
 import org.junit.jupiter.api.Test;
 

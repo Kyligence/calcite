@@ -27,7 +27,7 @@ import org.apache.calcite.sql.validate.SqlMonikerType;
 import org.apache.calcite.test.SqlValidatorFixture;
 import org.apache.calcite.test.SqlValidatorTestCase;
 
-import com.google.common.collect.ImmutableMap;
+import org.apache.kylin.guava30.shaded.common.collect.ImmutableMap;
 
 import org.checkerframework.checker.nullness.qual.Nullable;
 import org.junit.jupiter.api.Disabled;
@@ -138,6 +138,7 @@ class SqlAdvisorTest extends SqlValidatorTestCase {
           "KEYWORD(CAST)",
           "KEYWORD(CEIL)",
           "KEYWORD(CEILING)",
+          "KEYWORD(CHAR)",
           "KEYWORD(CHARACTER_LENGTH)",
           "KEYWORD(CHAR_LENGTH)",
           "KEYWORD(CLASSIFIER)",

@@ -17,10 +17,10 @@
 package org.apache.calcite.sql;
 
 import org.apache.calcite.sql.parser.SqlParserPos;
-import org.apache.calcite.util.ImmutableNullableList;
 
 import org.checkerframework.checker.nullness.qual.Nullable;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 
@@ -31,7 +31,15 @@ import static org.apache.calcite.linq4j.Nullness.castNonNull;
  */
 public class SqlBasicCall extends SqlCall {
   private SqlOperator operator;
-  private List<@Nullable SqlNode> operandList;
+  /**
+   * [CALCITE-4795] Calcite 1.30 change operands to operandList which is ImmutableNullableList.
+   * The deep copy operation will cause the operator and operandList reference objects
+   * to be inconsistent during the rewrite call, which will eventually lead to
+   * an exception, thus changing the deep copy of the immutable collection to
+   * a modification of the object reference.
+   * @see #setOperand(int, SqlNode)
+    */
+  private final @Nullable SqlNode[] operands;
   private final @Nullable SqlLiteral functionQuantifier;
 
   @Deprecated // to be removed before 2.0
@@ -39,7 +47,7 @@ public class SqlBasicCall extends SqlCall {
       SqlOperator operator,
       @Nullable SqlNode[] operands,
       SqlParserPos pos) {
-    this(operator, ImmutableNullableList.copyOf(operands), pos, null);
+    this(operator, operands, pos, null);
   }
 
   /** Creates a SqlBasicCall.
@@ -50,17 +58,7 @@ public class SqlBasicCall extends SqlCall {
       SqlOperator operator,
       List<? extends @Nullable SqlNode> operandList,
       SqlParserPos pos) {
-    this(operator, operandList, pos, null);
-  }
-
-  @Deprecated // to be removed before 2.0
-  public SqlBasicCall(
-      SqlOperator operator,
-      @Nullable SqlNode[] operands,
-      SqlParserPos pos,
-      @Nullable SqlLiteral functionQualifier) {
-    this(operator, ImmutableNullableList.copyOf(operands), pos,
-        functionQualifier);
+    this(operator, operandList.toArray(SqlNode.EMPTY_ARRAY), pos, null);
   }
 
   /** Creates a SqlBasicCall with an optional function qualifier.
@@ -69,12 +67,12 @@ public class SqlBasicCall extends SqlCall {
    * to expand. */
   public SqlBasicCall(
       SqlOperator operator,
-      List<? extends @Nullable SqlNode> operandList,
+      @Nullable SqlNode[] operands,
       SqlParserPos pos,
       @Nullable SqlLiteral functionQualifier) {
     super(pos);
     this.operator = Objects.requireNonNull(operator, "operator");
-    this.operandList = ImmutableNullableList.copyOf(operandList);
+    this.operands = operands;
     this.functionQuantifier = functionQualifier;
   }
 
@@ -88,12 +86,12 @@ public class SqlBasicCall extends SqlCall {
   public SqlCall withExpanded(boolean expanded) {
     return !expanded
         ? this
-        : new ExpandedBasicCall(operator, operandList, pos,
+        : new ExpandedBasicCall(operator, operands, pos,
             functionQuantifier);
   }
 
   @Override public void setOperand(int i, @Nullable SqlNode operand) {
-    operandList = set(operandList, i, operand);
+    operands[i] = operand;
   }
 
   /** Sets the operator (or function) that is being called.
@@ -111,16 +109,16 @@ public class SqlBasicCall extends SqlCall {
 
   @SuppressWarnings("nullness")
   @Override public List<SqlNode> getOperandList() {
-    return operandList;
+    return Arrays.asList(operands);
   }
 
   @SuppressWarnings("unchecked")
   @Override public <S extends SqlNode> S operand(int i) {
-    return (S) castNonNull(operandList.get(i));
+    return (S) castNonNull(operands[i]);
   }
 
   @Override public int operandCount() {
-    return operandList.size();
+    return operands.length;
   }
 
   @Override public @Nullable SqlLiteral getFunctionQuantifier() {
@@ -128,29 +126,16 @@ public class SqlBasicCall extends SqlCall {
   }
 
   @Override public SqlNode clone(SqlParserPos pos) {
-    return getOperator().createCall(getFunctionQuantifier(), pos, operandList);
-  }
-
-  /** Sets the {@code i}th element of {@code list} to value {@code e}, creating
-   * an immutable copy of the list. */
-  private static <E> List<@Nullable E> set(List<E> list, int i, @Nullable E e) {
-    if (i == 0 && list.size() == 1) {
-      // short-cut case where the contents of the previous list can be ignored
-      return ImmutableNullableList.of(e);
-    }
-    //noinspection unchecked
-    @Nullable E[] objects = (E[]) list.toArray();
-    objects[i] = e;
-    return ImmutableNullableList.copyOf(objects);
+    return getOperator().createCall(getFunctionQuantifier(), pos, operands);
   }
 
   /** Sub-class of {@link org.apache.calcite.sql.SqlBasicCall}
    * for which {@link #isExpanded()} returns true. */
   private static class ExpandedBasicCall extends SqlBasicCall {
     ExpandedBasicCall(SqlOperator operator,
-        List<? extends @Nullable SqlNode> operandList, SqlParserPos pos,
+        @Nullable SqlNode[] operands, SqlParserPos pos,
         @Nullable SqlLiteral functionQualifier) {
-      super(operator, operandList, pos, functionQualifier);
+      super(operator, operands, pos, functionQualifier);
     }
 
     @Override public boolean isExpanded() {
@@ -160,7 +145,7 @@ public class SqlBasicCall extends SqlCall {
     @Override public SqlCall withExpanded(boolean expanded) {
       return expanded
           ? this
-          : new SqlBasicCall(getOperator(), getOperandList(), pos,
+          : new SqlBasicCall(getOperator(), getOperandList().toArray(SqlNode.EMPTY_ARRAY), pos,
               getFunctionQuantifier());
     }
   }

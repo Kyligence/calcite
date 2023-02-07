@@ -26,7 +26,7 @@ import org.apache.calcite.util.ImmutableBitSet;
 import org.apache.calcite.util.ImmutableIntList;
 import org.apache.calcite.util.mapping.IntPair;
 
-import com.google.common.collect.ImmutableList;
+import org.apache.kylin.guava30.shaded.common.collect.ImmutableList;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -46,6 +46,8 @@ public class JoinInfo {
   public final ImmutableIntList leftKeys;
   public final ImmutableIntList rightKeys;
   public final ImmutableList<RexNode> nonEquiConditions;
+  // Calcite 1.30 remove EquiJoinInfo and NonEquiJoinInfo, but we need rexbuilder
+  private static RexBuilder nonEquiJoinInfoBuilder = null;
 
   /** Creates a JoinInfo. */
   protected JoinInfo(ImmutableIntList leftKeys, ImmutableIntList rightKeys,
@@ -62,6 +64,7 @@ public class JoinInfo {
     final List<Integer> rightKeys = new ArrayList<>();
     final List<Boolean> filterNulls = new ArrayList<>();
     final List<RexNode> nonEquiList = new ArrayList<>();
+    nonEquiJoinInfoBuilder = left.getCluster().getRexBuilder();
     RelOptUtil.splitJoinCondition(left, right, condition, leftKeys, rightKeys,
         filterNulls, nonEquiList);
     return new JoinInfo(ImmutableIntList.copyOf(leftKeys),
@@ -94,6 +97,9 @@ public class JoinInfo {
 
   @Deprecated // to be removed before 2.0
   public RexNode getRemaining(RexBuilder rexBuilder) {
+    if (rexBuilder == null) {
+      rexBuilder = nonEquiJoinInfoBuilder;
+    }
     return RexUtil.composeConjunction(rexBuilder, nonEquiConditions);
   }
 

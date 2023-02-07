@@ -32,7 +32,7 @@ import org.apache.calcite.schema.TranslatableTable;
 import org.apache.calcite.schema.impl.AbstractTableQueryable;
 import org.apache.calcite.util.Pair;
 
-import com.google.common.collect.ImmutableMultiset;
+import org.apache.kylin.guava30.shaded.common.collect.ImmutableMultiset;
 
 import org.junit.jupiter.api.Test;
 

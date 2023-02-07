@@ -26,9 +26,8 @@ import org.apache.calcite.sql.type.SqlOperandTypeInference;
 import org.apache.calcite.sql.type.SqlReturnTypeInference;
 import org.apache.calcite.sql.validate.SqlUserDefinedFunction;
 
+import org.apache.kylin.guava30.shaded.common.collect.ImmutableList;
 import org.apache.pig.FuncSpec;
-
-import com.google.common.collect.ImmutableList;
 
 /** Pig user-defined function. */
 public class PigUserDefinedFunction extends SqlUserDefinedFunction {

@@ -38,8 +38,9 @@ import org.apache.calcite.util.Permutation;
 import org.apache.calcite.util.mapping.MappingType;
 import org.apache.calcite.util.mapping.Mappings;
 
-import com.google.common.collect.ImmutableList;
-import com.google.common.collect.Ordering;
+import org.apache.kylin.guava30.shaded.common.collect.ImmutableList;
+import org.apache.kylin.guava30.shaded.common.collect.Ordering;
+
 import com.google.errorprone.annotations.CheckReturnValue;
 
 import org.checkerframework.checker.initialization.qual.UnknownInitialization;

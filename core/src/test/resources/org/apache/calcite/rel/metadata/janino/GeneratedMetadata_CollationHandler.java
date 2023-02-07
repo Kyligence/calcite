@@ -28,7 +28,7 @@ public final class GeneratedMetadata_CollationHandler
   public org.apache.calcite.rel.metadata.MetadataDef getDef() {
     return provider0.getDef();
   }
-  public com.google.common.collect.ImmutableList collations(
+  public org.apache.kylin.guava30.shaded.common.collect.ImmutableList collations(
       org.apache.calcite.rel.RelNode r,
       org.apache.calcite.rel.metadata.RelMetadataQuery mq) {
     while (r instanceof org.apache.calcite.rel.metadata.DelegatingMetadataRel) {
@@ -44,11 +44,11 @@ public final class GeneratedMetadata_CollationHandler
       if (v == org.apache.calcite.rel.metadata.NullSentinel.INSTANCE) {
         return null;
       }
-      return (com.google.common.collect.ImmutableList) v;
+      return (org.apache.kylin.guava30.shaded.common.collect.ImmutableList) v;
     }
     mq.map.put(r, key,org.apache.calcite.rel.metadata.NullSentinel.ACTIVE);
     try {
-      final com.google.common.collect.ImmutableList x = collations_(r, mq);
+      final org.apache.kylin.guava30.shaded.common.collect.ImmutableList x = collations_(r, mq);
       mq.map.put(r, key, org.apache.calcite.rel.metadata.NullSentinel.mask(x));
       return x;
     } catch (java.lang.Exception e) {
@@ -57,7 +57,7 @@ public final class GeneratedMetadata_CollationHandler
     }
   }
 
-  private com.google.common.collect.ImmutableList collations_(
+  private org.apache.kylin.guava30.shaded.common.collect.ImmutableList collations_(
       org.apache.calcite.rel.RelNode r,
       org.apache.calcite.rel.metadata.RelMetadataQuery mq) {
     if (r instanceof org.apache.calcite.adapter.enumerable.EnumerableCorrelate) {
@@ -99,7 +99,7 @@ public final class GeneratedMetadata_CollationHandler
     } else if (r instanceof org.apache.calcite.rel.RelNode) {
       return provider0.collations((org.apache.calcite.rel.RelNode) r, mq);
     } else {
-            throw new java.lang.IllegalArgumentException("No handler for method [public abstract com.google.common.collect.ImmutableList org.apache.calcite.rel.metadata.BuiltInMetadata$Collation$Handler.collations(org.apache.calcite.rel.RelNode,org.apache.calcite.rel.metadata.RelMetadataQuery)] applied to argument of type [" + r.getClass() + "]; we recommend you create a catch-all (RelNode) handler");
+            throw new java.lang.IllegalArgumentException("No handler for method [public abstract org.apache.kylin.guava30.shaded.common.collect.ImmutableList org.apache.calcite.rel.metadata.BuiltInMetadata$Collation$Handler.collations(org.apache.calcite.rel.RelNode,org.apache.calcite.rel.metadata.RelMetadataQuery)] applied to argument of type [" + r.getClass() + "]; we recommend you create a catch-all (RelNode) handler");
     }
   }
 

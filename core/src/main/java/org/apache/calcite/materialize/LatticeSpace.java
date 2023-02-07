@@ -23,7 +23,7 @@ import org.apache.calcite.util.Util;
 import org.apache.calcite.util.graph.AttributedDirectedGraph;
 import org.apache.calcite.util.mapping.IntPair;
 
-import com.google.common.collect.ImmutableList;
+import org.apache.kylin.guava30.shaded.common.collect.ImmutableList;
 
 import org.checkerframework.checker.initialization.qual.NotOnlyInitialized;
 

@@ -16,9 +16,10 @@
  */
 package org.apache.calcite.adapter.elasticsearch;
 
+import org.apache.kylin.guava30.shaded.common.collect.ImmutableMap;
+
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.node.JsonNodeFactory;
-import com.google.common.collect.ImmutableMap;
 
 import org.checkerframework.checker.nullness.qual.Nullable;
 

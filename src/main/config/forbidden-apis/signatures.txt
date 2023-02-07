@@ -65,42 +65,42 @@ java.net.URL#getPath()
 # Preconditions.checkPositionIndex, and
 # Preconditions.checkState are still OK
 @defaultMessage Use Objects.requireNonNull
-com.google.common.base.Preconditions#checkNotNull(java.lang.Object)
-com.google.common.base.Preconditions#checkNotNull(java.lang.Object, java.lang.Object)
+org.apache.kylin.guava30.shaded.common.base.Preconditions#checkNotNull(java.lang.Object)
+org.apache.kylin.guava30.shaded.common.base.Preconditions#checkNotNull(java.lang.Object, java.lang.Object)
 
 @defaultMessage Use java.util.Objects.equals
-com.google.common.base.Objects#equal(java.lang.Object, java.lang.Object)
+org.apache.kylin.guava30.shaded.common.base.Objects#equal(java.lang.Object, java.lang.Object)
 
 @defaultMessage Use java.util.Objects
-com.google.common.base.Objects
+org.apache.kylin.guava30.shaded.common.base.Objects
 
 @defaultMessage Use java.lang.String.join
-com.google.common.base.Joiner
+org.apache.kylin.guava30.shaded.common.base.Joiner
 
 # Remove Guava calls to construct empty collections;
 # Sets.identityHashSet(),
 # Sets.newHashSet(Iterable) are still OK
 
 @defaultMessage Use "new ArrayList<>()"
-com.google.common.collect.Lists#newArrayList()
+org.apache.kylin.guava30.shaded.common.collect.Lists#newArrayList()
 
 @defaultMessage Use "org.apache.calcite.util.Util#transform(List, Function)"
-com.google.common.collect.Lists#transform(java.util.List, com.google.common.base.Function)
+org.apache.kylin.guava30.shaded.common.collect.Lists#transform(java.util.List, org.apache.kylin.guava30.shaded.common.base.Function)
 
 @defaultMessage Use "org.apache.calcite.util.Util#transform(Iterable, Function)"
-com.google.common.collect.Iterables#transform(java.lang.Iterable, com.google.common.base.Function)
+org.apache.kylin.guava30.shaded.common.collect.Iterables#transform(java.lang.Iterable, org.apache.kylin.guava30.shaded.common.base.Function)
 
 @defaultMessage Use "new HashMap<>()"
-com.google.common.collect.Maps#newHashMap()
+org.apache.kylin.guava30.shaded.common.collect.Maps#newHashMap()
 
 @defaultMessage Use "new IdentityHashMap<>()"
-com.google.common.collect.Maps#newIdentityHashMap()
+org.apache.kylin.guava30.shaded.common.collect.Maps#newIdentityHashMap()
 
 @defaultMessage Use "new TreeMap<>()"
-com.google.common.collect.Maps#newTreeMap()
+org.apache.kylin.guava30.shaded.common.collect.Maps#newTreeMap()
 
 @defaultMessage Use "new HashSet<>()"
-com.google.common.collect.Sets#newHashSet()
+org.apache.kylin.guava30.shaded.common.collect.Sets#newHashSet()
 
 @defaultMessage Use "assertThat(expected, matcher)", do not call Matcher#matches directly
 org.hamcrest.Matcher#matches(java.lang.Object)

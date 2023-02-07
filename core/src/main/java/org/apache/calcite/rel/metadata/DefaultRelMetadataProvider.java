@@ -16,7 +16,7 @@
  */
 package org.apache.calcite.rel.metadata;
 
-import com.google.common.collect.ImmutableList;
+import org.apache.kylin.guava30.shaded.common.collect.ImmutableList;
 
 /**
  * DefaultRelMetadataProvider supplies a default implementation of the

@@ -59,6 +59,7 @@ import org.apache.calcite.rel.core.Values;
 import org.apache.calcite.rel.hint.Hintable;
 import org.apache.calcite.rel.hint.RelHint;
 import org.apache.calcite.rel.logical.LogicalFilter;
+import org.apache.calcite.rel.logical.LogicalJoin;
 import org.apache.calcite.rel.logical.LogicalProject;
 import org.apache.calcite.rel.metadata.RelColumnMapping;
 import org.apache.calcite.rel.metadata.RelMetadataQuery;
@@ -110,15 +111,15 @@ import org.apache.calcite.util.Util;
 import org.apache.calcite.util.mapping.Mapping;
 import org.apache.calcite.util.mapping.Mappings;
 
-import com.google.common.base.Preconditions;
-import com.google.common.collect.ImmutableList;
-import com.google.common.collect.ImmutableMap;
-import com.google.common.collect.ImmutableSet;
-import com.google.common.collect.ImmutableSortedMultiset;
-import com.google.common.collect.Iterables;
-import com.google.common.collect.Lists;
-import com.google.common.collect.Multiset;
-import com.google.common.collect.Sets;
+import org.apache.kylin.guava30.shaded.common.base.Preconditions;
+import org.apache.kylin.guava30.shaded.common.collect.ImmutableList;
+import org.apache.kylin.guava30.shaded.common.collect.ImmutableMap;
+import org.apache.kylin.guava30.shaded.common.collect.ImmutableSet;
+import org.apache.kylin.guava30.shaded.common.collect.ImmutableSortedMultiset;
+import org.apache.kylin.guava30.shaded.common.collect.Iterables;
+import org.apache.kylin.guava30.shaded.common.collect.Lists;
+import org.apache.kylin.guava30.shaded.common.collect.Multiset;
+import org.apache.kylin.guava30.shaded.common.collect.Sets;
 
 import org.checkerframework.checker.nullness.qual.MonotonicNonNull;
 import org.checkerframework.checker.nullness.qual.Nullable;
@@ -1284,7 +1285,10 @@ public class RelBuilder {
    */
   public GroupKey groupKey(ImmutableBitSet groupSet,
       Iterable<? extends ImmutableBitSet> groupSets) {
-    return groupKey_(groupSet, ImmutableList.copyOf(groupSets));
+    // Calcite 1.30 modified the original method logic to add a copy method,
+    // which throws an NPE if the groupSets is empty, Add logic to determine if it is empty here
+    return groupKey_(groupSet, groupSets == null
+        ? ImmutableList.of(groupSet) : ImmutableList.copyOf(groupSets));
   }
 
   // CHECKSTYLE: IGNORE 1
@@ -1556,7 +1560,7 @@ public class RelBuilder {
         ImmutableList.of(node));
   }
 
-  // Methods that create relational expressions
+  // Methods that create relational expressions.
 
   /** Creates a {@link TableScan} of the table
    * with a given name.
@@ -2006,9 +2010,15 @@ public class RelBuilder {
       return this;
     }
 
+    // Calcite 1.30 added an optimization for expressions that are all literals, i.e., when
+    // the input is the values with n rows, replace them with same tuple N times. This changes
+    // Calcite's logical plan, eliminates the process of creating LogicalProject, and causes
+    // the conversion to Spark logical plans to raise an exception when converting data types,
+    // in order to ensure correctness, comment out the following optimization code.
+
     // If the expressions are all literals, and the input is a Values with N
     // rows, replace with a Values with same tuple N times.
-    if (config.simplifyValues()
+    /*if (config.simplifyValues()
         && frame.rel instanceof Values
         && nodeList.stream().allMatch(e -> e instanceof RexLiteral)) {
       final Values values = (Values) build();
@@ -2019,7 +2029,7 @@ public class RelBuilder {
       final List<RexLiteral> tuple = (List<RexLiteral>) (List) nodeList;
       return values(Collections.nCopies(values.tuples.size(), tuple),
           typeBuilder.build());
-    }
+    }*/
 
     final RelNode project =
         struct.projectFactory.createProject(frame.rel,
@@ -2201,8 +2211,45 @@ public class RelBuilder {
             .collect(Collectors.toList()));
   }
 
-  /** Creates an {@link Aggregate} with multiple calls. */
+  /**
+   * Calcite 1.30 Copy from following, Use for Kylin.
+   * @see RelBuilder#aggregate(GroupKey, List)
+   * Wrapping the original method, the new kylinPruneInputOfAggregate parameter is used to
+   * control some behaviors that do not need to prune the agg, otherwise it will cause
+   * the Kylin matching model to fail.
+   */
+  public RelBuilder aggregate(GroupKey groupKey, List<AggregateCall> aggregateCalls,
+      boolean kylinPruneInputOfAggregate) {
+    return aggregate(groupKey,
+        aggregateCalls.stream()
+            .map(aggregateCall ->
+                new AggCallImpl2(aggregateCall,
+                    aggregateCall.getArgList().stream()
+                        .map(this::field)
+                        .collect(Util.toImmutableList())))
+            .collect(Collectors.toList()), kylinPruneInputOfAggregate);
+  }
+
+  /** Creates an {@link Aggregate} with multiple calls.
+   * Calcite 1.30 changed makeZeroLiteral method return type
+   * fix with SumCaseWhenFunctionRule and CountDistinctCaseWhenFunctionRule.
+   *
+   * Wrapping the original method, the new kylinPruneInputOfAggregate parameter is used to
+   * control some behaviors that do not need to prune the agg, otherwise it will cause
+   * the Kylin matching model to fail.
+   */
   public RelBuilder aggregate(GroupKey groupKey, Iterable<AggCall> aggCalls) {
+    return this.aggregate(groupKey, aggCalls, true);
+  }
+
+  /**
+   * Calcite 1.30 Copy from following, Use for Kylin.
+   * @see RelBuilder#aggregate(GroupKey, Iterable)
+   * Add new parameter kylinPruneInputOfAggregate to control some behaviors, that do not need
+   * to prune the agg, otherwise it will cause the Kylin matching model to fail.
+   */
+  public RelBuilder aggregate(GroupKey groupKey, Iterable<AggCall> aggCalls,
+      boolean kylinPruneInputOfAggregate) {
     final Registrar registrar =
         new Registrar(fields(), peek().getRowType().getFieldNames());
     final GroupKeyImpl groupKey_ = (GroupKeyImpl) groupKey;
@@ -2288,13 +2335,23 @@ public class RelBuilder {
 
     List<Field> inFields = frame.fields;
     if (config.pruneInputOfAggregate()
-        && r instanceof Project) {
+        && r instanceof Project && kylinPruneInputOfAggregate) {
       final Set<Integer> fieldsUsed =
           RelOptUtil.getAllFields2(groupSet, aggregateCalls);
       // Some parts of the system can't handle rows with zero fields, so
       // pretend that one field is used.
+
+      // Calcite 1.30 replaces the input RelNode with the current RelNode when the fields in
+      // the aggregate is 0, considering that there may be subsequent processes that cannot handle
+      // this situation, and this causes the matching model in Kylin to behave incorrectly.
+      // Here need to further determine whether to use Input RelNode to replace the current RelNode.
       if (fieldsUsed.isEmpty()) {
-        r = ((Project) r).getInput();
+        String relTypeName = ((Project) r).getInput().getRelTypeName();
+        if (!relTypeName.equals(LogicalJoin.class.getSimpleName())
+            && !relTypeName.equals(LogicalFilter.class.getSimpleName())
+            && !relTypeName.contains(TableScan.class.getSimpleName())) {
+          r = ((Project) r).getInput();
+        }
       } else if (fieldsUsed.size() < r.getRowType().getFieldCount()) {
         // Some fields are computed but not used. Prune them.
         final Map<Integer, Integer> map = new HashMap<>();

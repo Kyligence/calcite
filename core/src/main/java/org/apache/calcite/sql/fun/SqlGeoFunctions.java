@@ -33,9 +33,10 @@ import org.apache.calcite.sql.SqlNode;
 import org.apache.calcite.sql.type.SqlTypeName;
 import org.apache.calcite.util.ImmutableBitSet;
 
+import org.apache.kylin.guava30.shaded.common.collect.ImmutableList;
+
 import com.esri.core.geometry.Envelope;
 import com.esri.core.geometry.Geometry;
-import com.google.common.collect.ImmutableList;
 
 import org.checkerframework.checker.nullness.qual.Nullable;
 

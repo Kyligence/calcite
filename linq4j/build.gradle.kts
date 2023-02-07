@@ -18,6 +18,6 @@ dependencies {
     api("org.apiguardian:apiguardian-api")
     api("org.checkerframework:checker-qual")
 
-    implementation("com.google.guava:guava")
+    implementation("org.apache.kylin:kylin-external-guava30")
     implementation("org.apache.calcite.avatica:avatica-core")
 }

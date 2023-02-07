@@ -26,7 +26,7 @@ import org.apache.calcite.sql.SqlOperandCountRange;
 import org.apache.calcite.sql.SqlOperator;
 import org.apache.calcite.sql.SqlUtil;
 
-import com.google.common.collect.ImmutableList;
+import org.apache.kylin.guava30.shaded.common.collect.ImmutableList;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -492,6 +492,15 @@ public abstract class OperandTypes {
   public static final SqlOperandTypeChecker COMPARABLE_UNORDERED_COMPARABLE_UNORDERED =
       new ComparableOperandTypeChecker(2, RelDataTypeComparability.UNORDERED,
           SqlOperandTypeChecker.Consistency.LEAST_RESTRICTIVE);
+
+  /**
+   * OVERRIDE POINT
+   * Calcite 1.30 Keeps the same changes with AL-5295 as the previous Calcite version
+   * FYI: https://github.com/Kyligence/KAP/issues/13872
+   */
+  public static final SqlOperandTypeChecker COMPARABLE_NO_CONVERT_TO_VARYING =
+      new ComparableOperandTypeChecker(2, RelDataTypeComparability.UNORDERED,
+          SqlOperandTypeChecker.Consistency.LEAST_RESTRICTIVE_NO_CONVERT_TO_VARYING);
 
   /**
    * Operand type-checking strategy where two operands must both be in the

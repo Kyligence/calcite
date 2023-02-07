@@ -88,6 +88,12 @@ public interface SqlOperandTypeChecker {
      * or boolean. */
     COMPARE,
     /** Convert all arguments to the least restrictive type. */
-    LEAST_RESTRICTIVE
+    LEAST_RESTRICTIVE,
+    /**
+     * OVERRIDE POINT
+     * Calcite 1.30 Keeps the same changes with AL-5295 as the previous Calcite version
+     * FYI: https://github.com/Kyligence/KAP/issues/13872
+     */
+    LEAST_RESTRICTIVE_NO_CONVERT_TO_VARYING
   }
 }

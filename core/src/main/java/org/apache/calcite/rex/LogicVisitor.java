@@ -18,7 +18,7 @@ package org.apache.calcite.rex;
 
 import org.apache.calcite.plan.RelOptUtil.Logic;
 
-import com.google.common.collect.Iterables;
+import org.apache.kylin.guava30.shaded.common.collect.Iterables;
 
 import org.checkerframework.checker.nullness.qual.Nullable;
 

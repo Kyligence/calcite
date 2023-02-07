@@ -30,7 +30,7 @@ import org.apache.calcite.rel.type.RelDataType;
 import org.apache.calcite.tools.FrameworkConfig;
 import org.apache.calcite.tools.RelBuilder;
 
-import com.google.common.collect.ImmutableList;
+import org.apache.kylin.guava30.shaded.common.collect.ImmutableList;
 
 import org.hamcrest.MatcherAssert;
 import org.junit.jupiter.api.Test;

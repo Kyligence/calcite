@@ -22,7 +22,7 @@ dependencies {
                 .because("conflicts with log4j-slf4j-impl")
     }
 
-    implementation("com.google.guava:guava")
+    implementation("org.apache.kylin:kylin-external-guava30")
     implementation("org.eclipse.jetty:jetty-server")
     implementation("org.eclipse.jetty:jetty-util")
     implementation("org.scala-lang:scala-library")

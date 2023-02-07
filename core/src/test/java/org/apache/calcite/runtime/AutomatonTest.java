@@ -19,7 +19,7 @@ package org.apache.calcite.runtime;
 import org.apache.calcite.linq4j.MemoryFactory;
 import org.apache.calcite.test.Matchers;
 
-import com.google.common.collect.ImmutableList;
+import org.apache.kylin.guava30.shaded.common.collect.ImmutableList;
 
 import org.hamcrest.core.Is;
 import org.junit.jupiter.api.Test;

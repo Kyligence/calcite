@@ -44,7 +44,7 @@ import org.apache.calcite.schema.Table;
 import org.apache.calcite.tools.RelBuilder;
 import org.apache.calcite.util.Util;
 
-import com.google.common.collect.ImmutableList;
+import org.apache.kylin.guava30.shaded.common.collect.ImmutableList;
 
 import org.immutables.value.Value;
 

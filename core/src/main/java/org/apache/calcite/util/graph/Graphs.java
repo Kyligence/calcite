@@ -18,7 +18,7 @@ package org.apache.calcite.util.graph;
 
 import org.apache.calcite.util.Pair;
 
-import com.google.common.collect.ImmutableList;
+import org.apache.kylin.guava30.shaded.common.collect.ImmutableList;
 
 import java.util.AbstractList;
 import java.util.ArrayList;

@@ -27,10 +27,10 @@ import org.apache.calcite.util.Pair;
 import org.apache.calcite.util.Sources;
 
 import org.apache.commons.collections.CollectionUtils;
+import org.apache.kylin.guava30.shaded.common.collect.ImmutableMap;
+import org.apache.kylin.guava30.shaded.common.collect.Lists;
 
 import com.alibaba.innodb.java.reader.util.Utils;
-import com.google.common.collect.ImmutableMap;
-import com.google.common.collect.Lists;
 
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;

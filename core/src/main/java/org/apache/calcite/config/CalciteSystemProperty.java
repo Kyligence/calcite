@@ -16,8 +16,8 @@
  */
 package org.apache.calcite.config;
 
-import com.google.common.base.MoreObjects;
-import com.google.common.collect.ImmutableSet;
+import org.apache.kylin.guava30.shaded.common.base.MoreObjects;
+import org.apache.kylin.guava30.shaded.common.collect.ImmutableSet;
 
 import org.checkerframework.checker.nullness.qual.Nullable;
 

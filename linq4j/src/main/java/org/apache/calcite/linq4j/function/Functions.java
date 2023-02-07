@@ -259,7 +259,7 @@ public abstract class Functions {
   /**
    * Creates a view of a list that applies a function to each element.
    *
-   * @deprecated Use {@link com.google.common.collect.Lists#transform}
+   * @deprecated Use {@link org.apache.kylin.guava30.shaded.common.collect.Lists#transform}
    */
   @Deprecated // to be removed before 2.0
   public static <T1, R> List<R> adapt(final List<T1> list,
@@ -278,7 +278,7 @@ public abstract class Functions {
   /**
    * Creates a view of an array that applies a function to each element.
    *
-   * @deprecated Use {@link com.google.common.collect.Lists#transform}
+   * @deprecated Use {@link org.apache.kylin.guava30.shaded.common.collect.Lists#transform}
    * and {@link Arrays#asList(Object[])}
    */
   @Deprecated // to be removed before 2.0

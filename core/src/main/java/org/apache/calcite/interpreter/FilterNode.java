@@ -18,7 +18,7 @@ package org.apache.calcite.interpreter;
 
 import org.apache.calcite.rel.core.Filter;
 
-import com.google.common.collect.ImmutableList;
+import org.apache.kylin.guava30.shaded.common.collect.ImmutableList;
 
 /**
  * Interpreter node that implements a

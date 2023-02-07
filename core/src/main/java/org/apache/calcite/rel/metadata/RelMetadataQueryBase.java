@@ -18,8 +18,8 @@ package org.apache.calcite.rel.metadata;
 
 import org.apache.calcite.rel.RelNode;
 
-import com.google.common.collect.HashBasedTable;
-import com.google.common.collect.Table;
+import org.apache.kylin.guava30.shaded.common.collect.HashBasedTable;
+import org.apache.kylin.guava30.shaded.common.collect.Table;
 
 import org.checkerframework.checker.nullness.qual.Nullable;
 

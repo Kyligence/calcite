@@ -31,7 +31,7 @@ import org.checkerframework.checker.nullness.qual.Nullable;
 
 import java.util.List;
 
-import static com.google.common.base.Preconditions.checkState;
+import static org.apache.kylin.guava30.shaded.common.base.Preconditions.checkState;
 
 /**
  * Implementation of {@link org.apache.calcite.rel.core.Sort}

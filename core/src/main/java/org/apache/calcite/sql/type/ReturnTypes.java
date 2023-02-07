@@ -34,7 +34,7 @@ import org.apache.calcite.sql.validate.SqlValidatorNamespace;
 import org.apache.calcite.util.Glossary;
 import org.apache.calcite.util.Util;
 
-import com.google.common.base.Preconditions;
+import org.apache.kylin.guava30.shaded.common.base.Preconditions;
 
 import java.util.AbstractList;
 import java.util.List;
@@ -366,6 +366,13 @@ public abstract class ReturnTypes {
    */
   public static final SqlReturnTypeInference CHAR =
           explicit(SqlTypeName.CHAR);
+
+  /**
+   * Type-inference strategy whereby the result type of a call is a nullable
+   * CHAR(1).
+   */
+  public static final SqlReturnTypeInference CHAR_FORCE_NULLABLE =
+      CHAR.andThen(SqlTypeTransforms.FORCE_NULLABLE);
 
   /**
    * Type-inference strategy whereby the result type of a call is an Integer.

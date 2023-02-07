@@ -19,7 +19,7 @@ package org.apache.calcite.test;
 import org.apache.calcite.config.CalciteSystemProperty;
 import org.apache.calcite.util.TestUtil;
 
-import com.google.common.collect.Ordering;
+import org.apache.kylin.guava30.shaded.common.collect.Ordering;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;

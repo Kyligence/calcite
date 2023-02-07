@@ -21,8 +21,9 @@ import org.apache.calcite.schema.SchemaFactory;
 import org.apache.calcite.schema.SchemaPlus;
 import org.apache.calcite.util.trace.CalciteTrace;
 
+import org.apache.kylin.guava30.shaded.common.collect.ImmutableSet;
+
 import com.datastax.oss.driver.api.core.CqlSession;
-import com.google.common.collect.ImmutableSet;
 
 import org.slf4j.Logger;
 

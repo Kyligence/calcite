@@ -18,7 +18,7 @@ package org.apache.calcite.materialize;
 
 import org.apache.calcite.util.mapping.IntPair;
 
-import com.google.common.collect.ImmutableList;
+import org.apache.kylin.guava30.shaded.common.collect.ImmutableList;
 
 import java.util.List;
 

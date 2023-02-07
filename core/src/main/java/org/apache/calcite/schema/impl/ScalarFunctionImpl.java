@@ -30,7 +30,7 @@ import org.apache.calcite.schema.ScalarFunction;
 import org.apache.calcite.schema.TableFunction;
 import org.apache.calcite.sql.SqlOperatorBinding;
 
-import com.google.common.collect.ImmutableMultimap;
+import org.apache.kylin.guava30.shaded.common.collect.ImmutableMultimap;
 
 import org.checkerframework.checker.nullness.qual.Nullable;
 

@@ -27,7 +27,7 @@ dependencies {
     api(project(":linq4j"))
     api("org.apache.calcite.avatica:avatica-core")
 
-    implementation("com.google.guava:guava")
+    implementation("org.apache.kylin:kylin-external-guava30")
     implementation("org.slf4j:slf4j-api")
 
     testImplementation(project(":testkit"))

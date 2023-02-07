@@ -31,7 +31,7 @@ dependencies {
     api("org.slf4j:slf4j-api")
 
     implementation("com.fasterxml.jackson.core:jackson-databind")
-    implementation("com.google.guava:guava")
+    implementation("org.apache.kylin:kylin-external-guava30")
     implementation("org.apache.commons:commons-lang3")
 
     testImplementation(project(":testkit"))

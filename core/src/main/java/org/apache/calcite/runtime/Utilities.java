@@ -41,7 +41,7 @@ public class Utilities {
   @Deprecated // to be removed before 2.0
   public static boolean equal(@Nullable Object o0, @Nullable Object o1) {
     // Same as java.lang.Objects.equals (JDK 1.7 and later)
-    // and com.google.common.base.Objects.equal
+    // and org.apache.kylin.guava30.shaded.common.base.Objects.equal
     return Objects.equals(o0, o1);
   }
 

@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.google.common.collect;
+package org.apache.kylin.guava30.shaded.common.collect;
 
 import org.checkerframework.checker.nullness.qual.*;
 

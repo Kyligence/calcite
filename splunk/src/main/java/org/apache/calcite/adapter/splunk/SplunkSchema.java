@@ -20,7 +20,7 @@ import org.apache.calcite.adapter.splunk.search.SplunkConnection;
 import org.apache.calcite.schema.Table;
 import org.apache.calcite.schema.impl.AbstractSchema;
 
-import com.google.common.collect.ImmutableMap;
+import org.apache.kylin.guava30.shaded.common.collect.ImmutableMap;
 
 import java.util.Map;
 

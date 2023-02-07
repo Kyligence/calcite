@@ -24,8 +24,9 @@ import org.apache.calcite.test.CalciteAssert;
 import org.apache.calcite.test.ElasticsearchChecker;
 import org.apache.calcite.util.TestUtil;
 
+import org.apache.kylin.guava30.shaded.common.collect.ImmutableMap;
+
 import com.fasterxml.jackson.databind.node.ObjectNode;
-import com.google.common.collect.ImmutableMap;
 
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;

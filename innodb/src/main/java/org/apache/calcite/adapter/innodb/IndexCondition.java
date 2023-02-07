@@ -23,15 +23,15 @@ import org.apache.calcite.rex.RexNode;
 import org.apache.calcite.util.Pair;
 
 import org.apache.commons.collections.CollectionUtils;
+import org.apache.kylin.guava30.shaded.common.collect.ImmutableList;
 
 import com.alibaba.innodb.java.reader.comparator.ComparisonOperator;
-import com.google.common.collect.ImmutableList;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-import static com.google.common.base.Preconditions.checkState;
+import static org.apache.kylin.guava30.shaded.common.base.Preconditions.checkState;
 
 /**
  * Index condition.

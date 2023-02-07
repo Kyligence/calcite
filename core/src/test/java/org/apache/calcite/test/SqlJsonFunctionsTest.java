@@ -26,7 +26,8 @@ import org.apache.calcite.sql.SqlJsonQueryWrapperBehavior;
 import org.apache.calcite.sql.SqlJsonValueEmptyOrErrorBehavior;
 import org.apache.calcite.util.BuiltInMethod;
 
-import com.google.common.primitives.Longs;
+import org.apache.kylin.guava30.shaded.common.primitives.Longs;
+
 import com.jayway.jsonpath.InvalidJsonException;
 import com.jayway.jsonpath.PathNotFoundException;
 

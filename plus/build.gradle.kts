@@ -21,7 +21,7 @@ dependencies {
     api("org.apache.calcite.avatica:avatica-core")
     api("org.checkerframework:checker-qual")
 
-    implementation("com.google.guava:guava")
+    implementation("org.apache.kylin:kylin-external-guava30")
     implementation("com.teradata.tpcds:tpcds")
     implementation("io.prestosql.tpch:tpch")
     implementation("net.hydromatic:chinook-data-hsqldb")

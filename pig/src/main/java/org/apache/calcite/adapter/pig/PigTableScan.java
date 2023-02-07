@@ -27,9 +27,8 @@ import org.apache.calcite.rel.core.TableScan;
 import org.apache.calcite.rel.rules.CoreRules;
 import org.apache.calcite.rel.type.RelDataTypeField;
 
+import org.apache.kylin.guava30.shaded.common.collect.ImmutableList;
 import org.apache.pig.data.DataType;
-
-import com.google.common.collect.ImmutableList;
 
 import java.util.ArrayList;
 import java.util.List;

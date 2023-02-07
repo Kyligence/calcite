@@ -36,9 +36,10 @@ import org.apache.calcite.sql.SqlKind;
 import org.apache.calcite.sql.fun.SqlStdOperatorTable;
 import org.apache.calcite.tools.RelBuilder;
 
+import org.apache.kylin.guava30.shaded.common.collect.ImmutableList;
+
 import com.esri.core.geometry.Envelope;
 import com.esri.core.geometry.Point;
-import com.google.common.collect.ImmutableList;
 
 import org.checkerframework.checker.nullness.qual.Nullable;
 import org.immutables.value.Value;

@@ -18,9 +18,10 @@ package org.apache.calcite.adapter.cassandra;
 
 import org.apache.calcite.sql.type.SqlTypeName;
 
+import org.apache.kylin.guava30.shaded.common.collect.ImmutableMap;
+
 import com.datastax.oss.driver.api.core.type.DataType;
 import com.datastax.oss.driver.api.core.type.DataTypes;
-import com.google.common.collect.ImmutableMap;
 
 import java.util.Map;
 

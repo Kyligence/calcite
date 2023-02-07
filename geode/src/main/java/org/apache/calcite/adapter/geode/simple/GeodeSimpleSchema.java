@@ -22,8 +22,7 @@ import org.apache.calcite.schema.impl.AbstractSchema;
 
 import org.apache.geode.cache.Region;
 import org.apache.geode.cache.client.ClientCache;
-
-import com.google.common.collect.ImmutableMap;
+import org.apache.kylin.guava30.shaded.common.collect.ImmutableMap;
 
 import java.util.Map;
 

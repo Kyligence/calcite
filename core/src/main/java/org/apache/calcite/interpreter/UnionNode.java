@@ -18,7 +18,7 @@ package org.apache.calcite.interpreter;
 
 import org.apache.calcite.rel.core.Union;
 
-import com.google.common.collect.ImmutableList;
+import org.apache.kylin.guava30.shaded.common.collect.ImmutableList;
 
 import java.util.HashSet;
 import java.util.Set;

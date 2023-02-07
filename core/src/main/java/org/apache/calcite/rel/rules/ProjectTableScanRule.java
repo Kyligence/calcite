@@ -33,7 +33,7 @@ import org.apache.calcite.tools.RelBuilderFactory;
 import org.apache.calcite.util.mapping.Mapping;
 import org.apache.calcite.util.mapping.Mappings;
 
-import com.google.common.collect.ImmutableList;
+import org.apache.kylin.guava30.shaded.common.collect.ImmutableList;
 
 import org.immutables.value.Value;
 
@@ -59,7 +59,7 @@ public class ProjectTableScanRule
 
   @SuppressWarnings("Guava")
   @Deprecated // to be removed before 2.0
-  public static final com.google.common.base.Predicate<TableScan> PREDICATE =
+  public static final org.apache.kylin.guava30.shaded.common.base.Predicate<TableScan> PREDICATE =
       ProjectTableScanRule::test;
 
   /** Creates a ProjectTableScanRule. */

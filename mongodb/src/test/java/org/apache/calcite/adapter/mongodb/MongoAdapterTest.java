@@ -25,8 +25,9 @@ import org.apache.calcite.util.Bug;
 import org.apache.calcite.util.TestUtil;
 import org.apache.calcite.util.Util;
 
-import com.google.common.io.LineProcessor;
-import com.google.common.io.Resources;
+import org.apache.kylin.guava30.shaded.common.io.LineProcessor;
+import org.apache.kylin.guava30.shaded.common.io.Resources;
+
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
 

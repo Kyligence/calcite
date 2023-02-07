@@ -51,12 +51,12 @@ import org.apache.calcite.util.TimeString;
 import org.apache.calcite.util.TimestampString;
 import org.apache.calcite.util.Util;
 
-import com.google.common.base.Preconditions;
-import com.google.common.collect.ImmutableList;
-import com.google.common.collect.ImmutableRangeSet;
-import com.google.common.collect.Range;
-import com.google.common.collect.RangeSet;
-import com.google.common.collect.TreeRangeSet;
+import org.apache.kylin.guava30.shaded.common.base.Preconditions;
+import org.apache.kylin.guava30.shaded.common.collect.ImmutableList;
+import org.apache.kylin.guava30.shaded.common.collect.ImmutableRangeSet;
+import org.apache.kylin.guava30.shaded.common.collect.Range;
+import org.apache.kylin.guava30.shaded.common.collect.RangeSet;
+import org.apache.kylin.guava30.shaded.common.collect.TreeRangeSet;
 
 import org.checkerframework.checker.nullness.qual.Nullable;
 import org.checkerframework.checker.nullness.qual.PolyNull;
@@ -982,6 +982,16 @@ public class RexBuilder {
       }
       o = ((TimestampString) o).round(p);
       break;
+    // Calcite 1.30 removed the precision setting for the Decimal data type,
+    // restored the logic here to ensure correctness
+    case DECIMAL:
+      if (o != null) {
+        assert o instanceof BigDecimal;
+        if (type.getScale() >= 0 && ((BigDecimal) o).scale() > type.getScale()) {
+          o = ((BigDecimal) o).setScale(type.getScale(), RoundingMode.HALF_UP);
+        }
+      }
+      break;
     default:
       break;
     }
@@ -1459,6 +1469,20 @@ public class RexBuilder {
     return makeLiteral(zeroValue(type), type);
   }
 
+  /**
+   * Calcite 1.30 Copy from following, Use for Kylin.
+   * @see RexBuilder#makeZeroLiteral(RelDataType)
+   *
+   * Calcite 1.30 changed makeZeroLiteral method return type
+   * fix with SumCaseWhenFunctionRule and CountDistinctCaseWhenFunctionRule.
+   *
+   * @param type      Type
+   * @return Simple literal
+   */
+  public RexNode kylinMakeZeroLiteral(RelDataType type) {
+    return kylinMakeLiteral(zeroValue(type), type);
+  }
+
   private static Comparable zeroValue(RelDataType type) {
     switch (type.getSqlTypeName()) {
     case CHAR:
@@ -1503,6 +1527,21 @@ public class RexBuilder {
    */
   public RexLiteral makeLiteral(@Nullable Object value, RelDataType type) {
     return (RexLiteral) makeLiteral(value, type, false, false);
+  }
+
+  /**
+   * Calcite 1.30 Copy from following, Use for Kylin.
+   * @see RexBuilder#makeLiteral(Object, RelDataType)
+   *
+   * Calcite 1.30 changed makeZeroLiteral method return type
+   * fix with SumCaseWhenFunctionRule and CountDistinctCaseWhenFunctionRule.
+   *
+   * @param value     Value
+   * @param type      Type
+   * @return Simple literal
+   */
+  public RexNode kylinMakeLiteral(@Nullable Object value, RelDataType type) {
+    return makeLiteral(value, type, true, false);
   }
 
   /**

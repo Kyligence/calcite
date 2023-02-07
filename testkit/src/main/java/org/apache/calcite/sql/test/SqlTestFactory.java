@@ -50,7 +50,7 @@ import org.apache.calcite.test.MockSqlOperatorTable;
 import org.apache.calcite.test.catalog.MockCatalogReaderSimple;
 import org.apache.calcite.util.SourceStringReader;
 
-import com.google.common.base.Suppliers;
+import org.apache.kylin.guava30.shaded.common.base.Suppliers;
 
 import org.checkerframework.checker.nullness.qual.Nullable;
 

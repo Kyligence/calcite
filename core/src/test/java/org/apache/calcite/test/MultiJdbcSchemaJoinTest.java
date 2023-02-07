@@ -28,8 +28,7 @@ import org.apache.calcite.schema.SchemaPlus;
 import org.apache.calcite.test.schemata.hr.HrSchema;
 
 import org.apache.commons.dbcp2.BasicDataSource;
-
-import com.google.common.collect.Sets;
+import org.apache.kylin.guava30.shaded.common.collect.Sets;
 
 import org.junit.jupiter.api.Test;
 

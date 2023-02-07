@@ -26,7 +26,7 @@ import org.apache.calcite.sql.validate.SqlValidatorScope;
 import org.apache.calcite.util.Litmus;
 import org.apache.calcite.util.Util;
 
-import com.google.common.collect.ImmutableList;
+import org.apache.kylin.guava30.shaded.common.collect.ImmutableList;
 
 import org.checkerframework.checker.nullness.qual.Nullable;
 import org.checkerframework.dataflow.qual.Pure;
@@ -203,8 +203,14 @@ public class SqlIdentifier extends SqlNode {
    */
   public SqlParserPos getComponentParserPosition(int i) {
     assert (i >= 0) && (i < names.size());
-    return (componentPositions == null) ? getParserPosition()
-        : componentPositions.get(i);
+    // Calcite 1.30 add unparsedAsFunc in SqlUtil.unparseSqlIdentifierSyntax method
+    // Kylin may have changed the alias of the column, causing the index bound exception
+    if (componentPositions == null) {
+      return getParserPosition();
+    } else if (i == componentPositions.size()) {
+      return componentPositions.get(i - 1);
+    }
+    return componentPositions.get(i);
   }
 
   /**

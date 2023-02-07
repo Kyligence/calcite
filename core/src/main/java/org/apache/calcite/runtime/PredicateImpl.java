@@ -16,12 +16,12 @@
  */
 package org.apache.calcite.runtime;
 
-import com.google.common.base.Predicate;
+import org.apache.kylin.guava30.shaded.common.base.Predicate;
 
 import org.checkerframework.checker.nullness.qual.Nullable;
 
 /**
- * Abstract implementation of {@link com.google.common.base.Predicate}.
+ * Abstract implementation of {@link org.apache.kylin.guava30.shaded.common.base.Predicate}.
  *
  * <p>Derived class needs to implement the {@link #test} method.
  *

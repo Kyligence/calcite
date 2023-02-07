@@ -18,9 +18,10 @@ package org.apache.calcite.test;
 
 import org.apache.calcite.avatica.util.DateTimeUtils;
 
+import org.apache.kylin.guava30.shaded.common.collect.ImmutableMap;
+
 import com.datastax.oss.driver.api.core.CqlSession;
 import com.datastax.oss.driver.api.core.type.codec.TypeCodecs;
-import com.google.common.collect.ImmutableMap;
 
 import org.cassandraunit.CQLDataLoader;
 import org.cassandraunit.dataset.cql.ClassPathCQLDataSet;

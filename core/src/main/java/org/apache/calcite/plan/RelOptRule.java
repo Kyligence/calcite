@@ -23,8 +23,8 @@ import org.apache.calcite.rel.core.RelFactories;
 import org.apache.calcite.tools.RelBuilderFactory;
 import org.apache.calcite.util.Util;
 
-import com.google.common.collect.ImmutableList;
-import com.google.common.collect.Lists;
+import org.apache.kylin.guava30.shaded.common.collect.ImmutableList;
+import org.apache.kylin.guava30.shaded.common.collect.Lists;
 
 import org.checkerframework.checker.initialization.qual.UnderInitialization;
 import org.checkerframework.checker.nullness.qual.Nullable;
@@ -188,7 +188,7 @@ public abstract class RelOptRule {
   public static <R extends RelNode> RelOptRuleOperand operand(
       Class<R> clazz,
       RelTrait trait,
-      com.google.common.base.Predicate<? super R> predicate,
+      org.apache.kylin.guava30.shaded.common.base.Predicate<? super R> predicate,
       RelOptRuleOperandChildren operandList) {
     return operandJ(clazz, trait, (Predicate<? super R>) predicate::apply,
         operandList);
@@ -223,7 +223,7 @@ public abstract class RelOptRule {
   public static <R extends RelNode> RelOptRuleOperand operand(
       Class<R> clazz,
       RelTrait trait,
-      com.google.common.base.Predicate<? super R> predicate,
+      org.apache.kylin.guava30.shaded.common.base.Predicate<? super R> predicate,
       RelOptRuleOperand first,
       RelOptRuleOperand... rest) {
     return operandJ(clazz, trait, (Predicate<? super R>) predicate::apply,
@@ -279,7 +279,7 @@ public abstract class RelOptRule {
   @Deprecated // to be removed before 2.0
   protected static <R extends RelNode> ConverterRelOptRuleOperand
       convertOperand(Class<R> clazz,
-      com.google.common.base.Predicate<? super R> predicate,
+      org.apache.kylin.guava30.shaded.common.base.Predicate<? super R> predicate,
       RelTrait trait) {
     return new ConverterRelOptRuleOperand(clazz, trait, predicate::apply);
   }

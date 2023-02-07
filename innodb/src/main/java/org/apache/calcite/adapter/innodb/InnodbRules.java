@@ -38,8 +38,9 @@ import org.apache.calcite.rex.RexUtil;
 import org.apache.calcite.rex.RexVisitorImpl;
 import org.apache.calcite.sql.validate.SqlValidatorUtil;
 
+import org.apache.kylin.guava30.shaded.common.collect.ImmutableList;
+
 import com.alibaba.innodb.java.reader.schema.TableDef;
-import com.google.common.collect.ImmutableList;
 
 import org.immutables.value.Value;
 

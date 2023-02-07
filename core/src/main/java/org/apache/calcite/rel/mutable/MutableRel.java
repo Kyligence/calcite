@@ -21,8 +21,8 @@ import org.apache.calcite.plan.RelOptCluster;
 import org.apache.calcite.rel.RelNode;
 import org.apache.calcite.rel.type.RelDataType;
 
-import com.google.common.base.Equivalence;
-import com.google.common.collect.Lists;
+import org.apache.kylin.guava30.shaded.common.base.Equivalence;
+import org.apache.kylin.guava30.shaded.common.collect.Lists;
 
 import org.checkerframework.checker.nullness.qual.Nullable;
 

@@ -51,7 +51,7 @@ import org.apache.calcite.util.graph.DirectedGraph;
 import org.apache.calcite.util.graph.Graphs;
 import org.apache.calcite.util.graph.TopologicalOrderIterator;
 
-import com.google.common.collect.ImmutableList;
+import org.apache.kylin.guava30.shaded.common.collect.ImmutableList;
 
 import org.checkerframework.checker.nullness.qual.Nullable;
 
@@ -68,9 +68,9 @@ import java.util.Map;
 import java.util.Queue;
 import java.util.Set;
 
-import static com.google.common.base.Preconditions.checkArgument;
-
 import static org.apache.calcite.linq4j.Nullness.castNonNull;
+
+import static org.apache.kylin.guava30.shaded.common.base.Preconditions.checkArgument;
 
 import static java.util.Objects.requireNonNull;
 

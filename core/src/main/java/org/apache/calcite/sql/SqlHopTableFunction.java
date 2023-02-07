@@ -16,7 +16,7 @@
  */
 package org.apache.calcite.sql;
 
-import com.google.common.collect.ImmutableList;
+import org.apache.kylin.guava30.shaded.common.collect.ImmutableList;
 
 /**
  * SqlHopTableFunction implements an operator for hopping.

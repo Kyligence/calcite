@@ -25,9 +25,8 @@ import org.apache.calcite.rel.core.AggregateCall;
 import org.apache.calcite.rel.type.RelDataTypeField;
 import org.apache.calcite.util.ImmutableBitSet;
 
+import org.apache.kylin.guava30.shaded.common.collect.ImmutableList;
 import org.apache.pig.scripting.Pig;
-
-import com.google.common.collect.ImmutableList;
 
 import java.util.ArrayList;
 import java.util.HashSet;

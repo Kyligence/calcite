@@ -56,3 +56,27 @@ nb-configuration.xml
 
 # Local configuration file (sdk path, etc)
 local.properties
+
+# Generate files
+babel/bin/
+cassandra/bin/
+core/bin/
+druid/bin/
+elasticsearch/bin/
+example/csv/bin/
+example/function/bin/
+file/bin/
+geode/bin/
+innodb/bin/
+kafka/bin/
+linq4j/bin/
+mongodb/bin/
+pig/bin/
+piglet/bin/
+plus/bin/
+redis/bin/
+server/bin/
+spark/bin/
+splunk/bin/
+testkit/bin/
+ubenchmark/bin/

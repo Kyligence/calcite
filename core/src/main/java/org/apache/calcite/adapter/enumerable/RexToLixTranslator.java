@@ -57,6 +57,7 @@ import org.apache.calcite.sql.SqlIntervalQualifier;
 import org.apache.calcite.sql.SqlOperator;
 import org.apache.calcite.sql.SqlWindowTableFunction;
 import org.apache.calcite.sql.fun.SqlStdOperatorTable;
+import org.apache.calcite.sql.type.SqlTypeName;
 import org.apache.calcite.sql.type.SqlTypeUtil;
 import org.apache.calcite.sql.validate.SqlConformance;
 import org.apache.calcite.util.BuiltInMethod;
@@ -64,9 +65,9 @@ import org.apache.calcite.util.ControlFlowException;
 import org.apache.calcite.util.Pair;
 import org.apache.calcite.util.Util;
 
-import com.google.common.base.CaseFormat;
-import com.google.common.collect.ImmutableList;
-import com.google.common.collect.ImmutableMap;
+import org.apache.kylin.guava30.shaded.common.base.CaseFormat;
+import org.apache.kylin.guava30.shaded.common.collect.ImmutableList;
+import org.apache.kylin.guava30.shaded.common.collect.ImmutableMap;
 
 import org.checkerframework.checker.nullness.qual.Nullable;
 
@@ -521,7 +522,13 @@ public class RexToLixTranslator implements RexVisitor<RexToLixTranslator.Result>
       break;
     }
     if (convert == null) {
-      convert = EnumUtils.convert(operand, typeFactory.getJavaClass(targetType));
+      // Calcite 1.30 don't keep the precision of BigDecimal, This will cause calculate error
+      if (targetType.getSqlTypeName() == SqlTypeName.DECIMAL) {
+        convert = EnumUtils.convert(operand, typeFactory.getJavaClass(targetType),
+            targetType.getScale());
+      } else {
+        convert = EnumUtils.convert(operand, typeFactory.getJavaClass(targetType));
+      }
     }
     // Going from anything to CHAR(n) or VARCHAR(n), make sure value is no
     // longer than n.

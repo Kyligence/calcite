@@ -24,7 +24,7 @@ import org.apache.calcite.plan.RelOptUtil;
 import org.apache.calcite.tools.PigRelBuilder;
 import org.apache.calcite.util.Util;
 
-import com.google.common.collect.Ordering;
+import org.apache.kylin.guava30.shaded.common.collect.Ordering;
 
 import java.io.StringReader;
 import java.io.StringWriter;

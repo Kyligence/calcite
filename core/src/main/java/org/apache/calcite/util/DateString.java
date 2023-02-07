@@ -17,20 +17,31 @@
 package org.apache.calcite.util;
 
 import org.apache.calcite.avatica.util.DateTimeUtils;
+import org.apache.calcite.rex.RexBuilder;
+import org.apache.calcite.rex.RexNode;
+import org.apache.calcite.rex.RexSimplify;
+import org.apache.calcite.sql.SqlKind;
 
-import com.google.common.base.Preconditions;
+import org.apache.kylin.guava30.shaded.common.base.Preconditions;
 
 import org.checkerframework.checker.nullness.qual.Nullable;
 
 import java.util.Calendar;
+import java.util.List;
+import java.util.Map;
 import java.util.regex.Pattern;
 
 /**
  * Date literal.
  *
  * <p>Immutable, internally represented as a string (in ISO format).
+ * Calcite 1.30 changed DateString's compareTo method, which will cause compareTo(TimestampString)
+ * error in following method.
+ * @see RexSimplify#processRangeOld(RexBuilder, List, Map, RexNode, RexNode, Comparable, SqlKind)
  */
-public class DateString implements Comparable<DateString> {
+
+//public class DateString implements Comparable<DateString> {
+public class DateString implements Comparable<Object> {
   private static final Pattern PATTERN =
       Pattern.compile("[0-9][0-9][0-9][0-9]-[0-9][0-9]-[0-9][0-9]");
 
@@ -88,8 +99,21 @@ public class DateString implements Comparable<DateString> {
     return v.hashCode();
   }
 
-  @Override public int compareTo(DateString o) {
+  // Calcite 1.30 changed DateString's compareTo method, which will cause compareTo(TimestampString)
+  // error, we changed the behavior to the logic of Calcite 1.16
+  /*@Override public int compareTo(DateString o) {
     return v.compareTo(o.v);
+  }*/
+  @Override public int compareTo(Object o) {
+    if (o instanceof DateString) {
+      return v.compareTo(((DateString) o).v);
+    }
+
+    if (o instanceof TimestampString) {
+      return Long.compare(this.getMillisSinceEpoch(), ((TimestampString) o).getMillisSinceEpoch());
+    }
+
+    return v.compareTo(o.toString());
   }
 
   /** Creates a DateString from a Calendar. */

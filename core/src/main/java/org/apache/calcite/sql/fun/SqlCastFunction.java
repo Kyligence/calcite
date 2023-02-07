@@ -38,8 +38,8 @@ import org.apache.calcite.sql.type.SqlTypeUtil;
 import org.apache.calcite.sql.validate.SqlMonotonicity;
 import org.apache.calcite.sql.validate.SqlValidatorImpl;
 
-import com.google.common.collect.ImmutableSetMultimap;
-import com.google.common.collect.SetMultimap;
+import org.apache.kylin.guava30.shaded.common.collect.ImmutableSetMultimap;
+import org.apache.kylin.guava30.shaded.common.collect.SetMultimap;
 
 import java.text.Collator;
 import java.util.Objects;

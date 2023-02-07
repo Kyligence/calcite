@@ -26,7 +26,7 @@ dependencies {
     api(project(":core"))
     api("org.apache.calcite.avatica:avatica-core")
 
-    implementation("com.google.guava:guava")
+    implementation("org.apache.kylin:kylin-external-guava30")
     implementation("org.slf4j:slf4j-api")
 
     testImplementation("net.hydromatic:quidem")

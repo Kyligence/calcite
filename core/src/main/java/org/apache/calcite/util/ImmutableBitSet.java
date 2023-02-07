@@ -20,9 +20,9 @@ import org.apache.calcite.linq4j.Linq4j;
 import org.apache.calcite.runtime.Utilities;
 import org.apache.calcite.util.mapping.Mappings;
 
-import com.google.common.collect.ImmutableList;
-import com.google.common.collect.ImmutableSortedMap;
-import com.google.common.collect.Ordering;
+import org.apache.kylin.guava30.shaded.common.collect.ImmutableList;
+import org.apache.kylin.guava30.shaded.common.collect.ImmutableSortedMap;
+import org.apache.kylin.guava30.shaded.common.collect.Ordering;
 
 import org.checkerframework.checker.initialization.qual.UnderInitialization;
 import org.checkerframework.checker.nullness.qual.Nullable;
@@ -90,7 +90,7 @@ public class ImmutableBitSet
   @SuppressWarnings("Guava")
   @Deprecated // to be removed before 2.0
   public static final
-      com.google.common.base.Function<? super BitSet, ImmutableBitSet>
+      org.apache.kylin.guava30.shaded.common.base.Function<? super BitSet, ImmutableBitSet>
       FROM_BIT_SET = ImmutableBitSet::fromBitSet;
 
   private final long[] words;

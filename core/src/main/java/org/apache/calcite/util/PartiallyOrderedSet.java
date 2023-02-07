@@ -18,7 +18,7 @@ package org.apache.calcite.util;
 
 import org.apache.calcite.config.CalciteSystemProperty;
 
-import com.google.common.collect.ImmutableList;
+import org.apache.kylin.guava30.shaded.common.collect.ImmutableList;
 
 import org.checkerframework.checker.nullness.qual.Nullable;
 
@@ -116,8 +116,8 @@ public class PartiallyOrderedSet<E> extends AbstractSet<E> {
   @SuppressWarnings({"Guava", "UnnecessaryMethodReference"})
   @Deprecated // to be removed before 2.0
   public PartiallyOrderedSet(Ordering<E> ordering,
-      com.google.common.base.Function<E, Iterable<E>> childFunction,
-      com.google.common.base.Function<E, Iterable<E>> parentFunction) {
+      org.apache.kylin.guava30.shaded.common.base.Function<E, Iterable<E>> childFunction,
+      org.apache.kylin.guava30.shaded.common.base.Function<E, Iterable<E>> parentFunction) {
     //noinspection FunctionalExpressionCanBeFolded
     this(ordering, (Function<E, Iterable<E>>) childFunction::apply,
         parentFunction::apply);

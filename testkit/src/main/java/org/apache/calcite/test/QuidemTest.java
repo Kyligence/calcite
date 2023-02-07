@@ -34,7 +34,7 @@ import org.apache.calcite.util.Closer;
 import org.apache.calcite.util.Sources;
 import org.apache.calcite.util.Util;
 
-import com.google.common.io.PatternFilenameFilter;
+import org.apache.kylin.guava30.shaded.common.io.PatternFilenameFilter;
 
 import net.hydromatic.quidem.CommandHandler;
 import net.hydromatic.quidem.Quidem;

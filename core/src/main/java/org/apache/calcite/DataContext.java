@@ -23,7 +23,7 @@ import org.apache.calcite.linq4j.tree.ParameterExpression;
 import org.apache.calcite.schema.SchemaPlus;
 import org.apache.calcite.sql.advise.SqlAdvisor;
 
-import com.google.common.base.CaseFormat;
+import org.apache.kylin.guava30.shaded.common.base.CaseFormat;
 
 import org.checkerframework.checker.nullness.qual.Nullable;
 

@@ -21,7 +21,7 @@ import org.apache.calcite.rex.RexCall;
 import org.apache.calcite.rex.RexNode;
 import org.apache.calcite.sql.SqlOperator;
 
-import com.google.common.collect.Iterables;
+import org.apache.kylin.guava30.shaded.common.collect.Iterables;
 
 import java.util.List;
 

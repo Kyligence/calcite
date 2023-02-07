@@ -18,7 +18,7 @@ package org.apache.calcite.rel;
 
 import org.apache.calcite.runtime.Utilities;
 
-import com.google.common.collect.Ordering;
+import org.apache.kylin.guava30.shaded.common.collect.Ordering;
 
 import java.util.Comparator;
 

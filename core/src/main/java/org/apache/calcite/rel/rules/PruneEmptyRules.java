@@ -324,7 +324,7 @@ public abstract class PruneEmptyRules {
     @SuppressWarnings({"Guava", "UnnecessaryMethodReference"})
     @Deprecated // to be removed before 2.0
     public <R extends SingleRel> RemoveEmptySingleRule(Class<R> clazz,
-        com.google.common.base.Predicate<R> predicate,
+        org.apache.kylin.guava30.shaded.common.base.Predicate<R> predicate,
         RelBuilderFactory relBuilderFactory, String description) {
       this(ImmutableRemoveEmptySingleRuleConfig.of().withRelBuilderFactory(relBuilderFactory)
           .withDescription(description)

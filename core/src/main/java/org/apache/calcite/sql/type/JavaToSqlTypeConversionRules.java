@@ -19,7 +19,7 @@ package org.apache.calcite.sql.type;
 import org.apache.calcite.avatica.util.ArrayImpl;
 import org.apache.calcite.runtime.Geometries;
 
-import com.google.common.collect.ImmutableMap;
+import org.apache.kylin.guava30.shaded.common.collect.ImmutableMap;
 
 import org.checkerframework.checker.nullness.qual.Nullable;
 

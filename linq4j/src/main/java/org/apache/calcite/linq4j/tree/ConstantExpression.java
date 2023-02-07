@@ -228,7 +228,7 @@ public class ConstantExpression extends Expression {
   }
 
   private static ExpressionWriter writeMap(ExpressionWriter writer, Map map) {
-    writer.append("com.google.common.collect.ImmutableMap.");
+    writer.append("org.apache.kylin.guava30.shaded.common.collect.ImmutableMap.");
     if (map.isEmpty()) {
       return writer.append("of()");
     }
@@ -256,7 +256,7 @@ public class ConstantExpression extends Expression {
   }
 
   private static ExpressionWriter writeSet(ExpressionWriter writer, Set set) {
-    writer.append("com.google.common.collect.ImmutableSet.");
+    writer.append("org.apache.kylin.guava30.shaded.common.collect.ImmutableSet.");
     if (set.isEmpty()) {
       return writer.append("of()");
     }

@@ -39,13 +39,12 @@ import org.apache.calcite.sql.type.SqlTypeFamily;
 import org.apache.calcite.sql.type.SqlTypeName;
 import org.apache.calcite.sql.validate.SqlUserDefinedFunction;
 
+import org.apache.kylin.guava30.shaded.common.collect.ImmutableList;
 import org.apache.pig.FuncSpec;
 import org.apache.pig.data.BagFactory;
 import org.apache.pig.data.DataBag;
 import org.apache.pig.data.Tuple;
 import org.apache.pig.data.TupleFactory;
-
-import com.google.common.collect.ImmutableList;
 
 import java.lang.reflect.Method;
 import java.math.BigDecimal;

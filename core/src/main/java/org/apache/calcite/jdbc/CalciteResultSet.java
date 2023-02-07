@@ -28,7 +28,7 @@ import org.apache.calcite.linq4j.Linq4j;
 import org.apache.calcite.runtime.ArrayEnumeratorCursor;
 import org.apache.calcite.runtime.ObjectEnumeratorCursor;
 
-import com.google.common.collect.ImmutableList;
+import org.apache.kylin.guava30.shaded.common.collect.ImmutableList;
 
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;

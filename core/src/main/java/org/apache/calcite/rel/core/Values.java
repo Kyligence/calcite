@@ -33,7 +33,7 @@ import org.apache.calcite.sql.SqlExplainLevel;
 import org.apache.calcite.sql.type.SqlTypeUtil;
 import org.apache.calcite.util.Pair;
 
-import com.google.common.collect.ImmutableList;
+import org.apache.kylin.guava30.shaded.common.collect.ImmutableList;
 
 import org.checkerframework.checker.nullness.qual.Nullable;
 
@@ -51,12 +51,12 @@ public abstract class Values extends AbstractRelNode {
 
   @SuppressWarnings("Guava")
   @Deprecated // to be removed before 2.0
-  public static final com.google.common.base.Predicate<? super Values>
+  public static final org.apache.kylin.guava30.shaded.common.base.Predicate<? super Values>
       IS_EMPTY = Values::isEmpty;
 
   @SuppressWarnings("Guava")
   @Deprecated // to be removed before 2.0
-  public static final com.google.common.base.Predicate<? super Values>
+  public static final org.apache.kylin.guava30.shaded.common.base.Predicate<? super Values>
       IS_NOT_EMPTY = Values::isNotEmpty;
 
   //~ Instance fields --------------------------------------------------------

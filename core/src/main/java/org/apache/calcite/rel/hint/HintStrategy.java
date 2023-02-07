@@ -19,7 +19,7 @@ package org.apache.calcite.rel.hint;
 import org.apache.calcite.plan.RelOptRule;
 import org.apache.calcite.rel.convert.ConverterRule;
 
-import com.google.common.collect.ImmutableSet;
+import org.apache.kylin.guava30.shaded.common.collect.ImmutableSet;
 
 import org.checkerframework.checker.nullness.qual.Nullable;
 

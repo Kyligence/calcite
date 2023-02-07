@@ -30,16 +30,16 @@ import org.apache.calcite.sql.SqlValuesOperator;
 import org.apache.calcite.sql.fun.SqlRowOperator;
 import org.apache.calcite.sql.util.SqlBasicVisitor;
 
-import com.google.common.base.Preconditions;
-import com.google.common.base.Throwables;
-import com.google.common.cache.CacheBuilder;
-import com.google.common.cache.CacheLoader;
-import com.google.common.cache.LoadingCache;
-import com.google.common.collect.Collections2;
-import com.google.common.collect.FluentIterable;
-import com.google.common.collect.ImmutableList;
-import com.google.common.collect.ImmutableMap;
-import com.google.common.collect.Sets;
+import org.apache.kylin.guava30.shaded.common.base.Preconditions;
+import org.apache.kylin.guava30.shaded.common.base.Throwables;
+import org.apache.kylin.guava30.shaded.common.cache.CacheBuilder;
+import org.apache.kylin.guava30.shaded.common.cache.CacheLoader;
+import org.apache.kylin.guava30.shaded.common.cache.LoadingCache;
+import org.apache.kylin.guava30.shaded.common.collect.Collections2;
+import org.apache.kylin.guava30.shaded.common.collect.FluentIterable;
+import org.apache.kylin.guava30.shaded.common.collect.ImmutableList;
+import org.apache.kylin.guava30.shaded.common.collect.ImmutableMap;
+import org.apache.kylin.guava30.shaded.common.collect.Sets;
 
 import org.apiguardian.api.API;
 import org.checkerframework.checker.nullness.qual.Nullable;
@@ -1027,7 +1027,7 @@ public class Util {
    * @param t Throwable
    * @return Stack trace
    *
-   * @deprecated Use {@link com.google.common.base.Throwables#getStackTraceAsString(Throwable)}
+   * @deprecated Use {@link org.apache.kylin.guava30.shaded.common.base.Throwables#getStackTraceAsString(Throwable)}
    */
   @Deprecated // to be removed before 2.0
   public static String getStackTrace(Throwable t) {
@@ -2409,7 +2409,7 @@ public class Util {
    * provided function to convert a value to a key.
    *
    * <p>Unlike
-   * {@link com.google.common.collect.Maps#uniqueIndex(Iterable, com.google.common.base.Function)},
+   * {@link org.apache.kylin.guava30.shaded.common.collect.Maps#uniqueIndex(Iterable, org.apache.kylin.guava30.shaded.common.base.Function)},
    * returns a view whose contents change as the collection of values changes.
    *
    * @param values Collection of values
@@ -2445,7 +2445,7 @@ public class Util {
   @Deprecated
   public static <K, V> Map<K, V> asIndexMap(
       final Collection<V> values,
-      final com.google.common.base.Function<V, K> function) {
+      final org.apache.kylin.guava30.shaded.common.base.Function<V, K> function) {
     return asIndexMapJ(values, function::apply);
   }
 
@@ -2570,7 +2570,7 @@ public class Util {
    *
    * <p>It will be obsolete when we move to {@link Bug#upgrade Guava 28.0-jre}.
    * Guava 21.0 introduced {@code ImmutableList.toImmutableList()}, but it had
-   * a {@link com.google.common.annotations.Beta} tag until 28.0-jre.
+   * a {@link org.apache.kylin.guava30.shaded.common.annotations.Beta} tag until 28.0-jre.
    *
    * <p>In {@link Bug#upgrade Guava 21.0}, change this method to call
    * {@code ImmutableList.toImmutableList()}, ignoring the {@code @Beta} tag.

@@ -40,7 +40,7 @@ import org.apache.calcite.util.mapping.AbstractTargetMapping;
 import org.apache.calcite.util.mapping.Mapping;
 import org.apache.calcite.util.mapping.Mappings;
 
-import com.google.common.base.Preconditions;
+import org.apache.kylin.guava30.shaded.common.base.Preconditions;
 
 import org.immutables.value.Value;
 

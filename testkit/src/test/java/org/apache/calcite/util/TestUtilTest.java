@@ -18,7 +18,7 @@ package org.apache.calcite.util;
 
 import org.apache.calcite.util.mapping.IntPair;
 
-import com.google.common.collect.ImmutableMap;
+import org.apache.kylin.guava30.shaded.common.collect.ImmutableMap;
 
 import org.junit.jupiter.api.Test;
 

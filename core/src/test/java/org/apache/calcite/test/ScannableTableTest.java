@@ -43,7 +43,7 @@ import org.apache.calcite.test.CalciteAssert.ConnectionPostProcessor;
 import org.apache.calcite.util.NlsString;
 import org.apache.calcite.util.Pair;
 
-import com.google.common.collect.ImmutableMap;
+import org.apache.kylin.guava30.shaded.common.collect.ImmutableMap;
 
 import org.checkerframework.checker.nullness.qual.Nullable;
 import org.jetbrains.annotations.NotNull;

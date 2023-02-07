@@ -24,10 +24,10 @@ import org.apache.calcite.util.TimeString;
 import org.apache.calcite.util.TimestampString;
 import org.apache.calcite.util.Util;
 
-import com.google.common.collect.ImmutableList;
-import com.google.common.collect.ImmutableMap;
-import com.google.common.collect.Iterables;
-import com.google.common.collect.Sets;
+import org.apache.kylin.guava30.shaded.common.collect.ImmutableList;
+import org.apache.kylin.guava30.shaded.common.collect.ImmutableMap;
+import org.apache.kylin.guava30.shaded.common.collect.Iterables;
+import org.apache.kylin.guava30.shaded.common.collect.Sets;
 
 import org.checkerframework.checker.nullness.qual.Nullable;
 
@@ -126,7 +126,9 @@ public enum SqlTypeName {
   /** Spatial type. Though not standard, it is common to several DBs, so we
    * do not flag it 'special' (internal). */
   GEOMETRY(PrecScale.NO_NO, false, ExtraSqlTypes.GEOMETRY, SqlTypeFamily.GEO),
-  SARG(PrecScale.NO_NO, true, Types.OTHER, SqlTypeFamily.ANY);
+  SARG(PrecScale.NO_NO, true, Types.OTHER, SqlTypeFamily.ANY),
+  DOUBLE_PRECISION(PrecScale.NO_NO, false, Types.DOUBLE, SqlTypeFamily.NUMERIC,
+      "DOUBLE PRECISION");
 
   public static final int MAX_DATETIME_PRECISION = 3;
 
@@ -158,7 +160,7 @@ public enum SqlTypeName {
           INTERVAL_DAY_SECOND, INTERVAL_HOUR, INTERVAL_HOUR_MINUTE,
           INTERVAL_HOUR_SECOND, INTERVAL_MINUTE, INTERVAL_MINUTE_SECOND,
           INTERVAL_SECOND, TIME_WITH_LOCAL_TIME_ZONE, TIMESTAMP_WITH_LOCAL_TIME_ZONE,
-          FLOAT, MULTISET, DISTINCT, STRUCTURED, ROW, CURSOR, COLUMN_LIST);
+          FLOAT, MULTISET, DISTINCT, STRUCTURED, ROW, CURSOR, COLUMN_LIST, DOUBLE_PRECISION);
 
   public static final List<SqlTypeName> BOOLEAN_TYPES =
       ImmutableList.of(BOOLEAN);
@@ -268,12 +270,20 @@ public enum SqlTypeName {
   private final int jdbcOrdinal;
   private final @Nullable SqlTypeFamily family;
 
+  private final @Nullable String customTypeName;
+
   SqlTypeName(int signatures, boolean special, int jdbcType,
       @Nullable SqlTypeFamily family) {
+    this(signatures, special, jdbcType, family, null);
+  }
+
+  SqlTypeName(int signatures, boolean special, int jdbcType,
+      @Nullable SqlTypeFamily family, @Nullable String customTypeName) {
     this.signatures = signatures;
     this.special = special;
     this.jdbcOrdinal = jdbcType;
     this.family = family;
+    this.customTypeName = customTypeName;
   }
 
   /**
@@ -951,6 +961,9 @@ public enum SqlTypeName {
 
   /** Returns the name of this type. */
   public String getName() {
+    if (customTypeName != null) {
+      return customTypeName;
+    }
     return toString();
   }
 

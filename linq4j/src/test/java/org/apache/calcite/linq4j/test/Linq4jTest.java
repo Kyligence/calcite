@@ -38,9 +38,10 @@ import org.apache.calcite.linq4j.tree.ConstantExpression;
 import org.apache.calcite.linq4j.tree.Expressions;
 import org.apache.calcite.linq4j.tree.ParameterExpression;
 
+import org.apache.kylin.guava30.shaded.common.collect.ImmutableList;
+import org.apache.kylin.guava30.shaded.common.collect.Lists;
+
 import com.example.Linq4jExample;
-import com.google.common.collect.ImmutableList;
-import com.google.common.collect.Lists;
 
 import org.junit.jupiter.api.Test;
 

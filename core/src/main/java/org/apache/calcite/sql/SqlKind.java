@@ -16,7 +16,7 @@
  */
 package org.apache.calcite.sql;
 
-import com.google.common.collect.Sets;
+import org.apache.kylin.guava30.shaded.common.collect.Sets;
 
 import org.apiguardian.api.API;
 

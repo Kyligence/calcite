@@ -6919,6 +6919,7 @@ SqlIdentifier ReservedFunctionName() :
     |   <AVG>
     |   <CARDINALITY>
     |   <CEILING>
+    |   <CHAR>
     |   <CHAR_LENGTH>
     |   <CHARACTER_LENGTH>
     |   <COALESCE>

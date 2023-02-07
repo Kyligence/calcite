@@ -33,6 +33,7 @@ import org.apache.calcite.tools.RelBuilder;
 import org.apache.calcite.util.ImmutableBitSet;
 import org.apache.calcite.util.Pair;
 
+import org.apache.kylin.guava30.shaded.common.collect.ImmutableList;
 import org.apache.pig.builtin.CubeDimensions;
 import org.apache.pig.builtin.RollupDimensions;
 import org.apache.pig.impl.logicalLayer.FrontendException;
@@ -65,8 +66,6 @@ import org.apache.pig.newplan.logical.relational.LOUnion;
 import org.apache.pig.newplan.logical.relational.LogicalPlan;
 import org.apache.pig.newplan.logical.relational.LogicalRelationalOperator;
 import org.apache.pig.newplan.logical.relational.LogicalSchema;
-
-import com.google.common.collect.ImmutableList;
 
 import java.nio.file.Paths;
 import java.util.ArrayList;

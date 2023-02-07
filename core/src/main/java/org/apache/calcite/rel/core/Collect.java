@@ -28,7 +28,7 @@ import org.apache.calcite.rel.type.RelDataTypeFactory;
 import org.apache.calcite.sql.type.SqlTypeName;
 import org.apache.calcite.sql.type.SqlTypeUtil;
 
-import com.google.common.collect.Iterables;
+import org.apache.kylin.guava30.shaded.common.collect.Iterables;
 
 import java.util.List;
 

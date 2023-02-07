@@ -16,7 +16,7 @@
  */
 package org.apache.calcite.util;
 
-import com.google.common.primitives.Ints;
+import org.apache.kylin.guava30.shaded.common.primitives.Ints;
 
 import java.util.ArrayList;
 import java.util.Arrays;

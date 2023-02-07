@@ -28,7 +28,7 @@ dependencies {
         exclude("org.slf4j", "slf4j-log4j12")
                 .because("creates conflict with log4j-slf4j-impl")
     }
-    api("com.google.guava:guava")
+    api("org.apache.kylin:kylin-external-guava30")
 
     implementation("commons-collections:commons-collections")
     implementation("org.apache.calcite.avatica:avatica-core")

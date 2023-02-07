@@ -40,7 +40,7 @@ import org.apache.calcite.tools.RelBuilderFactory;
 import org.apache.calcite.util.NlsString;
 import org.apache.calcite.util.Pair;
 
-import com.google.common.collect.ImmutableSet;
+import org.apache.kylin.guava30.shaded.common.collect.ImmutableSet;
 
 import org.immutables.value.Value;
 import org.slf4j.Logger;

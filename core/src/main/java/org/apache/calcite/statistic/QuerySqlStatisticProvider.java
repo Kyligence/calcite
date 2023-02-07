@@ -32,7 +32,7 @@ import org.apache.calcite.tools.Frameworks;
 import org.apache.calcite.tools.RelBuilder;
 import org.apache.calcite.util.Util;
 
-import com.google.common.cache.CacheBuilder;
+import org.apache.kylin.guava30.shaded.common.cache.CacheBuilder;
 
 import java.sql.Connection;
 import java.sql.ResultSet;

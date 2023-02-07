@@ -41,7 +41,8 @@ public abstract class WinAggAddContextImpl extends WinAggResultContextImpl
   @SuppressWarnings("Guava")
   @Deprecated // to be removed before 2.0
   protected WinAggAddContextImpl(BlockBuilder block, List<Expression> accumulator,
-      com.google.common.base.Function<BlockBuilder, WinAggFrameResultContext> frame) {
+      org.apache.kylin.guava30.shaded.common.base.Function<BlockBuilder,
+      WinAggFrameResultContext> frame) {
     this(block, accumulator, (Function<BlockBuilder, WinAggFrameResultContext>) frame::apply);
   }
 

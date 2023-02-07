@@ -19,7 +19,7 @@ package org.apache.calcite.sql.fun;
 import org.apache.calcite.sql.SqlKind;
 import org.apache.calcite.sql.type.OperandTypes;
 
-import com.google.common.base.Preconditions;
+import org.apache.kylin.guava30.shaded.common.base.Preconditions;
 
 /**
  * Definition of the SQL <code>REGR_COUNT</code> aggregation function.

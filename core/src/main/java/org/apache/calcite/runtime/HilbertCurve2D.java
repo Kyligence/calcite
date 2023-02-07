@@ -16,7 +16,8 @@
  */
 package org.apache.calcite.runtime;
 
-import com.google.common.collect.ImmutableList;
+import org.apache.kylin.guava30.shaded.common.collect.ImmutableList;
+
 import com.google.uzaygezen.core.BacktrackingQueryBuilder;
 import com.google.uzaygezen.core.BitVector;
 import com.google.uzaygezen.core.BitVectorFactories;

@@ -57,9 +57,25 @@ plugins {
     id("com.autonomousapps.dependency-analysis") apply false
 }
 
-repositories {
-    // At least for RAT
-    mavenCentral()
+// define repo url
+val snapshotsRepoUrl = uri("https://repo-ofs.kyligence.com/repository/maven-snapshots/")
+val releasesRepoUrl = uri("https://repo-ofs.kyligence.com/repository/maven-releases/")
+
+allprojects {
+    repositories {
+        // At least for RAT
+        mavenLocal()
+        // achieve dependencies
+        maven {
+            name = "snapshots"
+            url = snapshotsRepoUrl
+        }
+        maven {
+            name = "releases"
+            url = releasesRepoUrl
+        }
+        mavenCentral()
+    }
 }
 
 fun reportsForHumans() = !(System.getenv()["CI"]?.toBoolean() ?: false)
@@ -886,6 +902,16 @@ allprojects {
                             developerConnection.set("scm:git:https://gitbox.apache.org/repos/asf/calcite.git")
                             url.set("https://github.com/apache/calcite")
                             tag.set("HEAD")
+                        }
+                        repositories {
+                            val finalUrl = if (version.toString().endsWith("SNAPSHOT")) snapshotsRepoUrl else releasesRepoUrl
+                            maven {
+                                url = finalUrl
+                                credentials {
+                                    username = "yaguang.jia"
+                                    password = "Qwer1234,"
+                                }
+                            }
                         }
                     }
                 }

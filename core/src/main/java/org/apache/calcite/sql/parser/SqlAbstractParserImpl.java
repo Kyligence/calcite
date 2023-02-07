@@ -26,13 +26,18 @@ import org.apache.calcite.sql.SqlLiteral;
 import org.apache.calcite.sql.SqlNode;
 import org.apache.calcite.sql.SqlNodeList;
 import org.apache.calcite.sql.SqlOperator;
+import org.apache.calcite.sql.SqlSyntax;
 import org.apache.calcite.sql.SqlUnresolvedFunction;
+import org.apache.calcite.sql.fun.SqlStdOperatorTable;
 import org.apache.calcite.sql.validate.SqlConformance;
+import org.apache.calcite.sql.validate.SqlNameMatchers;
 import org.apache.calcite.util.Glossary;
 
-import com.google.common.collect.ImmutableList;
-import com.google.common.collect.ImmutableSet;
-import com.google.common.collect.Iterables;
+import com.google.common.collect.Lists;
+
+import org.apache.kylin.guava30.shaded.common.collect.ImmutableList;
+import org.apache.kylin.guava30.shaded.common.collect.ImmutableSet;
+import org.apache.kylin.guava30.shaded.common.collect.Iterables;
 
 import org.checkerframework.checker.initialization.qual.UnderInitialization;
 import org.checkerframework.checker.nullness.qual.Nullable;
@@ -351,6 +356,11 @@ public abstract class SqlAbstractParserImpl {
 
   //~ Instance fields --------------------------------------------------------
 
+  /**
+   * Operator table containing the standard SQL operators and functions.
+   */
+  protected final SqlStdOperatorTable opTab = SqlStdOperatorTable.instance();
+
   protected int nDynamicParams;
 
   protected @Nullable String originalSql;
@@ -404,10 +414,32 @@ public abstract class SqlAbstractParserImpl {
       SqlFunctionCategory funcType,
       SqlLiteral functionQualifier,
       SqlNode[] operands) {
+
+    // Calcite 1.30 removed lookupOperatorOverloads here, we restore the code
+    SqlOperator fun = null;
+    // First, try a half-hearted resolution as a builtin function.
+    // If we find one, use it; this will guarantee that we
+    // preserve the correct syntax (i.e. don't quote builtin function
+    /// name when regenerating SQL).
+    if (funName.isSimple()) {
+      final List<SqlOperator> list = Lists.newArrayList();
+      opTab.lookupOperatorOverloads(funName, funcType, SqlSyntax.FUNCTION, list, SqlNameMatchers.liberal());
+      if (list.size() == 1) {
+        fun = list.get(0);
+      }
+    }
+
+    // Change the behavior==========================
     // Create a placeholder function.  Later, during
     // validation, it will be resolved into a real function reference.
-    SqlOperator fun = new SqlUnresolvedFunction(funName, null, null, null, null,
-        funcType);
+    // Change the behavior==========================
+
+    // Otherwise, just create a placeholder function.  Later, during
+    // validation, it will be resolved into a real function reference.
+    if (fun == null) {
+      fun = new SqlUnresolvedFunction(funName, null, null, null, null,
+          funcType);
+    }
 
     return fun.createCall(functionQualifier, pos, operands);
   }

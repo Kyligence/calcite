@@ -39,9 +39,9 @@ import org.apache.calcite.sql.type.SqlTypeUtil;
 import org.apache.calcite.sql.validate.SqlConformance;
 import org.apache.calcite.sql.validate.SqlConformanceEnum;
 
-import com.google.common.base.Preconditions;
-import com.google.common.base.Suppliers;
-import com.google.common.collect.ImmutableSet;
+import org.apache.kylin.guava30.shaded.common.base.Preconditions;
+import org.apache.kylin.guava30.shaded.common.base.Suppliers;
+import org.apache.kylin.guava30.shaded.common.collect.ImmutableSet;
 
 import org.checkerframework.checker.nullness.qual.Nullable;
 import org.checkerframework.dataflow.qual.Pure;
@@ -424,7 +424,12 @@ public class SqlDialect {
    */
   public void quoteStringLiteral(StringBuilder buf, @Nullable String charsetName,
       String val) {
-    if (containsNonAscii(val) && charsetName == null) {
+    // In Calcite 1.30, the default behavior is to perform Unicode operations on the
+    // quoteStringLiteral function, which leads to abnormal matching logic between
+    // Kylin models and indexes. For the sake of correctness, we have temporarily
+    // commented out this feature.
+//    if (containsNonAscii(val) && charsetName == null) {
+    if (false) {
       quoteStringLiteralUnicode(buf, val);
     } else {
       if (charsetName != null) {

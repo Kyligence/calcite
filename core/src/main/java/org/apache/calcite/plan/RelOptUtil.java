@@ -101,12 +101,12 @@ import org.apache.calcite.util.mapping.Mapping;
 import org.apache.calcite.util.mapping.MappingType;
 import org.apache.calcite.util.mapping.Mappings;
 
-import com.google.common.collect.ImmutableList;
-import com.google.common.collect.ImmutableSet;
-import com.google.common.collect.Iterables;
-import com.google.common.collect.LinkedHashMultimap;
-import com.google.common.collect.Lists;
-import com.google.common.collect.Multimap;
+import org.apache.kylin.guava30.shaded.common.collect.ImmutableList;
+import org.apache.kylin.guava30.shaded.common.collect.ImmutableSet;
+import org.apache.kylin.guava30.shaded.common.collect.Iterables;
+import org.apache.kylin.guava30.shaded.common.collect.LinkedHashMultimap;
+import org.apache.kylin.guava30.shaded.common.collect.Lists;
+import org.apache.kylin.guava30.shaded.common.collect.Multimap;
 
 import org.checkerframework.checker.initialization.qual.NotOnlyInitialized;
 import org.checkerframework.checker.initialization.qual.UnknownInitialization;
@@ -149,18 +149,18 @@ public abstract class RelOptUtil {
 
   @SuppressWarnings("Guava")
   @Deprecated // to be removed before 2.0
-  public static final com.google.common.base.Predicate<Filter>
+  public static final org.apache.kylin.guava30.shaded.common.base.Predicate<Filter>
       FILTER_PREDICATE = f -> !f.containsOver();
 
   @SuppressWarnings("Guava")
   @Deprecated // to be removed before 2.0
-  public static final com.google.common.base.Predicate<Project>
+  public static final org.apache.kylin.guava30.shaded.common.base.Predicate<Project>
       PROJECT_PREDICATE =
       RelOptUtil::notContainsWindowedAgg;
 
   @SuppressWarnings("Guava")
   @Deprecated // to be removed before 2.0
-  public static final com.google.common.base.Predicate<Calc> CALC_PREDICATE =
+  public static final org.apache.kylin.guava30.shaded.common.base.Predicate<Calc> CALC_PREDICATE =
       RelOptUtil::notContainsWindowedAgg;
 
   //~ Methods ----------------------------------------------------------------
@@ -2363,7 +2363,7 @@ public abstract class RelOptUtil {
       RexNode y,
       boolean neg) {
 
-    if (neg) {
+    /*if (neg) {
       // x is not distinct from y
       // x=y IS TRUE or ((x is null) and (y is null)),
       return rexBuilder.makeCall(SqlStdOperatorTable.OR,
@@ -2381,7 +2381,42 @@ public abstract class RelOptUtil {
               rexBuilder.makeCall(SqlStdOperatorTable.IS_NOT_NULL, y)),
           rexBuilder.makeCall(SqlStdOperatorTable.IS_NOT_TRUE,
               rexBuilder.makeCall(SqlStdOperatorTable.EQUALS, x, y)));
+    }*/
+
+    // Calcite 1.30 changed Rexcall operator from SqlCaseOperator to SqlPostfixOperator here.
+    // To make the KE behavior consistent, we changed the behavior to the logic of Calcite 1.16
+    SqlOperator nullOp;
+    SqlOperator eqOp;
+    if (neg) {
+      nullOp = SqlStdOperatorTable.IS_NULL;
+      eqOp = SqlStdOperatorTable.EQUALS;
+    } else {
+      nullOp = SqlStdOperatorTable.IS_NOT_NULL;
+      eqOp = SqlStdOperatorTable.NOT_EQUALS;
     }
+    // By the time the ELSE is reached, x and y are known to be not null;
+    // therefore the whole CASE is not null.
+    RexNode[] whenThenElse = {
+        // when x is null
+        rexBuilder.makeCall(SqlStdOperatorTable.IS_NULL, x),
+
+        // then return y is [not] null
+        rexBuilder.makeCall(nullOp, y),
+
+        // when y is null
+        rexBuilder.makeCall(SqlStdOperatorTable.IS_NULL, y),
+
+        // then return x is [not] null
+        rexBuilder.makeCall(nullOp, x),
+
+        // else return x compared to y
+        rexBuilder.makeCall(eqOp,
+            rexBuilder.makeNotNull(x),
+            rexBuilder.makeNotNull(y))
+    };
+    return rexBuilder.makeCall(
+        SqlStdOperatorTable.CASE,
+        whenThenElse);
   }
 
   /**
@@ -2880,6 +2915,126 @@ public abstract class RelOptUtil {
             joinFilters.add(filter);
           }
           filtersToRemove.add(filter);
+        }
+      }
+    }
+
+    // Remove filters after the loop, to prevent concurrent modification.
+    if (!filtersToRemove.isEmpty()) {
+      filters.removeAll(filtersToRemove);
+    }
+
+    // Did anything change?
+    return !filtersToRemove.isEmpty();
+  }
+
+  /**
+   * Calcite 1.30 copy from following method and add new parameter - shiftedMapping
+   * @see RelOptUtil#classifyFilters(RelNode, List, boolean, boolean, boolean, List, List, List)
+   *
+   * Classifies filters according to where they should be processed. They
+   * either stay where they are, are pushed to the join (if they originated
+   * from above the join), or are pushed to one of the children. Filters that
+   * are pushed are added to list passed in as input parameters.
+   *
+   * @param joinRel      join node
+   * @param filters      filters to be classified
+   * @param pushInto     whether filters can be pushed into the join
+   * @param pushLeft     true if filters can be pushed to the left
+   * @param pushRight    true if filters can be pushed to the right
+   * @param joinFilters  list of filters to push to the join
+   * @param leftFilters  list of filters to push to the left child
+   * @param rightFilters list of filters to push to the right child
+   * @param shiftedMapping list of leftFilters or rightFilters to push to the child
+   * @return whether at least one filter was pushed
+   */
+  public static boolean classifyFilters(
+      RelNode joinRel,
+      List<RexNode> filters,
+      boolean pushInto,
+      boolean pushLeft,
+      boolean pushRight,
+      List<RexNode> joinFilters,
+      List<RexNode> leftFilters,
+      List<RexNode> rightFilters,
+      Map<RexNode, RexNode> shiftedMapping) {
+    RexBuilder rexBuilder = joinRel.getCluster().getRexBuilder();
+    List<RelDataTypeField> joinFields = joinRel.getRowType().getFieldList();
+    final int nSysFields = 0; // joinRel.getSystemFieldList().size();
+    final List<RelDataTypeField> leftFields =
+        joinRel.getInputs().get(0).getRowType().getFieldList();
+    final int nFieldsLeft = leftFields.size();
+    final List<RelDataTypeField> rightFields =
+        joinRel.getInputs().get(1).getRowType().getFieldList();
+    final int nFieldsRight = rightFields.size();
+    final int nTotalFields = nFieldsLeft + nFieldsRight;
+
+    // set the reference bitmaps for the left and right children
+    ImmutableBitSet leftBitmap =
+        ImmutableBitSet.range(nSysFields, nSysFields + nFieldsLeft);
+    ImmutableBitSet rightBitmap =
+        ImmutableBitSet.range(nSysFields + nFieldsLeft, nTotalFields);
+
+    final List<RexNode> filtersToRemove = new ArrayList<>();
+    for (RexNode filter : filters) {
+      final InputFinder inputFinder = InputFinder.analyze(filter);
+      final ImmutableBitSet inputBits = inputFinder.build();
+
+      // REVIEW - are there any expressions that need special handling
+      // and therefore cannot be pushed?
+
+      if (pushLeft && leftBitmap.contains(inputBits)) {
+        // ignore filters that always evaluate to true
+        if (!filter.isAlwaysTrue()) {
+          // adjust the field references in the filter to reflect
+          // that fields in the left now shift over by the number
+          // of system fields
+          final RexNode shiftedFilter =
+              shiftFilter(
+                  nSysFields,
+                  nSysFields + nFieldsLeft,
+                  -nSysFields,
+                  rexBuilder,
+                  joinFields,
+                  nTotalFields,
+                  leftFields,
+                  filter);
+
+          leftFilters.add(shiftedFilter);
+          shiftedMapping.put(shiftedFilter, filter);
+        }
+        filtersToRemove.add(filter);
+      } else if (pushRight && rightBitmap.contains(inputBits)) {
+        if (!filter.isAlwaysTrue()) {
+          // adjust the field references in the filter to reflect
+          // that fields in the right now shift over to the left
+          final RexNode shiftedFilter =
+              shiftFilter(
+                  nSysFields + nFieldsLeft,
+                  nTotalFields,
+                  -(nSysFields + nFieldsLeft),
+                  rexBuilder,
+                  joinFields,
+                  nTotalFields,
+                  rightFields,
+                  filter);
+          rightFilters.add(shiftedFilter);
+          shiftedMapping.put(shiftedFilter, filter);
+        }
+        filtersToRemove.add(filter);
+
+      } else {
+        // If the filter can't be pushed to either child, we may push them into the join
+        if (pushInto) {
+          // Calcite 1.30 do not do the acutal push into
+          // remove above filters only if the filter is within the filter condition
+          /*if (!joinFilters.contains(filter)) {
+            joinFilters.add(filter);
+          }
+          filtersToRemove.add(filter);*/
+          if (joinFilters.stream().anyMatch(filter::equals)) {
+            filtersToRemove.add(filter);
+          }
         }
       }
     }

@@ -38,7 +38,7 @@ public interface RelDataTypeField extends Map.Entry<String, RelDataType> {
   @Deprecated // to be removed before 2.0
   @SuppressWarnings("nullability")
   class ToFieldIndex
-      implements com.google.common.base.Function<RelDataTypeField, Integer> {
+      implements org.apache.kylin.guava30.shaded.common.base.Function<RelDataTypeField, Integer> {
     @Override public Integer apply(RelDataTypeField o) {
       return o.getIndex();
     }
@@ -53,7 +53,7 @@ public interface RelDataTypeField extends Map.Entry<String, RelDataType> {
   @Deprecated // to be removed before 2.0
   @SuppressWarnings("nullability")
   class ToFieldName
-      implements com.google.common.base.Function<RelDataTypeField, String> {
+      implements org.apache.kylin.guava30.shaded.common.base.Function<RelDataTypeField, String> {
     @Override public String apply(RelDataTypeField o) {
       return o.getName();
     }

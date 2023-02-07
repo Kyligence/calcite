@@ -18,7 +18,7 @@ package org.apache.calcite.test;
 
 import org.apache.calcite.jdbc.CalciteConnection;
 
-import com.google.common.collect.ImmutableMultiset;
+import org.apache.kylin.guava30.shaded.common.collect.ImmutableMultiset;
 
 import org.junit.jupiter.api.Test;
 

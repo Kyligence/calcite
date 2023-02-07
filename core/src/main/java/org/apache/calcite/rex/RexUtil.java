@@ -48,11 +48,11 @@ import org.apache.calcite.util.Sarg;
 import org.apache.calcite.util.Util;
 import org.apache.calcite.util.mapping.Mappings;
 
-import com.google.common.collect.ImmutableList;
-import com.google.common.collect.ImmutableMap;
-import com.google.common.collect.Iterables;
-import com.google.common.collect.Lists;
-import com.google.common.collect.Range;
+import org.apache.kylin.guava30.shaded.common.collect.ImmutableList;
+import org.apache.kylin.guava30.shaded.common.collect.ImmutableMap;
+import org.apache.kylin.guava30.shaded.common.collect.Iterables;
+import org.apache.kylin.guava30.shaded.common.collect.Lists;
+import org.apache.kylin.guava30.shaded.common.collect.Range;
 
 import org.apiguardian.api.API;
 import org.checkerframework.checker.nullness.qual.Nullable;
@@ -2213,7 +2213,7 @@ public class RexUtil {
    * @deprecated Use {@link #not} */
   @SuppressWarnings("Guava")
   @Deprecated // to be removed before 2.0
-  public static com.google.common.base.Function<RexNode, RexNode> notFn(
+  public static org.apache.kylin.guava30.shaded.common.base.Function<RexNode, RexNode> notFn(
       final RexBuilder rexBuilder) {
     return e -> not(rexBuilder, e);
   }
@@ -2840,8 +2840,8 @@ public class RexUtil {
 
     @SuppressWarnings("Guava")
     @Deprecated // to be removed before 2.0
-    public static final com.google.common.base.Predicate<Project> PROJECT_PREDICATE =
-        SubQueryFinder::containsSubQuery;
+    public static final org.apache.kylin.guava30.shaded.common.base.Predicate<Project>
+        PROJECT_PREDICATE = SubQueryFinder::containsSubQuery;
 
     @SuppressWarnings("Guava")
     @Deprecated // to be removed before 2.0
@@ -2850,7 +2850,7 @@ public class RexUtil {
 
     @SuppressWarnings("Guava")
     @Deprecated // to be removed before 2.0
-    public static final com.google.common.base.Predicate<Join> JOIN_PREDICATE =
+    public static final org.apache.kylin.guava30.shaded.common.base.Predicate<Join> JOIN_PREDICATE =
         SubQueryFinder::containsSubQuery;
 
     private SubQueryFinder() {

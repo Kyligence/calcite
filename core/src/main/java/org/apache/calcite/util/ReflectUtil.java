@@ -19,7 +19,7 @@ package org.apache.calcite.util;
 import org.apache.calcite.linq4j.function.Parameter;
 import org.apache.calcite.linq4j.tree.Primitive;
 
-import com.google.common.collect.ImmutableList;
+import org.apache.kylin.guava30.shaded.common.collect.ImmutableList;
 
 import org.checkerframework.checker.nullness.qual.Nullable;
 

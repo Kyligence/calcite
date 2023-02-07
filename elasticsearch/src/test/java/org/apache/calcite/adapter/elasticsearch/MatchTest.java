@@ -37,11 +37,12 @@ import org.apache.calcite.tools.RelBuilder;
 import org.apache.calcite.tools.RelRunner;
 import org.apache.calcite.util.NlsString;
 
+import org.apache.kylin.guava30.shaded.common.collect.ImmutableList;
+import org.apache.kylin.guava30.shaded.common.collect.ImmutableMap;
+import org.apache.kylin.guava30.shaded.common.io.LineProcessor;
+import org.apache.kylin.guava30.shaded.common.io.Resources;
+
 import com.fasterxml.jackson.databind.node.ObjectNode;
-import com.google.common.collect.ImmutableList;
-import com.google.common.collect.ImmutableMap;
-import com.google.common.io.LineProcessor;
-import com.google.common.io.Resources;
 
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;

@@ -18,7 +18,7 @@ package org.apache.calcite.rel.hint;
 
 import org.apache.calcite.rel.RelNode;
 
-import com.google.common.collect.ImmutableList;
+import org.apache.kylin.guava30.shaded.common.collect.ImmutableList;
 
 /**
  * A {@link HintPredicate} to combine multiple hint predicates into one.

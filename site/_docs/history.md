@@ -617,7 +617,7 @@ YuKong.
 * [<a href="https://issues.apache.org/jira/browse/CALCITE-4793">CALCITE-4793</a>]
   `CassandraAdapterDataTypesTest.testCollectionsInnerValues` fails depending on
   the user timezone
-* Replace deprecated `com.google.common.io.Files.createTempDir()` with
+* Replace deprecated `org.apache.kylin.guava30.shaded.common.io.Files.createTempDir()` with
   `java.nio.file.Files.createTempDirectory()` in ElasticSearch tests
 * [<a href="https://issues.apache.org/jira/browse/CALCITE-4789">CALCITE-4789</a>]
   Build is broken on Guava versions &lt; 21

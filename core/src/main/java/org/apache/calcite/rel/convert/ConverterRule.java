@@ -85,7 +85,7 @@ public abstract class ConverterRule
   @SuppressWarnings("Guava")
   @Deprecated // to be removed before 2.0
   protected <R extends RelNode> ConverterRule(Class<R> clazz,
-      com.google.common.base.Predicate<? super R> predicate,
+      org.apache.kylin.guava30.shaded.common.base.Predicate<? super R> predicate,
       RelTrait in, RelTrait out, String descriptionPrefix) {
     this(Config.INSTANCE
         .withConversion(clazz, (Predicate<? super R>) predicate::apply,
@@ -117,7 +117,7 @@ public abstract class ConverterRule
   @SuppressWarnings("Guava")
   @Deprecated // to be removed before 2.0
   protected <R extends RelNode> ConverterRule(Class<R> clazz,
-      com.google.common.base.Predicate<? super R> predicate, RelTrait in,
+      org.apache.kylin.guava30.shaded.common.base.Predicate<? super R> predicate, RelTrait in,
       RelTrait out, RelBuilderFactory relBuilderFactory, String description) {
     this(clazz, (Predicate<? super R>) predicate::apply, in, out,
         relBuilderFactory, description);

@@ -43,8 +43,8 @@ import org.apache.calcite.util.TimeString;
 import org.apache.calcite.util.TimestampString;
 import org.apache.calcite.util.Util;
 
-import com.google.common.base.Preconditions;
-import com.google.common.collect.ImmutableList;
+import org.apache.kylin.guava30.shaded.common.base.Preconditions;
+import org.apache.kylin.guava30.shaded.common.collect.ImmutableList;
 
 import org.checkerframework.checker.initialization.qual.UnknownInitialization;
 import org.checkerframework.checker.nullness.qual.Nullable;
@@ -1219,5 +1219,11 @@ public class RexLiteral extends RexNode {
 
   @Override public <R, P> R accept(RexBiVisitor<R, P> visitor, P arg) {
     return visitor.visitLiteral(this, arg);
+  }
+
+  // Calcite 1.30 add type description in literal, Type needs to be removed on return to
+  // avoid call exceptions
+  @Override public String toString() {
+    return computeDigest(RexDigestIncludeType.NO_TYPE);
   }
 }

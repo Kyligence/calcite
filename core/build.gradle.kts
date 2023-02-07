@@ -49,7 +49,7 @@ dependencies {
     api("com.esri.geometry:esri-geometry-api")
     api("com.fasterxml.jackson.core:jackson-annotations")
     api("com.google.errorprone:error_prone_annotations")
-    api("com.google.guava:guava")
+    api("org.apache.kylin:kylin-external-guava30")
     api("org.apache.calcite.avatica:avatica-core")
     api("org.apiguardian:apiguardian-api")
     api("org.checkerframework:checker-qual")

@@ -16,7 +16,7 @@
  */
 package org.apache.calcite.util.graph;
 
-import com.google.common.collect.Ordering;
+import org.apache.kylin.guava30.shaded.common.collect.Ordering;
 
 import org.apiguardian.api.API;
 import org.checkerframework.checker.initialization.qual.NotOnlyInitialized;

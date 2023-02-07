@@ -16,9 +16,9 @@
  */
 package org.apache.calcite.util;
 
-import com.google.common.collect.ImmutableList;
-import com.google.common.collect.Iterables;
-import com.google.common.collect.Iterators;
+import org.apache.kylin.guava30.shaded.common.collect.ImmutableList;
+import org.apache.kylin.guava30.shaded.common.collect.Iterables;
+import org.apache.kylin.guava30.shaded.common.collect.Iterators;
 
 import org.checkerframework.checker.nullness.qual.Nullable;
 
@@ -33,7 +33,7 @@ import java.util.List;
  * An immutable list that may contain null values.
  *
  * <p>If the list cannot contain null values, use
- * {@link com.google.common.collect.ImmutableList}.</p>
+ * {@link org.apache.kylin.guava30.shaded.common.collect.ImmutableList}.</p>
  *
  * @param <E> Element type
  */
@@ -51,7 +51,7 @@ public class ImmutableNullableList<E> extends AbstractList<E> {
    * Returns an immutable list containing the given elements, in order.
    *
    * <p>Behavior as
-   * {@link com.google.common.collect.ImmutableList#copyOf(java.util.Collection)}
+   * {@link org.apache.kylin.guava30.shaded.common.collect.ImmutableList#copyOf(java.util.Collection)}
    * except that this list allows nulls.</p>
    */
   public static <E> List<E> copyOf(Collection<? extends E> elements) {
@@ -79,7 +79,7 @@ public class ImmutableNullableList<E> extends AbstractList<E> {
    * Returns an immutable list containing the given elements, in order.
    *
    * <p>Behavior as
-   * {@link com.google.common.collect.ImmutableList#copyOf(Iterable)}
+   * {@link org.apache.kylin.guava30.shaded.common.collect.ImmutableList#copyOf(Iterable)}
    * except that this list allows nulls.
    */
   public static <E> List<E> copyOf(Iterable<? extends E> elements) {
@@ -106,7 +106,7 @@ public class ImmutableNullableList<E> extends AbstractList<E> {
    * Returns an immutable list containing the given elements, in order.
    *
    * <p>Behavior as
-   * {@link com.google.common.collect.ImmutableList#copyOf(Object[])}
+   * {@link org.apache.kylin.guava30.shaded.common.collect.ImmutableList#copyOf(Object[])}
    * except that this list allows nulls.</p>
    */
   public static <E> List<E> copyOf(E[] elements) {

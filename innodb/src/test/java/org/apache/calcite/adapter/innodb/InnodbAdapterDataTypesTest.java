@@ -20,9 +20,9 @@ import org.apache.calcite.test.CalciteAssert;
 import org.apache.calcite.util.Sources;
 
 import org.apache.commons.lang3.StringUtils;
+import org.apache.kylin.guava30.shaded.common.collect.ImmutableMap;
 
 import com.alibaba.innodb.java.reader.util.Utils;
-import com.google.common.collect.ImmutableMap;
 
 import org.junit.jupiter.api.Test;
 

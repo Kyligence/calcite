@@ -16,7 +16,7 @@
  */
 package org.apache.calcite.adapter.elasticsearch;
 
-import com.google.common.collect.ImmutableSet;
+import org.apache.kylin.guava30.shaded.common.collect.ImmutableSet;
 
 import java.util.Set;
 

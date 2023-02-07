@@ -31,7 +31,7 @@ import org.apache.calcite.rel.core.Filter;
 import org.apache.calcite.rel.core.TableScan;
 import org.apache.calcite.tools.RelBuilderFactory;
 
-import com.google.common.base.Suppliers;
+import org.apache.kylin.guava30.shaded.common.base.Suppliers;
 
 import org.immutables.value.Value;
 
