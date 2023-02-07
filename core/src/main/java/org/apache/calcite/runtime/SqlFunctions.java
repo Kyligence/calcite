@@ -314,10 +314,8 @@ public class SqlFunctions {
     return s0.concat(s1);
   }
 
-  /**
-   * SQL {@code concat(arg0, arg1, arg2, ...)} function.
-   */
-  public static String concat(String... args) {
+  /** SQL {@code string0 || string1 || string2 || ...} operator. */
+  public static String concatMulti(String... args) {
     return String.join("", args);
   }
 
