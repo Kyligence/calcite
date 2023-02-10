@@ -953,7 +953,9 @@ public abstract class ReduceExpressionsRule extends RelOptRule {
       super.visitCall(call);
 
       if (call.op instanceof SqlUserDefinedFunction) {
-        if (((SqlUserDefinedFunction) call.op).function instanceof ScalarFunction) {
+        if (((SqlUserDefinedFunction) call.op).function == null) {
+          callConstancy = Constancy.NON_CONSTANT;
+        } else if (((SqlUserDefinedFunction) call.op).function instanceof ScalarFunction) {
           Class<?>[] interfaces = ((ScalarFunctionImpl) ((SqlUserDefinedFunction) call.op).function)
                   .method.getDeclaringClass().getInterfaces();
           if (interfaces.length == 1 && interfaces[0].isAssignableFrom(NotConstant.class)) {
