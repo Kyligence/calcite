@@ -2363,7 +2363,7 @@ public abstract class RelOptUtil {
       RexNode y,
       boolean neg) {
 
-    if (neg) {
+    /*if (neg) {
       // x is not distinct from y
       // x=y IS TRUE or ((x is null) and (y is null)),
       return rexBuilder.makeCall(SqlStdOperatorTable.OR,
@@ -2381,7 +2381,42 @@ public abstract class RelOptUtil {
               rexBuilder.makeCall(SqlStdOperatorTable.IS_NOT_NULL, y)),
           rexBuilder.makeCall(SqlStdOperatorTable.IS_NOT_TRUE,
               rexBuilder.makeCall(SqlStdOperatorTable.EQUALS, x, y)));
+    }*/
+
+    // Calcite 1.30 changed Rexcall operator from SqlCaseOperator to SqlPostfixOperator here.
+    // To make the KE behavior consistent, we changed the behavior to the logic of Calcite 1.116
+    SqlOperator nullOp;
+    SqlOperator eqOp;
+    if (neg) {
+      nullOp = SqlStdOperatorTable.IS_NULL;
+      eqOp = SqlStdOperatorTable.EQUALS;
+    } else {
+      nullOp = SqlStdOperatorTable.IS_NOT_NULL;
+      eqOp = SqlStdOperatorTable.NOT_EQUALS;
     }
+    // By the time the ELSE is reached, x and y are known to be not null;
+    // therefore the whole CASE is not null.
+    RexNode[] whenThenElse = {
+        // when x is null
+        rexBuilder.makeCall(SqlStdOperatorTable.IS_NULL, x),
+
+        // then return y is [not] null
+        rexBuilder.makeCall(nullOp, y),
+
+        // when y is null
+        rexBuilder.makeCall(SqlStdOperatorTable.IS_NULL, y),
+
+        // then return x is [not] null
+        rexBuilder.makeCall(nullOp, x),
+
+        // else return x compared to y
+        rexBuilder.makeCall(eqOp,
+            rexBuilder.makeNotNull(x),
+            rexBuilder.makeNotNull(y))
+    };
+    return rexBuilder.makeCall(
+        SqlStdOperatorTable.CASE,
+        whenThenElse);
   }
 
   /**
