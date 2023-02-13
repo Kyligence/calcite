@@ -1620,6 +1620,25 @@ public class SqlOperatorTest {
 
   }
 
+  // Calcite 1.30 removed SqlFunction CHAR, support this function
+  @Test void testChar() {
+    final SqlOperatorFixture f0 = fixture()
+        .setFor(SqlLibraryOperators.CHAR, VM_FENNEL, VM_JAVA);
+    f0.checkFails("^char(97)^",
+        "No match found for function signature CHAR\\(<NUMERIC>\\)", false);
+    final SqlOperatorFixture f = f0.withLibrary(SqlLibrary.MYSQL);
+    f.checkScalar("char(null)", isNullValue(), "CHAR(1)");
+    f.checkScalar("char(-1)", isNullValue(), "CHAR(1)");
+    f.checkScalar("char(97)", "a", "CHAR(1)");
+    f.checkScalar("char(48)", "0", "CHAR(1)");
+    f.checkScalar("char(0)", String.valueOf('\u0000'), "CHAR(1)");
+    f.checkFails("^char(97.1)^",
+        "Cannot apply 'CHAR' to arguments of type 'CHAR\\(<DECIMAL\\(3, 1\\)>\\)'\\. "
+            + "Supported form\\(s\\): 'CHAR\\(<INTEGER>\\)'",
+        false);
+    f.checkScalarExact("char('abc')", "CHAR(1)", "CHAR");
+  }
+
   @Test void testChr() {
     final SqlOperatorFixture f0 = fixture()
         .setFor(SqlLibraryOperators.CHR, VM_FENNEL, VM_JAVA);

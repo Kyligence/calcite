@@ -659,6 +659,16 @@ public abstract class SqlLibraryOperators {
           OperandTypes.INTEGER,
           SqlFunctionCategory.STRING);
 
+  // Calcite 1.30 removed SqlFunction CHAR, support this function
+  @LibraryOperator(libraries = {MYSQL, SPARK})
+  public static final SqlFunction CHAR =
+      new SqlFunction("CHAR",
+          SqlKind.OTHER_FUNCTION,
+          ReturnTypes.CHAR_FORCE_NULLABLE,
+          null,
+          OperandTypes.INTEGER,
+          SqlFunctionCategory.STRING);
+
   @LibraryOperator(libraries = {ORACLE})
   public static final SqlFunction TANH =
       new SqlFunction("TANH",

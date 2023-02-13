@@ -689,6 +689,8 @@ public class SqlJdbcFunctionCall extends SqlFunction {
       map.put("ATAN2", simple(SqlStdOperatorTable.ATAN2));
       map.put("CBRT", simple(SqlStdOperatorTable.CBRT));
       map.put("CEILING", simple(SqlStdOperatorTable.CEIL));
+      // Calcite 1.30 removed SqlFunction CHAR, support this function
+      map.put("CHAR", simple(SqlLibraryOperators.CHAR));
       map.put("COS", simple(SqlStdOperatorTable.COS));
       map.put("COT", simple(SqlStdOperatorTable.COT));
       map.put("DEGREES", simple(SqlStdOperatorTable.DEGREES));
