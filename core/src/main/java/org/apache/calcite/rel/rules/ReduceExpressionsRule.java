@@ -716,26 +716,13 @@ public abstract class ReduceExpressionsRule<C extends ReduceExpressionsRule.Conf
     final boolean reduced = reduceExpressionsInternal(rel, simplify, unknownAs,
         expList, predicates, treatDynamicCallsAsConstant);
 
-    // Calcite 1.30 The possibility of simplifying Condition and replacing it when simplifying
-    // the operation of reserved types will result in some abnormal behavior of KE,
-    // which is reverted to the logic of version 1.16 here
-    final RexUtil.ExprSimplifier simplifier =
-        new RexUtil.ExprSimplifier(simplify, matchNullability);
     boolean simplified = false;
-    //    for (int i = 0; i < expList.size(); i++) {
-    //      final RexNode expr2 =
-    //          simplify.simplifyPreservingType(expList.get(i), unknownAs,
-    //              matchNullability);
-    //      if (!expr2.equals(expList.get(i))) {
-    //        expList.set(i, expr2);
-    //        simplified = true;
-    //      }
-    //    }
     for (int i = 0; i < expList.size(); i++) {
-      RexNode expr2 = simplifier.apply(expList.get(i));
-      if (!expr2.toString().equals(expList.get(i).toString())) {
-        expList.remove(i);
-        expList.add(i, expr2);
+      final RexNode expr2 =
+          simplify.simplifyPreservingType(expList.get(i), unknownAs,
+              matchNullability);
+      if (!expr2.equals(expList.get(i))) {
+        expList.set(i, expr2);
         simplified = true;
       }
     }

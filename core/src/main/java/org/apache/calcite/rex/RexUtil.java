@@ -2918,11 +2918,7 @@ public class RexUtil {
    *
    * <p>This class is broken because it does not change the value of
    * {@link RexUnknownAs} as it recurses into an expression. Do not use. */
-  // Calcite 1.30 The possibility of simplifying Condition and replacing it when simplifying
-  // the operation of reserved types will result in some abnormal behavior of KE,
-  // which is reverted to the logic of version 1.16 here.
-  // Remove "@Deprecated" to avoid compilation errors
-  // to be removed before 2.0
+  @Deprecated // to be removed before 2.0
   public static class ExprSimplifier extends RexShuttle {
     private final RexSimplify simplify;
     private final Map<RexNode, RexUnknownAs> unknownAsMap =
