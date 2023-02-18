@@ -2929,6 +2929,126 @@ public abstract class RelOptUtil {
   }
 
   /**
+   * Calcite 1.30 copy from following method and add new parameter - shiftedMapping
+   * @see RelOptUtil#classifyFilters(RelNode, List, boolean, boolean, boolean, List, List, List)
+   *
+   * Classifies filters according to where they should be processed. They
+   * either stay where they are, are pushed to the join (if they originated
+   * from above the join), or are pushed to one of the children. Filters that
+   * are pushed are added to list passed in as input parameters.
+   *
+   * @param joinRel      join node
+   * @param filters      filters to be classified
+   * @param pushInto     whether filters can be pushed into the join
+   * @param pushLeft     true if filters can be pushed to the left
+   * @param pushRight    true if filters can be pushed to the right
+   * @param joinFilters  list of filters to push to the join
+   * @param leftFilters  list of filters to push to the left child
+   * @param rightFilters list of filters to push to the right child
+   * @param shiftedMapping list of leftFilters or rightFilters to push to the child
+   * @return whether at least one filter was pushed
+   */
+  public static boolean classifyFilters(
+      RelNode joinRel,
+      List<RexNode> filters,
+      boolean pushInto,
+      boolean pushLeft,
+      boolean pushRight,
+      List<RexNode> joinFilters,
+      List<RexNode> leftFilters,
+      List<RexNode> rightFilters,
+      Map<RexNode, RexNode> shiftedMapping) {
+    RexBuilder rexBuilder = joinRel.getCluster().getRexBuilder();
+    List<RelDataTypeField> joinFields = joinRel.getRowType().getFieldList();
+    final int nSysFields = 0; // joinRel.getSystemFieldList().size();
+    final List<RelDataTypeField> leftFields =
+        joinRel.getInputs().get(0).getRowType().getFieldList();
+    final int nFieldsLeft = leftFields.size();
+    final List<RelDataTypeField> rightFields =
+        joinRel.getInputs().get(1).getRowType().getFieldList();
+    final int nFieldsRight = rightFields.size();
+    final int nTotalFields = nFieldsLeft + nFieldsRight;
+
+    // set the reference bitmaps for the left and right children
+    ImmutableBitSet leftBitmap =
+        ImmutableBitSet.range(nSysFields, nSysFields + nFieldsLeft);
+    ImmutableBitSet rightBitmap =
+        ImmutableBitSet.range(nSysFields + nFieldsLeft, nTotalFields);
+
+    final List<RexNode> filtersToRemove = new ArrayList<>();
+    for (RexNode filter : filters) {
+      final InputFinder inputFinder = InputFinder.analyze(filter);
+      final ImmutableBitSet inputBits = inputFinder.build();
+
+      // REVIEW - are there any expressions that need special handling
+      // and therefore cannot be pushed?
+
+      if (pushLeft && leftBitmap.contains(inputBits)) {
+        // ignore filters that always evaluate to true
+        if (!filter.isAlwaysTrue()) {
+          // adjust the field references in the filter to reflect
+          // that fields in the left now shift over by the number
+          // of system fields
+          final RexNode shiftedFilter =
+              shiftFilter(
+                  nSysFields,
+                  nSysFields + nFieldsLeft,
+                  -nSysFields,
+                  rexBuilder,
+                  joinFields,
+                  nTotalFields,
+                  leftFields,
+                  filter);
+
+          leftFilters.add(shiftedFilter);
+          shiftedMapping.put(shiftedFilter, filter);
+        }
+        filtersToRemove.add(filter);
+      } else if (pushRight && rightBitmap.contains(inputBits)) {
+        if (!filter.isAlwaysTrue()) {
+          // adjust the field references in the filter to reflect
+          // that fields in the right now shift over to the left
+          final RexNode shiftedFilter =
+              shiftFilter(
+                  nSysFields + nFieldsLeft,
+                  nTotalFields,
+                  -(nSysFields + nFieldsLeft),
+                  rexBuilder,
+                  joinFields,
+                  nTotalFields,
+                  rightFields,
+                  filter);
+          rightFilters.add(shiftedFilter);
+          shiftedMapping.put(shiftedFilter, filter);
+        }
+        filtersToRemove.add(filter);
+
+      } else {
+        // If the filter can't be pushed to either child, we may push them into the join
+        if (pushInto) {
+          // Calcite 1.30 do not do the acutal push into
+          // remove above filters only if the filter is within the filter condition
+          /*if (!joinFilters.contains(filter)) {
+            joinFilters.add(filter);
+          }
+          filtersToRemove.add(filter);*/
+          if (joinFilters.stream().anyMatch(filter::equals)) {
+            filtersToRemove.add(filter);
+          }
+        }
+      }
+    }
+
+    // Remove filters after the loop, to prevent concurrent modification.
+    if (!filtersToRemove.isEmpty()) {
+      filters.removeAll(filtersToRemove);
+    }
+
+    // Did anything change?
+    return !filtersToRemove.isEmpty();
+  }
+
+  /**
    * Classifies filters according to where they should be processed. They
    * either stay where they are, are pushed to the join (if they originated
    * from above the join), or are pushed to one of the children. Filters that
