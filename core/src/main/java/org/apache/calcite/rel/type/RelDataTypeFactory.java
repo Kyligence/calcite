@@ -201,6 +201,13 @@ public interface RelDataTypeFactory {
   @Nullable RelDataType leastRestrictive(List<RelDataType> types);
 
   /**
+   * OVERRIDE POINT
+   * Calcite 1.30 Keeps the same changes with AL-5295 as the previous Calcite version
+   * FYI: https://github.com/Kyligence/KAP/issues/13872
+   */
+  @Nullable RelDataType leastRestrictive(List<RelDataType> types, boolean convertToVarying);
+
+  /**
    * Creates a SQL type with no precision or scale.
    *
    * @param typeName Name of the type, for example {@link SqlTypeName#BOOLEAN},
