@@ -135,7 +135,9 @@ public class AggregateCall {
         null, RelCollations.EMPTY, groupCount, input, type, name);
   }
 
-  @Deprecated // to be removed before 2.0
+  // Calcite 1.30 changed makeZeroLiteral method return type
+  // fix with SumCaseWhenFunctionRule and CountDistinctCaseWhenFunctionRule
+  // @Deprecated // to be removed before 2.0
   public static AggregateCall create(SqlAggFunction aggFunction,
       boolean distinct, boolean approximate, List<Integer> argList,
       int filterArg, int groupCount,
