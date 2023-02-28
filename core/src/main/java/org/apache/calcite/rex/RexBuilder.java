@@ -1460,11 +1460,11 @@ public class RexBuilder {
   }
 
   /**
-   * Copy from following, Use for Kylin
+   * Calcite 1.30 Copy from following, Use for Kylin.
    * @see RexBuilder#makeZeroLiteral(RelDataType)
    *
    * Calcite 1.30 changed makeZeroLiteral method return type
-   * fix with SumCaseWhenFunctionRule and CountDistinctCaseWhenFunctionRule
+   * fix with SumCaseWhenFunctionRule and CountDistinctCaseWhenFunctionRule.
    *
    * @param type      Type
    * @return Simple literal
@@ -1520,11 +1520,11 @@ public class RexBuilder {
   }
 
   /**
-   * Copy from following, Use for Kylin
+   * Calcite 1.30 Copy from following, Use for Kylin.
    * @see RexBuilder#makeLiteral(Object, RelDataType)
    *
    * Calcite 1.30 changed makeZeroLiteral method return type
-   * fix with SumCaseWhenFunctionRule and CountDistinctCaseWhenFunctionRule
+   * fix with SumCaseWhenFunctionRule and CountDistinctCaseWhenFunctionRule.
    *
    * @param value     Value
    * @param type      Type

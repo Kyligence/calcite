@@ -59,6 +59,7 @@ import org.apache.calcite.rel.core.Values;
 import org.apache.calcite.rel.hint.Hintable;
 import org.apache.calcite.rel.hint.RelHint;
 import org.apache.calcite.rel.logical.LogicalFilter;
+import org.apache.calcite.rel.logical.LogicalJoin;
 import org.apache.calcite.rel.logical.LogicalProject;
 import org.apache.calcite.rel.metadata.RelColumnMapping;
 import org.apache.calcite.rel.metadata.RelMetadataQuery;
@@ -1559,7 +1560,7 @@ public class RelBuilder {
         ImmutableList.of(node));
   }
 
-  // Methods that create relational expressions
+  // Methods that create relational expressions.
 
   /** Creates a {@link TableScan} of the table
    * with a given name.
@@ -2204,13 +2205,45 @@ public class RelBuilder {
             .collect(Collectors.toList()));
   }
 
+  /**
+   * Calcite 1.30 Copy from following, Use for Kylin.
+   * @see RelBuilder#aggregate(GroupKey, List)
+   * Wrapping the original method, the new kylinPruneInputOfAggregate parameter is used to
+   * control some behaviors that do not need to prune the agg, otherwise it will cause
+   * the Kylin matching model to fail.
+   */
+  public RelBuilder aggregate(GroupKey groupKey, List<AggregateCall> aggregateCalls,
+      boolean kylinPruneInputOfAggregate) {
+    return aggregate(groupKey,
+        aggregateCalls.stream()
+            .map(aggregateCall ->
+                new AggCallImpl2(aggregateCall,
+                    aggregateCall.getArgList().stream()
+                        .map(this::field)
+                        .collect(Util.toImmutableList())))
+            .collect(Collectors.toList()), kylinPruneInputOfAggregate);
+  }
+
   /** Creates an {@link Aggregate} with multiple calls.
    * Calcite 1.30 changed makeZeroLiteral method return type
-   * fix with SumCaseWhenFunctionRule and CountDistinctCaseWhenFunctionRule
+   * fix with SumCaseWhenFunctionRule and CountDistinctCaseWhenFunctionRule.
    *
-   *
+   * Wrapping the original method, the new kylinPruneInputOfAggregate parameter is used to
+   * control some behaviors that do not need to prune the agg, otherwise it will cause
+   * the Kylin matching model to fail.
    */
-  /*public RelBuilder aggregate(GroupKey groupKey, Iterable<AggCall> aggCalls) {
+  public RelBuilder aggregate(GroupKey groupKey, Iterable<AggCall> aggCalls) {
+    return this.aggregate(groupKey, aggCalls, true);
+  }
+
+  /**
+   * Calcite 1.30 Copy from following, Use for Kylin.
+   * @see RelBuilder#aggregate(GroupKey, Iterable)
+   * Add new parameter kylinPruneInputOfAggregate to control some behaviors, that do not need
+   * to prune the agg, otherwise it will cause the Kylin matching model to fail.
+   */
+  public RelBuilder aggregate(GroupKey groupKey, Iterable<AggCall> aggCalls,
+      boolean kylinPruneInputOfAggregate) {
     final Registrar registrar =
         new Registrar(fields(), peek().getRowType().getFieldNames());
     final GroupKeyImpl groupKey_ = (GroupKeyImpl) groupKey;
@@ -2296,13 +2329,20 @@ public class RelBuilder {
 
     List<Field> inFields = frame.fields;
     if (config.pruneInputOfAggregate()
-        && r instanceof Project) {
+        && r instanceof Project && kylinPruneInputOfAggregate) {
       final Set<Integer> fieldsUsed =
           RelOptUtil.getAllFields2(groupSet, aggregateCalls);
       // Some parts of the system can't handle rows with zero fields, so
       // pretend that one field is used.
+
+      // Calcite 1.30 replaces the input RelNode with the current RelNode when the fields in
+      // the aggregate is 0, considering that there may be subsequent processes that cannot handle
+      // this situation, and this causes the matching model in Kylin to behave incorrectly.
+      // Here need to further determine whether to use Input RelNode to replace the current RelNode.
       if (fieldsUsed.isEmpty()) {
-        r = ((Project) r).getInput();
+        if (!((Project) r).getInput().getRelTypeName().equals(LogicalJoin.class.getSimpleName())) {
+          r = ((Project) r).getInput();
+        }
       } else if (fieldsUsed.size() < r.getRowType().getFieldCount()) {
         // Some fields are computed but not used. Prune them.
         final Map<Integer, Integer> map = new HashMap<>();
@@ -2369,149 +2409,6 @@ public class RelBuilder {
             : alias(field(p.left), p.right))
         .collect(Collectors.toList());
     return project(fields);
-  }*/
-  public RelBuilder aggregate(GroupKey groupKey, Iterable<AggCall> aggCalls) {
-    final Registrar registrar = new Registrar(fields(), peek().getRowType().getFieldNames());
-    registrar.extraNodes.addAll(fields());
-    registrar.names.addAll(peek().getRowType().getFieldNames());
-    final GroupKeyImpl groupKey_ = (GroupKeyImpl) groupKey;
-    final ImmutableBitSet groupSet =
-        ImmutableBitSet.of(registrar.registerExpressions(groupKey_.nodes));
-    label:
-    if (Iterables.isEmpty(aggCalls)) {
-      final RelMetadataQuery mq = peek().getCluster().getMetadataQuery();
-      if (groupSet.isEmpty()) {
-        final Double minRowCount = mq.getMinRowCount(peek());
-        if (minRowCount == null || minRowCount < 1D) {
-          // We can't remove "GROUP BY ()" if there's a chance the rel could be
-          // empty.
-          break label;
-        }
-      }
-      if (registrar.extraNodes.size() == fields().size()) {
-        final Boolean unique = mq.areColumnsUnique(peek(), groupSet);
-        if (unique != null && unique) {
-          // Rel is already unique.
-          return project(fields(groupSet.asList()));
-        }
-      }
-      final Double maxRowCount = mq.getMaxRowCount(peek());
-      if (maxRowCount != null && maxRowCount <= 1D) {
-        // If there is at most one row, rel is already unique.
-        return this;
-      }
-    }
-    final ImmutableList<ImmutableBitSet> groupSets;
-    if (groupKey_.nodeLists != null) {
-      final int sizeBefore = registrar.extraNodes.size();
-      final SortedSet<ImmutableBitSet> groupSetSet =
-          new TreeSet<>(ImmutableBitSet.ORDERING);
-      for (ImmutableList<RexNode> nodeList : groupKey_.nodeLists) {
-        final ImmutableBitSet groupSet2 =
-            ImmutableBitSet.of(registrar.registerExpressions(nodeList));
-        if (!groupSet.contains(groupSet2)) {
-          throw new IllegalArgumentException("group set element " + nodeList
-              + " must be a subset of group key");
-        }
-        groupSetSet.add(groupSet2);
-      }
-      groupSets = ImmutableList.copyOf(groupSetSet);
-      if (registrar.extraNodes.size() > sizeBefore) {
-        throw new IllegalArgumentException(
-            "group sets contained expressions not in group key: "
-                + registrar.extraNodes.subList(sizeBefore,
-                registrar.extraNodes.size()));
-      }
-    } else {
-      groupSets = ImmutableList.of(groupSet);
-    }
-    for (AggCall aggCall : aggCalls) {
-      if (aggCall instanceof AggCallImpl) {
-        final AggCallImpl aggCall1 = (AggCallImpl) aggCall;
-        registrar.registerExpressions(aggCall1.operands);
-        if (aggCall1.filter != null) {
-          registrar.registerExpression(aggCall1.filter);
-        }
-      }
-    }
-    project(registrar.extraNodes);
-    rename(registrar.names);
-    final Frame frame = stack.pop();
-    final RelNode r = frame.rel;
-    final List<AggregateCall> aggregateCalls = new ArrayList<>();
-    for (AggCall aggCall : aggCalls) {
-      final AggregateCall aggregateCall;
-      if (aggCall instanceof AggCallImpl) {
-        final AggCallImpl aggCall1 = (AggCallImpl) aggCall;
-        final List<Integer> args =
-            registrar.registerExpressions(aggCall1.operands);
-        final int filterArg = aggCall1.filter == null ? -1
-            : registrar.registerExpression(aggCall1.filter);
-        if (aggCall1.distinct && !aggCall1.aggFunction.isQuantifierAllowed()) {
-          throw new IllegalArgumentException("DISTINCT not allowed");
-        }
-        if (aggCall1.filter != null && !aggCall1.aggFunction.allowsFilter()) {
-          throw new IllegalArgumentException("FILTER not allowed");
-        }
-        aggregateCall =
-            AggregateCall.create(aggCall1.aggFunction, aggCall1.distinct,
-                aggCall1.approximate, args,
-                filterArg, groupSet.cardinality(), r, null, aggCall1.alias);
-      } else {
-        aggregateCall = ((AggCallImpl2) aggCall).aggregateCall;
-      }
-      aggregateCalls.add(aggregateCall);
-    }
-
-    assert ImmutableBitSet.ORDERING.isStrictlyOrdered(groupSets) : groupSets;
-    for (ImmutableBitSet set : groupSets) {
-      assert groupSet.contains(set);
-    }
-    RelNode aggregate = struct.aggregateFactory.createAggregate(r,
-        ImmutableList.of(), groupSet, groupSets, aggregateCalls);
-
-    // build field list
-    final ImmutableList.Builder<Field> fields = ImmutableList.builder();
-    final List<RelDataTypeField> aggregateFields =
-        aggregate.getRowType().getFieldList();
-    int i = 0;
-    // first, group fields
-    for (Integer groupField : groupSet.asList()) {
-      RexNode node = registrar.extraNodes.get(groupField);
-      final SqlKind kind = node.getKind();
-      switch (kind) {
-      case INPUT_REF:
-        fields.add(frame.fields.get(((RexInputRef) node).getIndex()));
-        break;
-      default:
-        String name = aggregateFields.get(i).getName();
-        RelDataTypeField fieldType =
-            new RelDataTypeFieldImpl(name, i, node.getType());
-        fields.add(new Field(ImmutableSet.<String>of(), fieldType));
-        break;
-      }
-      i++;
-    }
-    // second, indicator fields (copy from aggregate rel type)
-    //    if (groupKey_.indicator) {
-    //      for (int j = 0; j < groupSet.cardinality(); ++j) {
-    //        final RelDataTypeField field = aggregateFields.get(i);
-    //        final RelDataTypeField fieldType =
-    //            new RelDataTypeFieldImpl(field.getName(), i, field.getType());
-    //        fields.add(new Field(ImmutableSet.<String>of(), fieldType));
-    //        i++;
-    //      }
-    //    }
-    // third, aggregate fields. retain `i' as field index
-    for (int j = 0; j < aggregateCalls.size(); ++j) {
-      final AggregateCall call = aggregateCalls.get(j);
-      final RelDataTypeField fieldType =
-          new RelDataTypeFieldImpl(aggregateFields.get(i + j).getName(), i + j,
-              call.getType());
-      fields.add(new Field(ImmutableSet.<String>of(), fieldType));
-    }
-    stack.push(new Frame(aggregate, fields.build()));
-    return this;
   }
 
   /** Finishes the implementation of {@link #aggregate} by creating an
