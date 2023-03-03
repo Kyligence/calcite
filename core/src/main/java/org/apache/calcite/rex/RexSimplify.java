@@ -18,6 +18,7 @@ package org.apache.calcite.rex;
 
 import org.apache.calcite.avatica.util.TimeUnit;
 import org.apache.calcite.avatica.util.TimeUnitRange;
+import org.apache.calcite.linq4j.Ord;
 import org.apache.calcite.plan.RelOptPredicateList;
 import org.apache.calcite.plan.RelOptUtil;
 import org.apache.calcite.plan.Strong;
@@ -1125,7 +1126,14 @@ public class RexSimplify {
     }
   }
 
-  private RexNode simplifyCase(RexCall call, RexUnknownAs unknownAs) {
+  /**
+   * Calcite 1.30 changed simplifyCase logic, The optimization, which can be viewed in detail by
+   * clicking on the link below, causes the Kylin matching model to be anomalous and therefore
+   * reverts the logic to the previous logic.
+   * @see <a href="https://issues.apache.org/jira/browse/CALCITE-1413">
+   *   New CASE statement simplification</a>
+   */
+  /*private RexNode simplifyCase(RexCall call, RexUnknownAs unknownAs) {
     List<CaseBranch> inputBranches =
         CaseBranch.fromCaseOperands(rexBuilder, new ArrayList<>(call.getOperands()));
 
@@ -1222,6 +1230,137 @@ public class RexSimplify {
       return call;
     }
     return rexBuilder.makeCall(SqlStdOperatorTable.CASE, newOperands);
+  }*/
+  private RexNode simplifyCase(RexCall call, RexUnknownAs unknownAs) {
+    final List<RexNode> operands = call.getOperands();
+    final List<RexNode> newOperands = new ArrayList<>();
+    final Set<String> values = new HashSet<>();
+    for (int i = 0; i < operands.size(); i++) {
+      RexNode operand = operands.get(i);
+      if (RexUtil.isCasePredicate(call, i)) {
+        if (operand.isAlwaysTrue()) {
+          // Predicate is always TRUE. Make value the ELSE and quit.
+          newOperands.add(operands.get(++i));
+          if (unknownAs == FALSE && RexUtil.isNull(operands.get(i))) {
+            values.add(rexBuilder.makeLiteral(false).toString());
+          } else {
+            values.add(operands.get(i).toString());
+          }
+          break;
+        } else if (operand.isAlwaysFalse() || RexUtil.isNull(operand)) {
+          // Predicate is always FALSE or NULL. Skip predicate and value.
+          ++i;
+          continue;
+        }
+      } else {
+        if (unknownAs == FALSE && RexUtil.isNull(operand)) {
+          values.add(rexBuilder.makeLiteral(false).toString());
+        } else {
+          values.add(operand.toString());
+        }
+      }
+      newOperands.add(operand);
+    }
+    assert newOperands.size() % 2 == 1;
+    if (newOperands.size() == 1 || values.size() == 1) {
+      final RexNode last = Util.last(newOperands);
+      if (!call.getType().equals(last.getType())) {
+        return rexBuilder.makeAbstractCast(call.getType(), last);
+      }
+      return last;
+    }
+    trueFalse:
+    if (call.getType().getSqlTypeName() == SqlTypeName.BOOLEAN) {
+      // Optimize CASE where every branch returns constant true or constant
+      // false.
+      final List<Pair<RexNode, RexNode>> pairs =
+          casePairs(rexBuilder, newOperands);
+      // 1) Possible simplification if unknown is treated as false:
+      //   CASE
+      //   WHEN p1 THEN TRUE
+      //   WHEN p2 THEN TRUE
+      //   ELSE FALSE
+      //   END
+      // can be rewritten to: (p1 or p2)
+      if (unknownAs == FALSE) {
+        final List<RexNode> terms = new ArrayList<>();
+        int pos = 0;
+        for (; pos < pairs.size(); pos++) {
+          // True block
+          Pair<RexNode, RexNode> pair = pairs.get(pos);
+          if (!pair.getValue().isAlwaysTrue()) {
+            break;
+          }
+          terms.add(pair.getKey());
+        }
+        for (; pos < pairs.size(); pos++) {
+          // False block
+          Pair<RexNode, RexNode> pair = pairs.get(pos);
+          if (!pair.getValue().isAlwaysFalse()
+              && !RexUtil.isNull(pair.getValue())) {
+            break;
+          }
+        }
+        if (pos == pairs.size()) {
+          final RexNode disjunction =
+              RexUtil.composeDisjunction(rexBuilder, terms);
+          if (!call.getType().equals(disjunction.getType())) {
+            return rexBuilder.makeCast(call.getType(), disjunction);
+          }
+          return disjunction;
+        }
+      }
+      // 2) Another simplification
+      //   CASE
+      //   WHEN p1 THEN TRUE
+      //   WHEN p2 THEN FALSE
+      //   WHEN p3 THEN TRUE
+      //   ELSE FALSE
+      //   END
+      // if p1...pn cannot be nullable
+      for (Ord<Pair<RexNode, RexNode>> pair : Ord.zip(pairs)) {
+        if (pair.e.getKey().getType().isNullable()) {
+          break trueFalse;
+        }
+        if (!pair.e.getValue().isAlwaysTrue()
+            && !pair.e.getValue().isAlwaysFalse()
+            && (unknownAs == UNKNOWN || !RexUtil.isNull(pair.e.getValue()))) {
+          break trueFalse;
+        }
+      }
+      final List<RexNode> terms = new ArrayList<>();
+      final List<RexNode> notTerms = new ArrayList<>();
+      for (Ord<Pair<RexNode, RexNode>> pair : Ord.zip(pairs)) {
+        if (pair.e.getValue().isAlwaysTrue()) {
+          terms.add(RexUtil.andNot(rexBuilder, pair.e.getKey(), notTerms));
+        } else {
+          notTerms.add(pair.e.getKey());
+        }
+      }
+      RexNode disjunction = RexUtil.composeDisjunction(rexBuilder, terms);
+      if (!call.getType().equals(disjunction.getType())) {
+        disjunction = rexBuilder.makeCast(call.getType(), disjunction);
+      }
+      return simplify(disjunction, unknownAs);
+    }
+    if (newOperands.equals(operands)) {
+      return call;
+    }
+    return call.clone(call.getType(), newOperands);
+  }
+
+  /** Given "CASE WHEN p1 THEN v1 ... ELSE e END"
+   * returns [(p1, v1), ..., (true, e)]. */
+  private static List<Pair<RexNode, RexNode>> casePairs(RexBuilder rexBuilder,
+      List<RexNode> operands) {
+    final ImmutableList.Builder<Pair<RexNode, RexNode>> builder =
+        ImmutableList.builder();
+    for (int i = 0; i < operands.size() - 1; i += 2) {
+      builder.add(Pair.of(operands.get(i), operands.get(i + 1)));
+    }
+    builder.add(
+        Pair.of((RexNode) rexBuilder.makeLiteral(true), Util.last(operands)));
+    return builder.build();
   }
 
   /**

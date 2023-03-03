@@ -292,6 +292,19 @@ public interface RelNode extends RelOptNode, Cloneable {
   void recomputeDigest();
 
   /**
+   * Calcite 1.30 changed the way digest is calculated, the execution logic of this method in the
+   * new version is to directly clear the current digest, here we need to revert to the logic of
+   * version 1.16.
+   * It can only be used to get but not to assign a value to the current RelNode digest,
+   * otherwise it will change the other behaviors of the new version, this method is mainly used
+   * to determine whether the Spark DF cache can be reused.
+   * Computes the digest, do not assign it, and returns it. For planner use only.
+   *
+   * @return Digest of this relational expression
+   */
+  String recomputeDigestForKylin();
+
+  /**
    * Deep equality check for RelNode digest.
    *
    * <p>By default this method collects digest attributes from

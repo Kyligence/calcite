@@ -24,8 +24,10 @@ import org.apache.calcite.plan.RelOptCost;
 import org.apache.calcite.plan.RelOptPlanner;
 import org.apache.calcite.plan.RelOptTable;
 import org.apache.calcite.plan.RelOptUtil;
+import org.apache.calcite.plan.RelTrait;
 import org.apache.calcite.plan.RelTraitSet;
 import org.apache.calcite.rel.core.CorrelationId;
+import org.apache.calcite.rel.externalize.RelWriterImpl;
 import org.apache.calcite.rel.hint.Hintable;
 import org.apache.calcite.rel.hint.RelHint;
 import org.apache.calcite.rel.metadata.Metadata;
@@ -46,6 +48,8 @@ import org.checkerframework.checker.nullness.qual.MonotonicNonNull;
 import org.checkerframework.checker.nullness.qual.Nullable;
 import org.checkerframework.dataflow.qual.Pure;
 
+import java.io.PrintWriter;
+import java.io.StringWriter;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -290,6 +294,65 @@ public abstract class AbstractRelNode implements RelNode {
 
   @Override public void recomputeDigest() {
     digest.clear();
+  }
+
+  /**
+   * Calcite 1.30 changed the way digest is calculated, the execution logic of this method in the
+   * new version is to directly clear the current digest, here we need to revert to the logic of
+   * version 1.16.
+   * It can only be used to get but not to assign a value to the current RelNode digest,
+   * otherwise it will change the other behaviors of the new version, this method is mainly used
+   * to determine whether the Spark DF cache can be reused.
+   * Computes the digest, do not assign it, and returns it. For planner use only.
+   *
+   * @return Digest of this relational expression
+   */
+  @Override public String recomputeDigestForKylin() {
+    String tempDigest = computeDigest();
+    assert tempDigest != null : "post: return != null";
+    String prefix = "rel#" + id + ":";
+
+    // Substring uses the same underlying array of chars, so saves a bit of memory.
+    String desc = prefix + tempDigest;
+    return desc.substring(prefix.length());
+  }
+
+  /**
+   * Calcite 1.30 changed the way digest is calculated, the execution logic of this method in the
+   * new version is to directly clear the current digest, here we need to revert to the logic of
+   * version 1.16.
+   * Computes the digest. Does not modify this object.
+   *
+   * @return Digest
+   */
+  protected String computeDigest() {
+    StringWriter sw = new StringWriter();
+    RelWriter pw =
+        new RelWriterImpl(
+            new PrintWriter(sw),
+            SqlExplainLevel.DIGEST_ATTRIBUTES, false) {
+          protected void explain_(
+              RelNode rel, List<Pair<String, Object>> values) {
+            pw.write(getRelTypeName());
+
+            for (RelTrait trait : traitSet) {
+              pw.write(".");
+              pw.write(trait.toString());
+            }
+
+            pw.write("(");
+            int j = 0;
+            for (Pair<String, Object> value : values) {
+              if (j++ > 0) {
+                pw.write(",");
+              }
+              pw.write(value.left + "=" + value.right);
+            }
+            pw.write(")");
+          }
+        };
+    explain(pw);
+    return sw.toString();
   }
 
   @Override public void replaceInput(
