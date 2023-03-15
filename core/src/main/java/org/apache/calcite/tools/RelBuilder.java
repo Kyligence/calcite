@@ -2010,9 +2010,15 @@ public class RelBuilder {
       return this;
     }
 
+    // Calcite 1.30 added an optimization for expressions that are all literals, i.e., when
+    // the input is the values with n rows, replace them with same tuple N times. This changes
+    // Calcite's logical plan, eliminates the process of creating LogicalProject, and causes
+    // the conversion to Spark logical plans to raise an exception when converting data types,
+    // in order to ensure correctness, comment out the following optimization code.
+
     // If the expressions are all literals, and the input is a Values with N
     // rows, replace with a Values with same tuple N times.
-    if (config.simplifyValues()
+    /*if (config.simplifyValues()
         && frame.rel instanceof Values
         && nodeList.stream().allMatch(e -> e instanceof RexLiteral)) {
       final Values values = (Values) build();
@@ -2023,7 +2029,7 @@ public class RelBuilder {
       final List<RexLiteral> tuple = (List<RexLiteral>) (List) nodeList;
       return values(Collections.nCopies(values.tuples.size(), tuple),
           typeBuilder.build());
-    }
+    }*/
 
     final RelNode project =
         struct.projectFactory.createProject(frame.rel,

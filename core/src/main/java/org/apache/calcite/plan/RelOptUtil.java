@@ -2384,7 +2384,7 @@ public abstract class RelOptUtil {
     }*/
 
     // Calcite 1.30 changed Rexcall operator from SqlCaseOperator to SqlPostfixOperator here.
-    // To make the KE behavior consistent, we changed the behavior to the logic of Calcite 1.116
+    // To make the KE behavior consistent, we changed the behavior to the logic of Calcite 1.16
     SqlOperator nullOp;
     SqlOperator eqOp;
     if (neg) {

@@ -982,6 +982,16 @@ public class RexBuilder {
       }
       o = ((TimestampString) o).round(p);
       break;
+    // Calcite 1.30 removed the precision setting for the Decimal data type,
+    // restored the logic here to ensure correctness
+    case DECIMAL:
+      if (o != null) {
+        assert o instanceof BigDecimal;
+        if (type.getScale() >= 0 && ((BigDecimal) o).scale() > type.getScale()) {
+          o = ((BigDecimal) o).setScale(type.getScale(), RoundingMode.HALF_UP);
+        }
+      }
+      break;
     default:
       break;
     }

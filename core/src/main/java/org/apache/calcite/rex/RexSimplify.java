@@ -534,7 +534,11 @@ public class RexSimplify {
       }
     }
 
-    if (o0.getType().getSqlTypeName() == SqlTypeName.BOOLEAN) {
+    // Calcite 1.30 Simplify comparisons against boolean literals.
+    // However, this causes the query to not match the expectation when converting
+    // Calcite Logical Plan to Spark Logical Plan, comment this optimization code
+    // to ensure the result is correct.
+    /*if (o0.getType().getSqlTypeName() == SqlTypeName.BOOLEAN) {
       Comparison cmp = Comparison.of(rexBuilder.makeCall(e.getOperator(), o0, o1), node -> true);
       if (cmp != null) {
         if (cmp.literal.isAlwaysTrue()) {
@@ -546,13 +550,13 @@ public class RexSimplify {
           case NOT_EQUALS: // x!=true
             return simplify(not(cmp.ref), unknownAs);
           case GREATER_THAN:
-            /* this is false, but could be null if x is null */
+            *//* this is false, but could be null if x is null *//*
             if (!cmp.ref.getType().isNullable()) {
               return rexBuilder.makeLiteral(false);
             }
             break;
           case LESS_THAN_OR_EQUAL:
-            /* this is true, but could be null if x is null */
+            *//* this is true, but could be null if x is null *//*
             if (!cmp.ref.getType().isNullable()) {
               return rexBuilder.makeLiteral(true);
             }
@@ -570,13 +574,13 @@ public class RexSimplify {
           case GREATER_THAN:
             return cmp.ref;
           case GREATER_THAN_OR_EQUAL:
-            /* this is true, but could be null if x is null */
+            *//* this is true, but could be null if x is null *//*
             if (!cmp.ref.getType().isNullable()) {
               return rexBuilder.makeLiteral(true);
             }
             break;
           case LESS_THAN:
-            /* this is false, but could be null if x is null */
+            *//* this is false, but could be null if x is null *//*
             if (!cmp.ref.getType().isNullable()) {
               return rexBuilder.makeLiteral(false);
             }
@@ -586,7 +590,7 @@ public class RexSimplify {
           }
         }
       }
-    }
+    }*/
 
 
     // Simplify "<literal1> <op> <literal2>"
