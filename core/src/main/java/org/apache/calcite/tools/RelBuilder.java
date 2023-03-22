@@ -2346,7 +2346,9 @@ public class RelBuilder {
       // this situation, and this causes the matching model in Kylin to behave incorrectly.
       // Here need to further determine whether to use Input RelNode to replace the current RelNode.
       if (fieldsUsed.isEmpty()) {
-        if (!((Project) r).getInput().getRelTypeName().equals(LogicalJoin.class.getSimpleName())) {
+        String relTypeName = ((Project) r).getInput().getRelTypeName();
+        if (!relTypeName.equals(LogicalJoin.class.getSimpleName())
+            && !relTypeName.equals(LogicalFilter.class.getSimpleName())) {
           r = ((Project) r).getInput();
         }
       } else if (fieldsUsed.size() < r.getRowType().getFieldCount()) {

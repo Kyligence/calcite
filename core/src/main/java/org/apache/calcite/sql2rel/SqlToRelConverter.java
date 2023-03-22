@@ -993,10 +993,13 @@ public class SqlToRelConverter {
       List<SqlNode> orderExprList,
       @Nullable SqlNode offset,
       @Nullable SqlNode fetch) {
-    if (removeSortInSubQuery(bb.top)
-        || select.getOrderList() == null
+    // Calcite 1.30 will optimize Sort in subqueries, but this is not the correct behavior
+    // for Kylin. The code logic is removed here to ensure correctness.
+//    if (removeSortInSubQuery(bb.top)
+    if (select.getOrderList() == null
         || select.getOrderList().isEmpty()) {
-      assert removeSortInSubQuery(bb.top) || collation.getFieldCollations().isEmpty();
+//      assert removeSortInSubQuery(bb.top) || collation.getFieldCollations().isEmpty();
+      assert collation.getFieldCollations().isEmpty();
       if ((offset == null
             || (offset instanceof SqlLiteral
                 && Objects.equals(((SqlLiteral) offset).bigDecimalValue(), BigDecimal.ZERO)))
@@ -3979,15 +3982,17 @@ public class SqlToRelConverter {
       return;
     }
 
-    if (removeSortInSubQuery(bb.top)) {
-      SqlNode offset = select.getOffset();
-      if ((offset == null
-              || (offset instanceof SqlLiteral
-                  && Objects.equals(((SqlLiteral) offset).bigDecimalValue(), BigDecimal.ZERO)))
-          && select.getFetch() == null) {
-        return;
-      }
-    }
+    // Calcite 1.30 will optimize Sort in subqueries, but this is not the correct behavior
+    // for Kylin. The code logic is removed here to ensure correctness.
+//    if (removeSortInSubQuery(bb.top)) {
+//      SqlNode offset = select.getOffset();
+//      if ((offset == null
+//              || (offset instanceof SqlLiteral
+//                  && Objects.equals(((SqlLiteral) offset).bigDecimalValue(), BigDecimal.ZERO)))
+//          && select.getFetch() == null) {
+//        return;
+//      }
+//    }
 
     for (SqlNode orderItem : orderList) {
       collationList.add(
