@@ -396,8 +396,6 @@ public enum BuiltInMethod {
   SUBSTRING(SqlFunctions.class, "substring", String.class, int.class,
       int.class),
   OCTET_LENGTH(SqlFunctions.class, "octetLength", ByteString.class),
-  // Calcite 1.30 removed SqlFunction CHAR, support this function
-  CHAR(SqlFunctions.class, "charN", long.class),
   CHAR_LENGTH(SqlFunctions.class, "charLength", String.class),
   STRING_CONCAT(SqlFunctions.class, "concat", String.class, String.class),
   MULTI_STRING_CONCAT(SqlFunctions.class, "concatMulti", String[].class),

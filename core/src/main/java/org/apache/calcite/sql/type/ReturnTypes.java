@@ -368,14 +368,6 @@ public abstract class ReturnTypes {
           explicit(SqlTypeName.CHAR);
 
   /**
-   * Calcite 1.30 removed SqlFunction CHAR, support this function
-   * Type-inference strategy whereby the result type of a call is a nullable
-   * CHAR(1).
-   */
-  public static final SqlReturnTypeInference CHAR_FORCE_NULLABLE =
-      ReturnTypes.cascade(ReturnTypes.CHAR, SqlTypeTransforms.FORCE_NULLABLE);
-
-  /**
    * Type-inference strategy whereby the result type of a call is an Integer.
    */
   public static final SqlReturnTypeInference INTEGER =

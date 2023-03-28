@@ -523,14 +523,6 @@ public class SqlFunctions {
     return s.length();
   }
 
-  /** Calcite 1.30 removed SqlFunction CHAR, support this function */
-  public static String charN(long n) {
-    if (n < 0) {
-      return null;
-    }
-    return String.valueOf(Character.toChars((int) (n % 256)));
-  }
-
   /** SQL CHARACTER_LENGTH(string) function. */
   public static int charLength(String s) {
     if (s == null) {
