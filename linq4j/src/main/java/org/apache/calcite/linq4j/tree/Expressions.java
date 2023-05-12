@@ -1940,7 +1940,14 @@ public abstract class Expressions {
   public static NewExpression new_(Type type, Expression... arguments) {
     // Note that the last argument is not an empty list. That would cause
     // an anonymous inner-class with no members to be generated.
-    return new NewExpression(type, toList(arguments), null);
+    return new_(type, -1, arguments);
+  }
+
+  // Calcite 1.30 don't keep the precision of BigDecimal, This will cause calculate error
+  public static NewExpression new_(Type type, int scale, Expression... arguments) {
+    // Note that the last argument is not an empty list. That would cause
+    // an anonymous inner-class with no members to be generated.
+    return new NewExpression(type, scale, toList(arguments), null);
   }
 
   /**
@@ -1951,7 +1958,15 @@ public abstract class Expressions {
   public static NewExpression new_(Type type,
       Iterable<? extends Expression> arguments,
       @Nullable Iterable<? extends MemberDeclaration> memberDeclarations) {
-    return new NewExpression(type, toList(arguments),
+    return new_(type, -1, arguments, memberDeclarations);
+  }
+
+  // Calcite 1.30 don't keep the precision of BigDecimal, This will cause calculate error
+  public static NewExpression new_(Type type,
+      int scale,
+      Iterable<? extends Expression> arguments,
+      @Nullable Iterable<? extends MemberDeclaration> memberDeclarations) {
+    return new NewExpression(type, scale, toList(arguments),
         memberDeclarations == null ? null : toList(memberDeclarations));
   }
 

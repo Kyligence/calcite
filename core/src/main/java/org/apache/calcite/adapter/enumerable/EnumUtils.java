@@ -335,8 +335,13 @@ public class EnumUtils {
    * is no need to convert
    */
   public static Expression convert(Expression operand, Type toType) {
+    return convert(operand, toType, -1);
+  }
+
+  // Calcite 1.30 don't keep the precision of BigDecimal, This will cause calculate error
+  public static Expression convert(Expression operand, Type toType, int scale) {
     final Type fromType = operand.getType();
-    return convert(operand, fromType, toType);
+    return convert(operand, fromType, toType, scale);
   }
 
   /**
@@ -350,6 +355,12 @@ public class EnumUtils {
    */
   public static Expression convert(Expression operand, Type fromType,
       Type toType) {
+    return convert(operand, fromType, toType, -1);
+  }
+
+  // Calcite 1.30 don't keep the precision of BigDecimal, This will cause calculate error
+  public static Expression convert(Expression operand, Type fromType,
+      Type toType, int scale) {
     if (!Types.needTypeCast(fromType, toType)) {
       return operand;
     }
@@ -487,7 +498,8 @@ public class EnumUtils {
       if (fromPrimitive != null) {
         // E.g. from "int" to "BigDecimal".
         // Generate "new BigDecimal(x)"
-        return Expressions.new_(BigDecimal.class, operand);
+        // // Calcite 1.30 don't keep the precision of BigDecimal, This will cause calculate error
+        return Expressions.new_(BigDecimal.class, scale, operand);
       }
       // E.g. from "Object" to "BigDecimal".
       // Generate "x == null ? null : SqlFunctions.toBigDecimal(x)"
