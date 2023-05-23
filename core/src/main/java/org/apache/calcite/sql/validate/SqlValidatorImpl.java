@@ -1859,7 +1859,7 @@ public class SqlValidatorImpl implements SqlValidatorWithHints {
           // actually a call to a function. Construct a fake
           // call to this function, so we can use the regular
           // operator validation.
-          return new SqlBasicCall(operator, ImmutableList.of(),
+          return new SqlBasicCall(operator, SqlNode.EMPTY_ARRAY,
               id.getParserPosition(), null).withExpanded(true);
         }
       }

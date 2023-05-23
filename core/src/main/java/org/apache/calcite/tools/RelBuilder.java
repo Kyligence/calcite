@@ -2348,7 +2348,8 @@ public class RelBuilder {
       if (fieldsUsed.isEmpty()) {
         String relTypeName = ((Project) r).getInput().getRelTypeName();
         if (!relTypeName.equals(LogicalJoin.class.getSimpleName())
-            && !relTypeName.equals(LogicalFilter.class.getSimpleName())) {
+            && !relTypeName.equals(LogicalFilter.class.getSimpleName())
+            && !relTypeName.contains(TableScan.class.getSimpleName())) {
           r = ((Project) r).getInput();
         }
       } else if (fieldsUsed.size() < r.getRowType().getFieldCount()) {
