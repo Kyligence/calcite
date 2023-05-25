@@ -28,7 +28,8 @@ import org.apache.calcite.schema.Table;
 import org.apache.calcite.schema.impl.AbstractSchema;
 import org.apache.calcite.schema.impl.AbstractTableQueryable;
 
-import io.kyligence.kap.guava20.shaded.common.collect.ImmutableMap;
+import org.apache.kylin.guava30.shaded.common.collect.ImmutableMap;
+
 import io.prestosql.tpch.TpchColumn;
 import io.prestosql.tpch.TpchEntity;
 import io.prestosql.tpch.TpchTable;

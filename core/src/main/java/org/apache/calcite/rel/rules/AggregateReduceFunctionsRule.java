@@ -37,8 +37,8 @@ import org.apache.calcite.util.CompositeList;
 import org.apache.calcite.util.ImmutableIntList;
 import org.apache.calcite.util.Util;
 
-import io.kyligence.kap.guava20.shaded.common.collect.ImmutableList;
-import io.kyligence.kap.guava20.shaded.common.collect.ImmutableSet;
+import org.apache.kylin.guava30.shaded.common.collect.ImmutableList;
+import org.apache.kylin.guava30.shaded.common.collect.ImmutableSet;
 
 import org.checkerframework.checker.nullness.qual.Nullable;
 import org.immutables.value.Value;

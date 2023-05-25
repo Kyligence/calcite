@@ -46,11 +46,11 @@ import org.apache.calcite.util.NlsString;
 import org.apache.calcite.util.Pair;
 import org.apache.calcite.util.Util;
 
-import io.kyligence.kap.guava20.shaded.common.base.Predicates;
-import io.kyligence.kap.guava20.shaded.common.base.Utf8;
-import io.kyligence.kap.guava20.shaded.common.collect.ImmutableList;
-import io.kyligence.kap.guava20.shaded.common.collect.Iterators;
-import io.kyligence.kap.guava20.shaded.common.collect.Lists;
+import org.apache.kylin.guava30.shaded.common.base.Predicates;
+import org.apache.kylin.guava30.shaded.common.base.Utf8;
+import org.apache.kylin.guava30.shaded.common.collect.ImmutableList;
+import org.apache.kylin.guava30.shaded.common.collect.Iterators;
+import org.apache.kylin.guava30.shaded.common.collect.Lists;
 
 import org.checkerframework.checker.nullness.qual.Nullable;
 import org.checkerframework.checker.nullness.qual.PolyNull;

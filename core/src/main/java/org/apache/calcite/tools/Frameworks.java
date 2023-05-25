@@ -43,8 +43,8 @@ import org.apache.calcite.sql2rel.StandardConvertletTable;
 import org.apache.calcite.statistic.QuerySqlStatisticProvider;
 import org.apache.calcite.util.Util;
 
-import io.kyligence.kap.guava20.shaded.common.base.Suppliers;
-import io.kyligence.kap.guava20.shaded.common.collect.ImmutableList;
+import org.apache.kylin.guava30.shaded.common.base.Suppliers;
+import org.apache.kylin.guava30.shaded.common.collect.ImmutableList;
 
 import org.checkerframework.checker.nullness.qual.Nullable;
 

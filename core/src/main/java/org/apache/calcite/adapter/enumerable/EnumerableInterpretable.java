@@ -45,8 +45,8 @@ import org.apache.calcite.runtime.Typed;
 import org.apache.calcite.runtime.Utilities;
 import org.apache.calcite.util.Util;
 
-import io.kyligence.kap.guava20.shaded.common.cache.Cache;
-import io.kyligence.kap.guava20.shaded.common.cache.CacheBuilder;
+import org.apache.kylin.guava30.shaded.common.cache.Cache;
+import org.apache.kylin.guava30.shaded.common.cache.CacheBuilder;
 
 import org.checkerframework.checker.nullness.qual.Nullable;
 import org.codehaus.commons.compiler.CompileException;

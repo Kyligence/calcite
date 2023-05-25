@@ -25,11 +25,11 @@ import org.apache.calcite.util.Bug;
 import org.apache.calcite.util.TestUtil;
 import org.apache.calcite.util.Util;
 
+import org.apache.kylin.guava30.shaded.common.io.LineProcessor;
+import org.apache.kylin.guava30.shaded.common.io.Resources;
+
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
-
-import io.kyligence.kap.guava20.shaded.common.io.LineProcessor;
-import io.kyligence.kap.guava20.shaded.common.io.Resources;
 
 import net.hydromatic.foodmart.data.json.FoodmartJson;
 

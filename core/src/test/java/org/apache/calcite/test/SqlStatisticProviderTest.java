@@ -31,8 +31,8 @@ import org.apache.calcite.tools.Programs;
 import org.apache.calcite.tools.RelBuilder;
 import org.apache.calcite.util.Util;
 
-import io.kyligence.kap.guava20.shaded.common.cache.Cache;
-import io.kyligence.kap.guava20.shaded.common.cache.CacheBuilder;
+import org.apache.kylin.guava30.shaded.common.cache.Cache;
+import org.apache.kylin.guava30.shaded.common.cache.CacheBuilder;
 
 import org.junit.jupiter.api.Test;
 

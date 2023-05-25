@@ -18,12 +18,12 @@ package org.apache.calcite.sql.type;
 
 import org.apache.calcite.util.Util;
 
-import io.kyligence.kap.guava20.shaded.common.cache.CacheBuilder;
-import io.kyligence.kap.guava20.shaded.common.cache.CacheLoader;
-import io.kyligence.kap.guava20.shaded.common.cache.LoadingCache;
-import io.kyligence.kap.guava20.shaded.common.collect.ImmutableSet;
-import io.kyligence.kap.guava20.shaded.common.collect.Sets;
-import io.kyligence.kap.guava20.shaded.common.util.concurrent.UncheckedExecutionException;
+import org.apache.kylin.guava30.shaded.common.cache.CacheBuilder;
+import org.apache.kylin.guava30.shaded.common.cache.CacheLoader;
+import org.apache.kylin.guava30.shaded.common.cache.LoadingCache;
+import org.apache.kylin.guava30.shaded.common.collect.ImmutableSet;
+import org.apache.kylin.guava30.shaded.common.collect.Sets;
+import org.apache.kylin.guava30.shaded.common.util.concurrent.UncheckedExecutionException;
 
 import java.util.HashMap;
 import java.util.Map;

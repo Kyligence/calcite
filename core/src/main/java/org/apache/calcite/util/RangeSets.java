@@ -16,18 +16,18 @@
  */
 package org.apache.calcite.util;
 
-import io.kyligence.kap.guava20.shaded.common.collect.BoundType;
-import io.kyligence.kap.guava20.shaded.common.collect.ImmutableRangeSet;
-import io.kyligence.kap.guava20.shaded.common.collect.Range;
-import io.kyligence.kap.guava20.shaded.common.collect.RangeSet;
-import io.kyligence.kap.guava20.shaded.common.collect.TreeRangeSet;
+import org.apache.kylin.guava30.shaded.common.collect.BoundType;
+import org.apache.kylin.guava30.shaded.common.collect.ImmutableRangeSet;
+import org.apache.kylin.guava30.shaded.common.collect.Range;
+import org.apache.kylin.guava30.shaded.common.collect.RangeSet;
+import org.apache.kylin.guava30.shaded.common.collect.TreeRangeSet;
 
 import java.util.Iterator;
 import java.util.Set;
 import java.util.function.BiConsumer;
 import java.util.function.Function;
 
-/** Utilities for Guava {@link io.kyligence.kap.guava20.shaded.common.collect.RangeSet}. */
+/** Utilities for Guava {@link org.apache.kylin.guava30.shaded.common.collect.RangeSet}. */
 @SuppressWarnings({"BetaApi", "UnstableApiUsage"})
 public class RangeSets {
   private RangeSets() {}

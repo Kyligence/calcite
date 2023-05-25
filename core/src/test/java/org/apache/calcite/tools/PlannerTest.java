@@ -84,8 +84,8 @@ import org.apache.calcite.util.Optionality;
 import org.apache.calcite.util.Smalls;
 import org.apache.calcite.util.Util;
 
-import io.kyligence.kap.guava20.shaded.common.base.Throwables;
-import io.kyligence.kap.guava20.shaded.common.collect.ImmutableList;
+import org.apache.kylin.guava30.shaded.common.base.Throwables;
+import org.apache.kylin.guava30.shaded.common.collect.ImmutableList;
 
 import org.hamcrest.Matcher;
 import org.immutables.value.Value;

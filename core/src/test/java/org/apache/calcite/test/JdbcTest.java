@@ -95,9 +95,9 @@ import org.apache.calcite.util.TestUtil;
 import org.apache.calcite.util.TryThreadLocal;
 import org.apache.calcite.util.Util;
 
-import io.kyligence.kap.guava20.shaded.common.collect.ImmutableList;
-import io.kyligence.kap.guava20.shaded.common.collect.LinkedListMultimap;
-import io.kyligence.kap.guava20.shaded.common.collect.Multimap;
+import org.apache.kylin.guava30.shaded.common.collect.ImmutableList;
+import org.apache.kylin.guava30.shaded.common.collect.LinkedListMultimap;
+import org.apache.kylin.guava30.shaded.common.collect.Multimap;
 
 import org.checkerframework.checker.nullness.qual.Nullable;
 import org.hamcrest.Matcher;

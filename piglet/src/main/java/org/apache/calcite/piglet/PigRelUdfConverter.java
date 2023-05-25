@@ -25,12 +25,11 @@ import org.apache.calcite.sql.SqlOperator;
 import org.apache.calcite.sql.fun.SqlStdOperatorTable;
 import org.apache.calcite.sql.validate.SqlUserDefinedFunction;
 
+import org.apache.kylin.guava30.shaded.common.collect.ImmutableList;
+import org.apache.kylin.guava30.shaded.common.collect.ImmutableMap;
 import org.apache.pig.Accumulator;
 import org.apache.pig.FuncSpec;
 import org.apache.pig.impl.logicalLayer.FrontendException;
-
-import io.kyligence.kap.guava20.shaded.common.collect.ImmutableList;
-import io.kyligence.kap.guava20.shaded.common.collect.ImmutableMap;
 
 import java.lang.reflect.Method;
 import java.util.Map;

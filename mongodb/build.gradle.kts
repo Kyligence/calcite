@@ -17,7 +17,7 @@
 dependencies {
     api(project(":core"))
     api(project(":linq4j"))
-    api("io.kyligence.ke:kap-external-guava20")
+    api("org.apache.kylin:kylin-external-guava30")
     api("org.slf4j:slf4j-api")
 
     implementation("org.apache.calcite.avatica:avatica-core")

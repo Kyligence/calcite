@@ -21,10 +21,10 @@ import org.apache.calcite.util.ImmutableBitSet;
 import org.apache.calcite.util.Permutation;
 import org.apache.calcite.util.Util;
 
-import com.google.errorprone.annotations.CheckReturnValue;
+import org.apache.kylin.guava30.shaded.common.collect.ImmutableList;
+import org.apache.kylin.guava30.shaded.common.primitives.Ints;
 
-import io.kyligence.kap.guava20.shaded.common.collect.ImmutableList;
-import io.kyligence.kap.guava20.shaded.common.primitives.Ints;
+import com.google.errorprone.annotations.CheckReturnValue;
 
 import org.checkerframework.checker.initialization.qual.UnknownInitialization;
 import org.checkerframework.checker.nullness.qual.Nullable;

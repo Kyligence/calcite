@@ -38,9 +38,9 @@ import org.apache.calcite.rex.RexProgram;
 import org.apache.calcite.util.ImmutableBitSet;
 import org.apache.calcite.util.Util;
 
-import io.kyligence.kap.guava20.shaded.common.collect.ImmutableMultimap;
-import io.kyligence.kap.guava20.shaded.common.collect.ImmutableSet;
-import io.kyligence.kap.guava20.shaded.common.collect.Maps;
+import org.apache.kylin.guava30.shaded.common.collect.ImmutableMultimap;
+import org.apache.kylin.guava30.shaded.common.collect.ImmutableSet;
+import org.apache.kylin.guava30.shaded.common.collect.Maps;
 
 import org.checkerframework.checker.nullness.qual.Nullable;
 

@@ -20,11 +20,11 @@ import org.apache.calcite.schema.Table;
 import org.apache.calcite.schema.impl.AbstractSchema;
 import org.apache.calcite.sql.type.SqlTypeName;
 
-import io.kyligence.kap.guava20.shaded.common.cache.CacheBuilder;
-import io.kyligence.kap.guava20.shaded.common.cache.CacheLoader;
-import io.kyligence.kap.guava20.shaded.common.collect.ImmutableMap;
-import io.kyligence.kap.guava20.shaded.common.collect.ImmutableSet;
-import io.kyligence.kap.guava20.shaded.common.collect.Maps;
+import org.apache.kylin.guava30.shaded.common.cache.CacheBuilder;
+import org.apache.kylin.guava30.shaded.common.cache.CacheLoader;
+import org.apache.kylin.guava30.shaded.common.collect.ImmutableMap;
+import org.apache.kylin.guava30.shaded.common.collect.ImmutableSet;
+import org.apache.kylin.guava30.shaded.common.collect.Maps;
 
 import java.util.HashMap;
 import java.util.LinkedHashMap;

@@ -22,8 +22,8 @@ import org.apache.calcite.runtime.Automaton.SymbolTransition;
 import org.apache.calcite.runtime.Automaton.Transition;
 import org.apache.calcite.util.Util;
 
-import io.kyligence.kap.guava20.shaded.common.base.Preconditions;
-import io.kyligence.kap.guava20.shaded.common.collect.ImmutableList;
+import org.apache.kylin.guava30.shaded.common.base.Preconditions;
+import org.apache.kylin.guava30.shaded.common.collect.ImmutableList;
 
 import java.util.ArrayList;
 import java.util.Comparator;

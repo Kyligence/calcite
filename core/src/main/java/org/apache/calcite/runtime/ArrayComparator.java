@@ -16,7 +16,7 @@
  */
 package org.apache.calcite.runtime;
 
-import io.kyligence.kap.guava20.shaded.common.collect.Ordering;
+import org.apache.kylin.guava30.shaded.common.collect.Ordering;
 
 import java.util.Collections;
 import java.util.Comparator;

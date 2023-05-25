@@ -29,11 +29,11 @@ import org.apache.calcite.rex.RexTableInputRef.RelTableRef;
 import org.apache.calcite.sql.SqlExplainLevel;
 import org.apache.calcite.util.ImmutableBitSet;
 
-import io.kyligence.kap.guava20.shaded.common.base.Supplier;
-import io.kyligence.kap.guava20.shaded.common.base.Suppliers;
-import io.kyligence.kap.guava20.shaded.common.collect.ImmutableList;
-import io.kyligence.kap.guava20.shaded.common.collect.Iterables;
-import io.kyligence.kap.guava20.shaded.common.collect.Multimap;
+import org.apache.kylin.guava30.shaded.common.base.Supplier;
+import org.apache.kylin.guava30.shaded.common.base.Suppliers;
+import org.apache.kylin.guava30.shaded.common.collect.ImmutableList;
+import org.apache.kylin.guava30.shaded.common.collect.Iterables;
+import org.apache.kylin.guava30.shaded.common.collect.Multimap;
 
 import org.checkerframework.checker.nullness.qual.Nullable;
 

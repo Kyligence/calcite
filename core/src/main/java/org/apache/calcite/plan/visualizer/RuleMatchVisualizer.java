@@ -26,12 +26,11 @@ import org.apache.calcite.rel.RelNode;
 import org.apache.calcite.rel.metadata.RelMetadataQuery;
 
 import org.apache.commons.io.IOUtils;
+import org.apache.kylin.guava30.shaded.common.base.Charsets;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.util.DefaultPrettyPrinter;
 import com.fasterxml.jackson.databind.ObjectMapper;
-
-import io.kyligence.kap.guava20.shaded.common.base.Charsets;
 
 import org.checkerframework.checker.nullness.qual.Nullable;
 

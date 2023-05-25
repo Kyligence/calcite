@@ -25,11 +25,11 @@ import org.apache.calcite.util.graph.DefaultEdge;
 import org.apache.calcite.util.graph.DirectedGraph;
 import org.apache.calcite.util.graph.Graphs;
 
-import io.kyligence.kap.guava20.shaded.common.cache.CacheBuilder;
-import io.kyligence.kap.guava20.shaded.common.cache.CacheLoader;
-import io.kyligence.kap.guava20.shaded.common.cache.LoadingCache;
-import io.kyligence.kap.guava20.shaded.common.collect.HashMultimap;
-import io.kyligence.kap.guava20.shaded.common.collect.Multimap;
+import org.apache.kylin.guava30.shaded.common.cache.CacheBuilder;
+import org.apache.kylin.guava30.shaded.common.cache.CacheLoader;
+import org.apache.kylin.guava30.shaded.common.cache.LoadingCache;
+import org.apache.kylin.guava30.shaded.common.collect.HashMultimap;
+import org.apache.kylin.guava30.shaded.common.collect.Multimap;
 
 import org.checkerframework.checker.nullness.qual.MonotonicNonNull;
 import org.checkerframework.checker.nullness.qual.Nullable;

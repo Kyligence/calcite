@@ -16,7 +16,7 @@
  */
 package org.apache.calcite.linq4j;
 
-import io.kyligence.kap.guava20.shaded.common.collect.ImmutableList;
+import org.apache.kylin.guava30.shaded.common.collect.ImmutableList;
 
 import java.util.AbstractList;
 import java.util.Iterator;

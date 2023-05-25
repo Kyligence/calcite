@@ -26,10 +26,10 @@ import org.apache.calcite.sql.SqlJsonQueryWrapperBehavior;
 import org.apache.calcite.sql.SqlJsonValueEmptyOrErrorBehavior;
 import org.apache.calcite.util.BuiltInMethod;
 
+import org.apache.kylin.guava30.shaded.common.primitives.Longs;
+
 import com.jayway.jsonpath.InvalidJsonException;
 import com.jayway.jsonpath.PathNotFoundException;
-
-import io.kyligence.kap.guava20.shaded.common.primitives.Longs;
 
 import org.hamcrest.BaseMatcher;
 import org.hamcrest.Description;

@@ -18,7 +18,7 @@ package org.apache.calcite.sql.type;
 
 import org.apache.calcite.sql.SqlOperandCountRange;
 
-import io.kyligence.kap.guava20.shaded.common.base.Preconditions;
+import org.apache.kylin.guava30.shaded.common.base.Preconditions;
 
 /**
  * Helpers for {@link SqlOperandCountRange}.

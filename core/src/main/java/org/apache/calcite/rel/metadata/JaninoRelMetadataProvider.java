@@ -22,12 +22,12 @@ import org.apache.calcite.rel.RelNode;
 import org.apache.calcite.rel.metadata.janino.RelMetadataHandlerGeneratorUtil;
 import org.apache.calcite.util.Util;
 
-import io.kyligence.kap.guava20.shaded.common.annotations.VisibleForTesting;
-import io.kyligence.kap.guava20.shaded.common.cache.CacheBuilder;
-import io.kyligence.kap.guava20.shaded.common.cache.CacheLoader;
-import io.kyligence.kap.guava20.shaded.common.cache.LoadingCache;
-import io.kyligence.kap.guava20.shaded.common.collect.Multimap;
-import io.kyligence.kap.guava20.shaded.common.util.concurrent.UncheckedExecutionException;
+import org.apache.kylin.guava30.shaded.common.annotations.VisibleForTesting;
+import org.apache.kylin.guava30.shaded.common.cache.CacheBuilder;
+import org.apache.kylin.guava30.shaded.common.cache.CacheLoader;
+import org.apache.kylin.guava30.shaded.common.cache.LoadingCache;
+import org.apache.kylin.guava30.shaded.common.collect.Multimap;
+import org.apache.kylin.guava30.shaded.common.util.concurrent.UncheckedExecutionException;
 
 import org.apiguardian.api.API;
 import org.checkerframework.checker.nullness.qual.Nullable;

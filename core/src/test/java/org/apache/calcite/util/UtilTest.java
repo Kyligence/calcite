@@ -39,13 +39,13 @@ import org.apache.calcite.test.Matchers;
 import org.apache.calcite.test.Unsafe;
 import org.apache.calcite.testlib.annotations.LocaleEnUs;
 
-import io.kyligence.kap.guava20.shaded.common.collect.ImmutableList;
-import io.kyligence.kap.guava20.shaded.common.collect.ImmutableMap;
-import io.kyligence.kap.guava20.shaded.common.collect.ImmutableMultiset;
-import io.kyligence.kap.guava20.shaded.common.collect.ImmutableSet;
-import io.kyligence.kap.guava20.shaded.common.collect.Iterables;
-import io.kyligence.kap.guava20.shaded.common.collect.Lists;
-import io.kyligence.kap.guava20.shaded.common.primitives.Ints;
+import org.apache.kylin.guava30.shaded.common.collect.ImmutableList;
+import org.apache.kylin.guava30.shaded.common.collect.ImmutableMap;
+import org.apache.kylin.guava30.shaded.common.collect.ImmutableMultiset;
+import org.apache.kylin.guava30.shaded.common.collect.ImmutableSet;
+import org.apache.kylin.guava30.shaded.common.collect.Iterables;
+import org.apache.kylin.guava30.shaded.common.collect.Lists;
+import org.apache.kylin.guava30.shaded.common.primitives.Ints;
 
 import org.hamcrest.Description;
 import org.hamcrest.Matcher;

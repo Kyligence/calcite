@@ -67,7 +67,7 @@ import org.apache.calcite.util.TimestampString;
 import org.apache.calcite.util.Util;
 import org.apache.calcite.util.trace.CalciteTrace;
 
-import io.kyligence.kap.guava20.shaded.common.base.Throwables;
+import org.apache.kylin.guava30.shaded.common.base.Throwables;
 
 import org.checkerframework.checker.nullness.qual.Nullable;
 import org.junit.jupiter.api.Disabled;

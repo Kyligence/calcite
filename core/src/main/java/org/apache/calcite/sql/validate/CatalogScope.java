@@ -18,7 +18,7 @@ package org.apache.calcite.sql.validate;
 
 import org.apache.calcite.sql.SqlNode;
 
-import io.kyligence.kap.guava20.shaded.common.collect.ImmutableList;
+import org.apache.kylin.guava30.shaded.common.collect.ImmutableList;
 
 import java.util.List;
 

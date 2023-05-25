@@ -16,7 +16,7 @@
  */
 package org.apache.calcite.util;
 
-import io.kyligence.kap.guava20.shaded.common.io.CharSource;
+import org.apache.kylin.guava30.shaded.common.io.CharSource;
 
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;

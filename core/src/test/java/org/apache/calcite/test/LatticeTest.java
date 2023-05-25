@@ -30,8 +30,8 @@ import org.apache.calcite.test.schemata.foodmart.FoodmartSchema;
 import org.apache.calcite.util.ImmutableBitSet;
 import org.apache.calcite.util.TestUtil;
 
-import io.kyligence.kap.guava20.shaded.common.base.Throwables;
-import io.kyligence.kap.guava20.shaded.common.collect.ImmutableList;
+import org.apache.kylin.guava30.shaded.common.base.Throwables;
+import org.apache.kylin.guava30.shaded.common.collect.ImmutableList;
 
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Tag;

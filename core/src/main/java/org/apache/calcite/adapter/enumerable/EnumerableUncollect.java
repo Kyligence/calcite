@@ -29,7 +29,7 @@ import org.apache.calcite.runtime.SqlFunctions.FlatProductInputType;
 import org.apache.calcite.sql.type.MapSqlType;
 import org.apache.calcite.util.BuiltInMethod;
 
-import io.kyligence.kap.guava20.shaded.common.primitives.Ints;
+import org.apache.kylin.guava30.shaded.common.primitives.Ints;
 
 import java.util.ArrayList;
 import java.util.Collections;

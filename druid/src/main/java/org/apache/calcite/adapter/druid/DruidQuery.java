@@ -65,14 +65,14 @@ import org.apache.calcite.util.Litmus;
 import org.apache.calcite.util.Pair;
 import org.apache.calcite.util.Util;
 
+import org.apache.kylin.guava30.shaded.common.base.Strings;
+import org.apache.kylin.guava30.shaded.common.collect.ImmutableList;
+import org.apache.kylin.guava30.shaded.common.collect.ImmutableMap;
+import org.apache.kylin.guava30.shaded.common.collect.Iterables;
+import org.apache.kylin.guava30.shaded.common.collect.Maps;
+
 import com.fasterxml.jackson.core.JsonFactory;
 import com.fasterxml.jackson.core.JsonGenerator;
-
-import io.kyligence.kap.guava20.shaded.common.base.Strings;
-import io.kyligence.kap.guava20.shaded.common.collect.ImmutableList;
-import io.kyligence.kap.guava20.shaded.common.collect.ImmutableMap;
-import io.kyligence.kap.guava20.shaded.common.collect.Iterables;
-import io.kyligence.kap.guava20.shaded.common.collect.Maps;
 
 import org.checkerframework.checker.nullness.qual.Nullable;
 import org.joda.time.Interval;

@@ -163,7 +163,7 @@ public enum Hook {
   @SuppressWarnings("Guava")
   @Deprecated // to be removed before 2.0
   public <T, R> Closeable addThread(
-      final io.kyligence.kap.guava20.shaded.common.base.Function<T, R> handler) {
+      final org.apache.kylin.guava30.shaded.common.base.Function<T, R> handler) {
     return addThread((Consumer<T>) handler::apply);
   }
 
@@ -176,7 +176,7 @@ public enum Hook {
   /** @deprecated Use {@link #propertyJ}. */
   @SuppressWarnings("Guava")
   @Deprecated // return type will change in 2.0
-  public static <V> io.kyligence.kap.guava20.shaded.common.base.Function<Holder<V>, Void>
+  public static <V> org.apache.kylin.guava30.shaded.common.base.Function<Holder<V>, Void>
       property(final V v) {
     return holder -> {
       holder.set(v);

@@ -16,6 +16,8 @@
  */
 package org.apache.calcite.runtime;
 
+import org.apache.kylin.guava30.shaded.common.collect.ImmutableList;
+
 import com.google.uzaygezen.core.BacktrackingQueryBuilder;
 import com.google.uzaygezen.core.BitVector;
 import com.google.uzaygezen.core.BitVectorFactories;
@@ -28,8 +30,6 @@ import com.google.uzaygezen.core.SimpleRegionInspector;
 import com.google.uzaygezen.core.ZoomingSpaceVisitorAdapter;
 import com.google.uzaygezen.core.ranges.LongRange;
 import com.google.uzaygezen.core.ranges.LongRangeHome;
-
-import io.kyligence.kap.guava20.shaded.common.collect.ImmutableList;
 
 import java.util.ArrayList;
 import java.util.List;

@@ -29,8 +29,8 @@ import org.apache.calcite.util.Sarg;
 import org.apache.calcite.util.TimeString;
 import org.apache.calcite.util.Util;
 
-import io.kyligence.kap.guava20.shaded.common.collect.ImmutableMap;
-import io.kyligence.kap.guava20.shaded.common.collect.RangeSet;
+import org.apache.kylin.guava30.shaded.common.collect.ImmutableMap;
+import org.apache.kylin.guava30.shaded.common.collect.RangeSet;
 
 import org.checkerframework.checker.nullness.qual.Nullable;
 

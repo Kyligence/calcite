@@ -25,11 +25,11 @@ import org.apache.calcite.test.ElasticsearchChecker;
 import org.apache.calcite.util.Bug;
 import org.apache.calcite.util.TestUtil;
 
-import com.fasterxml.jackson.databind.node.ObjectNode;
+import org.apache.kylin.guava30.shaded.common.collect.ImmutableMap;
+import org.apache.kylin.guava30.shaded.common.io.LineProcessor;
+import org.apache.kylin.guava30.shaded.common.io.Resources;
 
-import io.kyligence.kap.guava20.shaded.common.collect.ImmutableMap;
-import io.kyligence.kap.guava20.shaded.common.io.LineProcessor;
-import io.kyligence.kap.guava20.shaded.common.io.Resources;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 
 import org.junit.jupiter.api.Assumptions;
 import org.junit.jupiter.api.BeforeAll;

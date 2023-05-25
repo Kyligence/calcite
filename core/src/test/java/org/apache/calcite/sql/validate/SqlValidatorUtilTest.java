@@ -23,8 +23,8 @@ import org.apache.calcite.sql.parser.SqlParserPos;
 import org.apache.calcite.test.Fixtures;
 import org.apache.calcite.test.SqlValidatorFixture;
 
-import io.kyligence.kap.guava20.shaded.common.collect.ImmutableList;
-import io.kyligence.kap.guava20.shaded.common.collect.Lists;
+import org.apache.kylin.guava30.shaded.common.collect.ImmutableList;
+import org.apache.kylin.guava30.shaded.common.collect.Lists;
 
 import org.junit.jupiter.api.Test;
 

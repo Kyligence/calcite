@@ -25,7 +25,7 @@ import org.apache.calcite.linq4j.function.Function2;
 import org.apache.calcite.linq4j.function.Functions;
 import org.apache.calcite.linq4j.function.Predicate2;
 
-import io.kyligence.kap.guava20.shaded.common.collect.Lists;
+import org.apache.kylin.guava30.shaded.common.collect.Lists;
 
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
@@ -37,10 +37,10 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Objects;
 
+import static org.apache.kylin.guava30.shaded.common.collect.Lists.newArrayList;
+
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.MatcherAssert.assertThat;
-
-import static io.kyligence.kap.guava20.shaded.common.collect.Lists.newArrayList;
 
 /**
  * Unit tests for {@link org.apache.calcite.runtime.Enumerables}.

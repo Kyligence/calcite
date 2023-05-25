@@ -26,10 +26,10 @@ import org.apache.calcite.sql.SqlOperator;
 import org.apache.calcite.sql.type.SqlTypeFamily;
 import org.apache.calcite.sql.type.SqlTypeName;
 
-import io.kyligence.kap.guava20.shaded.common.collect.ImmutableList;
-import io.kyligence.kap.guava20.shaded.common.collect.ImmutableMap;
-import io.kyligence.kap.guava20.shaded.common.io.BaseEncoding;
-import io.kyligence.kap.guava20.shaded.common.primitives.Chars;
+import org.apache.kylin.guava30.shaded.common.collect.ImmutableList;
+import org.apache.kylin.guava30.shaded.common.collect.ImmutableMap;
+import org.apache.kylin.guava30.shaded.common.io.BaseEncoding;
+import org.apache.kylin.guava30.shaded.common.primitives.Chars;
 
 import org.checkerframework.checker.nullness.qual.Nullable;
 

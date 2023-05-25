@@ -51,7 +51,7 @@ import org.apache.calcite.util.graph.DirectedGraph;
 import org.apache.calcite.util.graph.Graphs;
 import org.apache.calcite.util.graph.TopologicalOrderIterator;
 
-import io.kyligence.kap.guava20.shaded.common.collect.ImmutableList;
+import org.apache.kylin.guava30.shaded.common.collect.ImmutableList;
 
 import org.checkerframework.checker.nullness.qual.Nullable;
 
@@ -70,9 +70,9 @@ import java.util.Set;
 
 import static org.apache.calcite.linq4j.Nullness.castNonNull;
 
-import static java.util.Objects.requireNonNull;
+import static org.apache.kylin.guava30.shaded.common.base.Preconditions.checkArgument;
 
-import static io.kyligence.kap.guava20.shaded.common.base.Preconditions.checkArgument;
+import static java.util.Objects.requireNonNull;
 
 /**
  * HepPlanner is a heuristic implementation of the {@link RelOptPlanner}

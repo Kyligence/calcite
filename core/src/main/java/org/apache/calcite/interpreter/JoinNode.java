@@ -19,7 +19,7 @@ package org.apache.calcite.interpreter;
 import org.apache.calcite.rel.core.Join;
 import org.apache.calcite.rel.core.JoinRelType;
 
-import io.kyligence.kap.guava20.shaded.common.collect.ImmutableList;
+import org.apache.kylin.guava30.shaded.common.collect.ImmutableList;
 
 import org.checkerframework.checker.nullness.qual.Nullable;
 

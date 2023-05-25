@@ -18,7 +18,7 @@ package org.apache.calcite.adapter.elasticsearch;
 
 import org.apache.calcite.util.TestUtil;
 
-import io.kyligence.kap.guava20.shaded.common.base.Preconditions;
+import org.apache.kylin.guava30.shaded.common.base.Preconditions;
 
 import org.elasticsearch.action.admin.cluster.node.info.NodeInfo;
 import org.elasticsearch.action.admin.cluster.node.info.NodesInfoResponse;

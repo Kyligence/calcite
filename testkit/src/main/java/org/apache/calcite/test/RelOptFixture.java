@@ -45,7 +45,7 @@ import org.apache.calcite.test.catalog.MockCatalogReaderDynamic;
 import org.apache.calcite.tools.RelBuilder;
 import org.apache.calcite.util.Closer;
 
-import io.kyligence.kap.guava20.shaded.common.collect.ImmutableMap;
+import org.apache.kylin.guava30.shaded.common.collect.ImmutableMap;
 
 import org.checkerframework.checker.nullness.qual.Nullable;
 

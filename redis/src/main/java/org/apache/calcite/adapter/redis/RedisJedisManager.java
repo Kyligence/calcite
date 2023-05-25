@@ -20,12 +20,11 @@ import org.apache.calcite.util.trace.CalciteTrace;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.pool2.impl.GenericObjectPoolConfig;
-
-import io.kyligence.kap.guava20.shaded.common.cache.CacheBuilder;
-import io.kyligence.kap.guava20.shaded.common.cache.CacheLoader;
-import io.kyligence.kap.guava20.shaded.common.cache.LoadingCache;
-import io.kyligence.kap.guava20.shaded.common.cache.RemovalListener;
-import io.kyligence.kap.guava20.shaded.common.cache.RemovalNotification;
+import org.apache.kylin.guava30.shaded.common.cache.CacheBuilder;
+import org.apache.kylin.guava30.shaded.common.cache.CacheLoader;
+import org.apache.kylin.guava30.shaded.common.cache.LoadingCache;
+import org.apache.kylin.guava30.shaded.common.cache.RemovalListener;
+import org.apache.kylin.guava30.shaded.common.cache.RemovalNotification;
 
 import org.slf4j.Logger;
 

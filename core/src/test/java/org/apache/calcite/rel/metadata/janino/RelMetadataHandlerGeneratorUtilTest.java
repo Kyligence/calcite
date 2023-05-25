@@ -21,7 +21,7 @@ import org.apache.calcite.rel.metadata.DefaultRelMetadataProvider;
 import org.apache.calcite.rel.metadata.MetadataHandler;
 import org.apache.calcite.util.Sources;
 
-import io.kyligence.kap.guava20.shaded.common.io.CharStreams;
+import org.apache.kylin.guava30.shaded.common.io.CharStreams;
 
 import org.junit.jupiter.api.Test;
 

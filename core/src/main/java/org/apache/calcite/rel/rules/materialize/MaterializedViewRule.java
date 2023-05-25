@@ -56,13 +56,13 @@ import org.apache.calcite.util.graph.DirectedGraph;
 import org.apache.calcite.util.mapping.IntPair;
 import org.apache.calcite.util.mapping.Mapping;
 
-import io.kyligence.kap.guava20.shaded.common.collect.ArrayListMultimap;
-import io.kyligence.kap.guava20.shaded.common.collect.BiMap;
-import io.kyligence.kap.guava20.shaded.common.collect.HashBiMap;
-import io.kyligence.kap.guava20.shaded.common.collect.ImmutableList;
-import io.kyligence.kap.guava20.shaded.common.collect.ImmutableMap;
-import io.kyligence.kap.guava20.shaded.common.collect.Multimap;
-import io.kyligence.kap.guava20.shaded.common.collect.Sets;
+import org.apache.kylin.guava30.shaded.common.collect.ArrayListMultimap;
+import org.apache.kylin.guava30.shaded.common.collect.BiMap;
+import org.apache.kylin.guava30.shaded.common.collect.HashBiMap;
+import org.apache.kylin.guava30.shaded.common.collect.ImmutableList;
+import org.apache.kylin.guava30.shaded.common.collect.ImmutableMap;
+import org.apache.kylin.guava30.shaded.common.collect.Multimap;
+import org.apache.kylin.guava30.shaded.common.collect.Sets;
 
 import org.checkerframework.checker.nullness.qual.Nullable;
 

@@ -20,9 +20,9 @@ import org.apache.calcite.adapter.jdbc.JdbcTable;
 import org.apache.calcite.materialize.SqlStatisticProvider;
 import org.apache.calcite.plan.RelOptTable;
 
-import io.kyligence.kap.guava20.shaded.common.collect.ImmutableList;
-import io.kyligence.kap.guava20.shaded.common.collect.ImmutableMap;
-import io.kyligence.kap.guava20.shaded.common.collect.ImmutableMultimap;
+import org.apache.kylin.guava30.shaded.common.collect.ImmutableList;
+import org.apache.kylin.guava30.shaded.common.collect.ImmutableMap;
+import org.apache.kylin.guava30.shaded.common.collect.ImmutableMultimap;
 
 import java.util.Arrays;
 import java.util.List;

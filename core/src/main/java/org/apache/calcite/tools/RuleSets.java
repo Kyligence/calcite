@@ -18,7 +18,7 @@ package org.apache.calcite.tools;
 
 import org.apache.calcite.plan.RelOptRule;
 
-import io.kyligence.kap.guava20.shaded.common.collect.ImmutableList;
+import org.apache.kylin.guava30.shaded.common.collect.ImmutableList;
 
 import org.checkerframework.checker.nullness.qual.Nullable;
 

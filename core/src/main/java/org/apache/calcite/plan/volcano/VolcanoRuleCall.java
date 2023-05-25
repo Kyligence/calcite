@@ -26,9 +26,9 @@ import org.apache.calcite.rel.RelNode;
 import org.apache.calcite.rel.rules.SubstitutionRule;
 import org.apache.calcite.rel.rules.TransformationRule;
 
-import io.kyligence.kap.guava20.shaded.common.collect.ImmutableList;
-import io.kyligence.kap.guava20.shaded.common.collect.ImmutableMap;
-import io.kyligence.kap.guava20.shaded.common.collect.Lists;
+import org.apache.kylin.guava30.shaded.common.collect.ImmutableList;
+import org.apache.kylin.guava30.shaded.common.collect.ImmutableMap;
+import org.apache.kylin.guava30.shaded.common.collect.Lists;
 
 import org.checkerframework.checker.nullness.qual.Nullable;
 

@@ -34,7 +34,7 @@ dependencies {
 
     implementation("com.fasterxml.jackson.core:jackson-core")
     implementation("com.fasterxml.jackson.core:jackson-databind")
-    implementation("io.kyligence.ke:kap-external-guava20")
+    implementation("org.apache.kylin:kylin-external-guava30")
     implementation("org.apache.calcite.avatica:avatica-core")
 
     testImplementation("sqlline:sqlline")

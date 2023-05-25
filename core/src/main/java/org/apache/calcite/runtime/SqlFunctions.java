@@ -42,9 +42,8 @@ import org.apache.calcite.util.Util;
 
 import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.codec.language.Soundex;
-
-import io.kyligence.kap.guava20.shaded.common.base.Splitter;
-import io.kyligence.kap.guava20.shaded.common.base.Strings;
+import org.apache.kylin.guava30.shaded.common.base.Splitter;
+import org.apache.kylin.guava30.shaded.common.base.Strings;
 
 import org.checkerframework.checker.nullness.qual.Nullable;
 import org.checkerframework.checker.nullness.qual.PolyNull;

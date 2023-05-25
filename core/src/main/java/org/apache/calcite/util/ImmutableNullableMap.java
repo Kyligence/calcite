@@ -16,8 +16,8 @@
  */
 package org.apache.calcite.util;
 
-import io.kyligence.kap.guava20.shaded.common.collect.ImmutableMap;
-import io.kyligence.kap.guava20.shaded.common.collect.ImmutableSortedMap;
+import org.apache.kylin.guava30.shaded.common.collect.ImmutableMap;
+import org.apache.kylin.guava30.shaded.common.collect.ImmutableSortedMap;
 
 import java.util.AbstractMap;
 import java.util.Collections;

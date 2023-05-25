@@ -19,8 +19,8 @@ package org.apache.calcite.plan;
 import org.apache.calcite.rel.RelNode;
 import org.apache.calcite.rel.convert.ConverterRule;
 
-import io.kyligence.kap.guava20.shaded.common.collect.Interner;
-import io.kyligence.kap.guava20.shaded.common.collect.Interners;
+import org.apache.kylin.guava30.shaded.common.collect.Interner;
+import org.apache.kylin.guava30.shaded.common.collect.Interners;
 
 import org.checkerframework.checker.nullness.qual.Nullable;
 

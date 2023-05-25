@@ -26,7 +26,7 @@ plugins {
 dependencies {
     api(project(":core"))
     api(project(":linq4j"))
-    api("io.kyligence.ke:kap-external-guava20")
+    api("org.apache.kylin:kylin-external-guava30")
     api("org.apache.pig:pig::h2")
 
     implementation("org.apache.calcite.avatica:avatica-core")

@@ -28,7 +28,7 @@ dependencies {
     api("org.elasticsearch.client:elasticsearch-rest-client")
     api("org.slf4j:slf4j-api")
 
-    implementation("io.kyligence.ke:kap-external-guava20")
+    implementation("org.apache.kylin:kylin-external-guava30")
     implementation("org.apache.calcite.avatica:avatica-core")
     implementation("org.apache.httpcomponents:httpasyncclient")
     implementation("org.apache.httpcomponents:httpclient")

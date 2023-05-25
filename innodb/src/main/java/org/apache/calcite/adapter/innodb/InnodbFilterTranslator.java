@@ -31,14 +31,13 @@ import org.apache.calcite.util.TimeString;
 import org.apache.calcite.util.TimestampString;
 
 import org.apache.commons.collections.CollectionUtils;
+import org.apache.kylin.guava30.shaded.common.collect.HashMultimap;
+import org.apache.kylin.guava30.shaded.common.collect.Lists;
+import org.apache.kylin.guava30.shaded.common.collect.Multimap;
 
 import com.alibaba.innodb.java.reader.comparator.ComparisonOperator;
 import com.alibaba.innodb.java.reader.schema.KeyMeta;
 import com.alibaba.innodb.java.reader.schema.TableDef;
-
-import io.kyligence.kap.guava20.shaded.common.collect.HashMultimap;
-import io.kyligence.kap.guava20.shaded.common.collect.Lists;
-import io.kyligence.kap.guava20.shaded.common.collect.Multimap;
 
 import org.checkerframework.checker.nullness.qual.Nullable;
 

@@ -57,13 +57,13 @@ import org.apache.calcite.util.graph.DirectedGraph;
 import org.apache.calcite.util.graph.TopologicalOrderIterator;
 import org.apache.calcite.util.mapping.IntPair;
 
-import io.kyligence.kap.guava20.shaded.common.base.Preconditions;
-import io.kyligence.kap.guava20.shaded.common.collect.ImmutableList;
-import io.kyligence.kap.guava20.shaded.common.collect.ImmutableListMultimap;
-import io.kyligence.kap.guava20.shaded.common.collect.ImmutableSortedSet;
-import io.kyligence.kap.guava20.shaded.common.collect.LinkedHashMultimap;
-import io.kyligence.kap.guava20.shaded.common.collect.Multimap;
-import io.kyligence.kap.guava20.shaded.common.collect.Ordering;
+import org.apache.kylin.guava30.shaded.common.base.Preconditions;
+import org.apache.kylin.guava30.shaded.common.collect.ImmutableList;
+import org.apache.kylin.guava30.shaded.common.collect.ImmutableListMultimap;
+import org.apache.kylin.guava30.shaded.common.collect.ImmutableSortedSet;
+import org.apache.kylin.guava30.shaded.common.collect.LinkedHashMultimap;
+import org.apache.kylin.guava30.shaded.common.collect.Multimap;
+import org.apache.kylin.guava30.shaded.common.collect.Ordering;
 
 import org.checkerframework.checker.initialization.qual.UnknownInitialization;
 import org.checkerframework.checker.nullness.qual.MonotonicNonNull;

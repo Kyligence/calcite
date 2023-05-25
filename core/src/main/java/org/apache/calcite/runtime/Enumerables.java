@@ -66,8 +66,8 @@ public class Enumerables {
 
   @SuppressWarnings("Guava")
   @Deprecated // to be removed before 2.0
-  public static io.kyligence.kap.guava20.shaded.common.base.Supplier<Enumerable<Row>> toRow(
-      final io.kyligence.kap.guava20.shaded.common.base.Supplier<Enumerable<@Nullable Object[]>>
+  public static org.apache.kylin.guava30.shaded.common.base.Supplier<Enumerable<Row>> toRow(
+      final org.apache.kylin.guava30.shaded.common.base.Supplier<Enumerable<@Nullable Object[]>>
       supplier) {
     return () -> toRow(supplier.get());
   }

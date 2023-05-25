@@ -33,10 +33,10 @@ import org.apache.calcite.linq4j.tree.ParameterExpression;
 import org.apache.calcite.linq4j.tree.Shuttle;
 import org.apache.calcite.linq4j.tree.Types;
 
-import io.kyligence.kap.guava20.shaded.common.collect.ImmutableList;
-import io.kyligence.kap.guava20.shaded.common.collect.ImmutableMap;
-import io.kyligence.kap.guava20.shaded.common.collect.ImmutableSet;
-import io.kyligence.kap.guava20.shaded.common.collect.Sets;
+import org.apache.kylin.guava30.shaded.common.collect.ImmutableList;
+import org.apache.kylin.guava30.shaded.common.collect.ImmutableMap;
+import org.apache.kylin.guava30.shaded.common.collect.ImmutableSet;
+import org.apache.kylin.guava30.shaded.common.collect.Sets;
 
 import org.junit.jupiter.api.Test;
 
@@ -1593,17 +1593,17 @@ public class ExpressionTest {
   }
 
   @Test void testEmptyMapLiteral() throws Exception {
-    assertEquals("io.kyligence.kap.guava20.shaded.common.collect.ImmutableMap.of()",
+    assertEquals("org.apache.kylin.guava30.shaded.common.collect.ImmutableMap.of()",
         Expressions.toString(Expressions.constant(new HashMap())));
   }
 
   @Test void testOneElementMapLiteral() throws Exception {
-    assertEquals("io.kyligence.kap.guava20.shaded.common.collect.ImmutableMap.of(\"abc\", 42)",
+    assertEquals("org.apache.kylin.guava30.shaded.common.collect.ImmutableMap.of(\"abc\", 42)",
         Expressions.toString(Expressions.constant(Collections.singletonMap("abc", 42))));
   }
 
   @Test void testTwoElementsMapLiteral() throws Exception {
-    assertEquals("io.kyligence.kap.guava20.shaded.common.collect.ImmutableMap.of(\"abc\", 42,\n"
+    assertEquals("org.apache.kylin.guava30.shaded.common.collect.ImmutableMap.of(\"abc\", 42,\n"
             + "\"def\", 43)",
         Expressions.toString(Expressions.constant(ImmutableMap.of("abc", 42, "def", 43))));
   }
@@ -1613,7 +1613,7 @@ public class ExpressionTest {
     for (int i = 0; i < 10; i++) {
       map.put("key_" + i, "value_" + i);
     }
-    assertEquals("io.kyligence.kap.guava20.shaded.common.collect.ImmutableMap.builder()"
+    assertEquals("org.apache.kylin.guava30.shaded.common.collect.ImmutableMap.builder()"
             + ".put(\"key_0\", \"value_0\")\n"
             + ".put(\"key_1\", \"value_1\")\n"
             + ".put(\"key_2\", \"value_2\")\n"
@@ -1634,17 +1634,17 @@ public class ExpressionTest {
   }
 
   @Test void testEmptySetLiteral() throws Exception {
-    assertEquals("io.kyligence.kap.guava20.shaded.common.collect.ImmutableSet.of()",
+    assertEquals("org.apache.kylin.guava30.shaded.common.collect.ImmutableSet.of()",
         Expressions.toString(Expressions.constant(new HashSet())));
   }
 
   @Test void testOneElementSetLiteral() throws Exception {
-    assertEquals("io.kyligence.kap.guava20.shaded.common.collect.ImmutableSet.of(1)",
+    assertEquals("org.apache.kylin.guava30.shaded.common.collect.ImmutableSet.of(1)",
         Expressions.toString(Expressions.constant(Sets.newHashSet(1))));
   }
 
   @Test void testTwoElementsSetLiteral() throws Exception {
-    assertEquals("io.kyligence.kap.guava20.shaded.common.collect.ImmutableSet.of(1,2)",
+    assertEquals("org.apache.kylin.guava30.shaded.common.collect.ImmutableSet.of(1,2)",
         Expressions.toString(Expressions.constant(ImmutableSet.of(1, 2))));
   }
 
@@ -1653,7 +1653,7 @@ public class ExpressionTest {
     for (int i = 0; i < 10; i++) {
       set.add(i);
     }
-    assertEquals("io.kyligence.kap.guava20.shaded.common.collect.ImmutableSet.builder().add(0)\n"
+    assertEquals("org.apache.kylin.guava30.shaded.common.collect.ImmutableSet.builder().add(0)\n"
             + ".add(1)\n"
             + ".add(2)\n"
             + ".add(3)\n"
@@ -1671,7 +1671,7 @@ public class ExpressionTest {
     for (Integer i = 0; i < 10; i++) {
       set.add(i);
     }
-    assertEquals("io.kyligence.kap.guava20.shaded.common.collect.ImmutableSet.builder().add(0)\n"
+    assertEquals("org.apache.kylin.guava30.shaded.common.collect.ImmutableSet.builder().add(0)\n"
             + ".add(1)\n"
             + ".add(2)\n"
             + ".add(3)\n"
@@ -1689,7 +1689,7 @@ public class ExpressionTest {
     for (int i = 10; i > 0; i--) {
       set.add(String.valueOf(i));
     }
-    assertEquals("io.kyligence.kap.guava20.shaded.common.collect.ImmutableSet.builder()"
+    assertEquals("org.apache.kylin.guava30.shaded.common.collect.ImmutableSet.builder()"
             + ".add(\"10\")\n"
             + ".add(\"9\")\n"
             + ".add(\"8\")\n"

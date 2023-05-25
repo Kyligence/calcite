@@ -18,9 +18,9 @@ package org.apache.calcite.util;
 
 import org.apache.calcite.runtime.Utilities;
 
-import io.kyligence.kap.guava20.shaded.common.collect.ImmutableList;
-import io.kyligence.kap.guava20.shaded.common.collect.Iterables;
-import io.kyligence.kap.guava20.shaded.common.primitives.Ints;
+import org.apache.kylin.guava30.shaded.common.collect.ImmutableList;
+import org.apache.kylin.guava30.shaded.common.collect.Iterables;
+import org.apache.kylin.guava30.shaded.common.primitives.Ints;
 
 import org.junit.jupiter.api.Test;
 

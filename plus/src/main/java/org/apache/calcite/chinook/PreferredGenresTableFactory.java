@@ -26,9 +26,9 @@ import org.apache.calcite.schema.SchemaPlus;
 import org.apache.calcite.schema.TableFactory;
 import org.apache.calcite.sql.type.SqlTypeName;
 
-import io.kyligence.kap.guava20.shaded.common.collect.ContiguousSet;
-import io.kyligence.kap.guava20.shaded.common.collect.DiscreteDomain;
-import io.kyligence.kap.guava20.shaded.common.collect.Range;
+import org.apache.kylin.guava30.shaded.common.collect.ContiguousSet;
+import org.apache.kylin.guava30.shaded.common.collect.DiscreteDomain;
+import org.apache.kylin.guava30.shaded.common.collect.Range;
 
 import org.checkerframework.checker.nullness.qual.Nullable;
 

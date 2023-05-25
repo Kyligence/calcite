@@ -38,16 +38,16 @@ import org.apache.calcite.util.RangeSets;
 import org.apache.calcite.util.Sarg;
 import org.apache.calcite.util.Util;
 
-import io.kyligence.kap.guava20.shaded.common.collect.ArrayListMultimap;
-import io.kyligence.kap.guava20.shaded.common.collect.BoundType;
-import io.kyligence.kap.guava20.shaded.common.collect.ImmutableList;
-import io.kyligence.kap.guava20.shaded.common.collect.ImmutableRangeSet;
-import io.kyligence.kap.guava20.shaded.common.collect.Iterables;
-import io.kyligence.kap.guava20.shaded.common.collect.Multimap;
-import io.kyligence.kap.guava20.shaded.common.collect.Range;
-import io.kyligence.kap.guava20.shaded.common.collect.RangeSet;
-import io.kyligence.kap.guava20.shaded.common.collect.Sets;
-import io.kyligence.kap.guava20.shaded.common.collect.TreeRangeSet;
+import org.apache.kylin.guava30.shaded.common.collect.ArrayListMultimap;
+import org.apache.kylin.guava30.shaded.common.collect.BoundType;
+import org.apache.kylin.guava30.shaded.common.collect.ImmutableList;
+import org.apache.kylin.guava30.shaded.common.collect.ImmutableRangeSet;
+import org.apache.kylin.guava30.shaded.common.collect.Iterables;
+import org.apache.kylin.guava30.shaded.common.collect.Multimap;
+import org.apache.kylin.guava30.shaded.common.collect.Range;
+import org.apache.kylin.guava30.shaded.common.collect.RangeSet;
+import org.apache.kylin.guava30.shaded.common.collect.Sets;
+import org.apache.kylin.guava30.shaded.common.collect.TreeRangeSet;
 
 import org.checkerframework.checker.nullness.qual.Nullable;
 

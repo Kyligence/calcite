@@ -22,9 +22,8 @@ import org.apache.calcite.test.CalciteAssert;
 
 import org.apache.geode.cache.Cache;
 import org.apache.geode.cache.Region;
-
-import io.kyligence.kap.guava20.shaded.common.collect.ImmutableList;
-import io.kyligence.kap.guava20.shaded.common.collect.ImmutableMap;
+import org.apache.kylin.guava30.shaded.common.collect.ImmutableList;
+import org.apache.kylin.guava30.shaded.common.collect.ImmutableMap;
 
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;

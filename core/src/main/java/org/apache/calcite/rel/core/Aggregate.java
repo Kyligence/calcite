@@ -46,9 +46,9 @@ import org.apache.calcite.util.Litmus;
 import org.apache.calcite.util.Pair;
 import org.apache.calcite.util.Util;
 
-import io.kyligence.kap.guava20.shaded.common.base.Preconditions;
-import io.kyligence.kap.guava20.shaded.common.collect.ImmutableList;
-import io.kyligence.kap.guava20.shaded.common.math.IntMath;
+import org.apache.kylin.guava30.shaded.common.base.Preconditions;
+import org.apache.kylin.guava30.shaded.common.collect.ImmutableList;
+import org.apache.kylin.guava30.shaded.common.math.IntMath;
 
 import org.checkerframework.checker.nullness.qual.Nullable;
 
@@ -85,17 +85,17 @@ public abstract class Aggregate extends SingleRel implements Hintable {
 
   @SuppressWarnings("Guava")
   @Deprecated // to be converted to Java Predicate before 2.0
-  public static final io.kyligence.kap.guava20.shaded.common.base.Predicate<Aggregate> IS_SIMPLE =
+  public static final org.apache.kylin.guava30.shaded.common.base.Predicate<Aggregate> IS_SIMPLE =
       Aggregate::isSimple;
 
   @SuppressWarnings("Guava")
   @Deprecated // to be converted to Java Predicate before 2.0
-  public static final io.kyligence.kap.guava20.shaded.common.base.Predicate<Aggregate>
+  public static final org.apache.kylin.guava30.shaded.common.base.Predicate<Aggregate>
       NO_INDICATOR = Aggregate::noIndicator;
 
   @SuppressWarnings("Guava")
   @Deprecated // to be converted to Java Predicate before 2.0
-  public static final io.kyligence.kap.guava20.shaded.common.base.Predicate<Aggregate>
+  public static final org.apache.kylin.guava30.shaded.common.base.Predicate<Aggregate>
       IS_NOT_GRAND_TOTAL = Aggregate::isNotGrandTotal;
 
   /** Used internally; will removed when {@link #indicator} is removed,

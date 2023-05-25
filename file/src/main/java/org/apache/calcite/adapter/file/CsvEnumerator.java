@@ -28,10 +28,9 @@ import org.apache.calcite.util.Source;
 import org.apache.calcite.util.trace.CalciteLogger;
 
 import org.apache.commons.lang3.time.FastDateFormat;
+import org.apache.kylin.guava30.shaded.common.annotations.VisibleForTesting;
 
 import au.com.bytecode.opencsv.CSVReader;
-
-import io.kyligence.kap.guava20.shaded.common.annotations.VisibleForTesting;
 
 import org.checkerframework.checker.nullness.qual.Nullable;
 import org.slf4j.LoggerFactory;
@@ -52,7 +51,7 @@ import java.util.regex.Pattern;
 
 import static org.apache.calcite.linq4j.Nullness.castNonNull;
 
-import static io.kyligence.kap.guava20.shaded.common.base.Preconditions.checkArgument;
+import static org.apache.kylin.guava30.shaded.common.base.Preconditions.checkArgument;
 
 /** Enumerator that reads from a CSV file.
  *

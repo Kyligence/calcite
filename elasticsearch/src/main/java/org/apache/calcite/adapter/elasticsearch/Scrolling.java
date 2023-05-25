@@ -16,11 +16,11 @@
  */
 package org.apache.calcite.adapter.elasticsearch;
 
-import com.fasterxml.jackson.databind.node.ObjectNode;
+import org.apache.kylin.guava30.shaded.common.base.Preconditions;
+import org.apache.kylin.guava30.shaded.common.collect.AbstractSequentialIterator;
+import org.apache.kylin.guava30.shaded.common.collect.Iterators;
 
-import io.kyligence.kap.guava20.shaded.common.base.Preconditions;
-import io.kyligence.kap.guava20.shaded.common.collect.AbstractSequentialIterator;
-import io.kyligence.kap.guava20.shaded.common.collect.Iterators;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 
 import java.util.Collections;
 import java.util.Iterator;

@@ -31,11 +31,11 @@ import org.apache.calcite.util.TimestampString;
 import org.apache.calcite.util.Util;
 import org.apache.calcite.util.trace.CalciteTrace;
 
-import io.kyligence.kap.guava20.shaded.common.collect.BoundType;
-import io.kyligence.kap.guava20.shaded.common.collect.ImmutableList;
-import io.kyligence.kap.guava20.shaded.common.collect.ImmutableRangeSet;
-import io.kyligence.kap.guava20.shaded.common.collect.Range;
-import io.kyligence.kap.guava20.shaded.common.collect.TreeRangeSet;
+import org.apache.kylin.guava30.shaded.common.collect.BoundType;
+import org.apache.kylin.guava30.shaded.common.collect.ImmutableList;
+import org.apache.kylin.guava30.shaded.common.collect.ImmutableRangeSet;
+import org.apache.kylin.guava30.shaded.common.collect.Range;
+import org.apache.kylin.guava30.shaded.common.collect.TreeRangeSet;
 
 import org.checkerframework.checker.nullness.qual.Nullable;
 import org.joda.time.Interval;

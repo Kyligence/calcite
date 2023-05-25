@@ -26,7 +26,7 @@ dependencies {
     api(project(":linq4j"))
     api("org.checkerframework:checker-qual")
 
-    implementation("io.kyligence.ke:kap-external-guava20")
+    implementation("org.apache.kylin:kylin-external-guava30")
     implementation("com.joestelmach:natty")
     implementation("net.sf.opencsv:opencsv")
     implementation("org.apache.calcite.avatica:avatica-core")

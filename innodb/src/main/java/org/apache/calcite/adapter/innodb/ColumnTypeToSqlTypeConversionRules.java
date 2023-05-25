@@ -18,9 +18,9 @@ package org.apache.calcite.adapter.innodb;
 
 import org.apache.calcite.sql.type.SqlTypeName;
 
-import com.alibaba.innodb.java.reader.column.ColumnType;
+import org.apache.kylin.guava30.shaded.common.collect.ImmutableMap;
 
-import io.kyligence.kap.guava20.shaded.common.collect.ImmutableMap;
+import com.alibaba.innodb.java.reader.column.ColumnType;
 
 import java.util.Map;
 
