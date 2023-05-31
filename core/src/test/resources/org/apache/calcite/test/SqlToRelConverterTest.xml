@@ -725,7 +725,7 @@ GROUP BY GROUPING SETS ((empno, derived_col),(empno))]]>
         <Resource name="plan">
             <![CDATA[
 LogicalAggregate(group=[{0, 1}], groups=[[{0, 1}, {0}]])
-  LogicalProject(EMPNO=[$0], DERIVED_COL=[CASE(SEARCH($1, Sarg['Eric', 'Fred']:CHAR(4)), 'CEO  ', 'Other')])
+  LogicalProject(EMPNO=[$0], DERIVED_COL=[CASE(OR(=($1, 'Fred'), =($1, 'Eric')), CAST('CEO'):CHAR(5) CHARACTER SET "ISO-8859-1" COLLATE "ISO-8859-1$en_US$primary" NOT NULL, 'Other')])
     LogicalTableScan(table=[[CATALOG, SALES, EMP]])
 ]]>
         </Resource>
@@ -743,7 +743,7 @@ GROUP BY GROUPING SETS (
         <Resource name="plan">
             <![CDATA[
 LogicalAggregate(group=[{0, 1}], groups=[[{0, 1}, {0}]])
-  LogicalProject(EMPNO=[$0], EXPR$1=[CASE(SEARCH($1, Sarg['Eric', 'Fred']:CHAR(4)), 'Manager', 'Other  ')])
+  LogicalProject(EMPNO=[$0], EXPR$1=[CASE(OR(=($1, 'Fred'), =($1, 'Eric')), 'Manager', CAST('Other'):CHAR(7) CHARACTER SET "ISO-8859-1" COLLATE "ISO-8859-1$en_US$primary" NOT NULL)])
     LogicalTableScan(table=[[CATALOG, SALES, EMP]])
 ]]>
         </Resource>
