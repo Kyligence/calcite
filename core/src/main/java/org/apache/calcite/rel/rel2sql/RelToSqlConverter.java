@@ -102,7 +102,6 @@ import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.Deque;
 import java.util.LinkedHashSet;
 import java.util.List;
@@ -833,12 +832,12 @@ public class RelToSqlConverter extends SqlImplementor
       if (isEmpty) {
         // In case of empty values, we need to build:
         //   SELECT *
-        //   FROM (VALUES (NULL, NULL ...)) AS T (C1, C2 ...)
+        //   FROM (VALUES (CAST(NULL AS Type), CAST(NULL AS Type)...)) AS T (C1, C2 ...)
         //   WHERE 1 = 0
-        selects.add(
-            SqlInternalOperators.ANONYMOUS_ROW.createCall(POS,
-                Collections.nCopies(fieldNames.size(),
-                    SqlLiteral.createNull(POS))));
+        List<SqlNode> nodes = e.getRowType().getFieldList().stream().map(
+            field -> castNullType(SqlLiteral.createNull(POS), field.getType())
+        ).collect(Collectors.toList());
+        selects.add(SqlInternalOperators.ANONYMOUS_ROW.createCall(POS, nodes));
       } else {
         for (List<RexLiteral> tuple : e.getTuples()) {
           selects.add(
