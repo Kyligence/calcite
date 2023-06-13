@@ -5584,7 +5584,7 @@ class RelToSqlConverterTest {
         + "FROM \"DUAL\"\n"
         + "WHERE 1 = 0";
     final String expectedPostgresql = "SELECT *\n"
-        + "FROM (VALUES (NULL, NULL)) AS \"t\" (\"X\", \"Y\")\n"
+        + "FROM (VALUES (CAST(NULL AS INTEGER), CAST(NULL AS CHAR(2)))) AS \"t\" (\"X\", \"Y\")\n"
         + "WHERE 1 = 0";
     final String expectedClickHouse = expectedMysql;
     sql(sql)
@@ -6289,7 +6289,7 @@ class RelToSqlConverterTest {
         + "FROM \"foodmart\".\"employee\"\n"
         + "INNER JOIN (SELECT \"t1\".\"department_id\" AS \"department_id0\", MIN(\"t1\".\"department_id\") AS \"EXPR$0\"\n"
         + "FROM (SELECT *\n"
-        + "FROM (VALUES (NULL, NULL)) AS \"t\" (\"department_id\", \"department_description\")\n"
+        + "FROM (VALUES (CAST(NULL AS INTEGER), CAST(NULL AS VARCHAR(30) CHARACTER SET \"ISO-8859-1\"))) AS \"t\" (\"department_id\", \"department_description\")\n"
         + "WHERE 1 = 0) AS \"t\",\n"
         + "(SELECT \"department_id\"\n"
         + "FROM \"foodmart\".\"employee\"\n"
