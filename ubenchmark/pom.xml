@@ -20,7 +20,7 @@ limitations under the License.
   <parent>
     <groupId>org.apache.calcite</groupId>
     <artifactId>calcite</artifactId>
-    <version>1.116.0-kylin-4.x-r028</version>
+    <version>1.116.0-kylin-4.x-r029</version>
   </parent>
 
   <properties>
