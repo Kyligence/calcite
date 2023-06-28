@@ -4371,7 +4371,7 @@ public class JdbcTest {
             + "        EnumerableTableScan(table=[[scott, EMP]])");
     CalciteAssert.that()
         .with(CalciteAssert.Config.REGULAR)
-        .query("select deptno, group_id() + 1 as g, group_id() as rawg, count(*) as c\n"
+        .query("select deptno, group_id() + 1 as g, count(*) as c\n"
             + "from (VALUES(10), (20), (30)) AS tst(deptno)\n"
             + "group by grouping sets (deptno, deptno, deptno, (), ())\n"
             + "having group_id() > 0")
@@ -4384,7 +4384,7 @@ public class JdbcTest {
             "DEPTNO=null; G=2; C=3");
   }
 
-  @Test public void testDuplicateGroupByGroupingSets() {
+  @Test public void testDuplicateGroupByGroupingSetsWithGroupId() {
     CalciteAssert.that()
         .with(CalciteAssert.Config.SCOTT)
         .query("select deptno, name, group_id() + 1 as g, count(*) as c\n" +
@@ -4404,7 +4404,7 @@ public class JdbcTest {
             + "DEPTNO=30; NAME=a; G=3; C=1");
   }
 
-  @Test public void ttt() {
+  @Test public void testDuplicateGroupByGroupingSets() {
     CalciteAssert.that()
         .with(CalciteAssert.Config.SCOTT)
         .query("select deptno, name, count(*) as c\n" +
@@ -4413,15 +4413,15 @@ public class JdbcTest {
         // Calcite marks duplicated group sets with monotonically increasing integers from 0
         // As the following result, DEPTNO=10 AND NAME=a has 3 duplications, and each of them
         // has an increased sequence number, saying G=1, G=2, G=3.
-        .returnsUnordered("DEPTNO=10; NAME=a; G=1; C=1\n"
-            + "DEPTNO=10; NAME=a; G=2; C=1\n"
-            + "DEPTNO=10; NAME=a; G=3; C=1\n"
-            + "DEPTNO=20; NAME=b; G=1; C=1\n"
-            + "DEPTNO=20; NAME=b; G=2; C=1\n"
-            + "DEPTNO=20; NAME=b; G=3; C=1\n"
-            + "DEPTNO=30; NAME=a; G=1; C=1\n"
-            + "DEPTNO=30; NAME=a; G=2; C=1\n"
-            + "DEPTNO=30; NAME=a; G=3; C=1");
+        .returnsUnordered("DEPTNO=10; NAME=a; C=1\n"
+            + "DEPTNO=10; NAME=a; C=1\n"
+            + "DEPTNO=10; NAME=a; C=1\n"
+            + "DEPTNO=20; NAME=b; C=1\n"
+            + "DEPTNO=20; NAME=b; C=1\n"
+            + "DEPTNO=20; NAME=b; C=1\n"
+            + "DEPTNO=30; NAME=a; C=1\n"
+            + "DEPTNO=30; NAME=a; C=1\n"
+            + "DEPTNO=30; NAME=a; C=1");
   }
 
   /** Tests CALCITE-980: Not (C='a' or C='b') causes NPE */

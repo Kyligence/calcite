@@ -111,20 +111,17 @@ public class AggregatingSelectScope
       groupExprProjection = groupAnalyzer.groupExprProjection;
     }
 
-    final SortedMap<ImmutableBitSet, Integer> flatGroupSetCount =
-        Maps.newTreeMap(ImmutableBitSet.COMPARATOR);
+    final List<ImmutableBitSet> flatGroupSets = new ArrayList<>();
     for (List<ImmutableBitSet> groupSet : Linq4j.product(builder.build())) {
-      final ImmutableBitSet set = ImmutableBitSet.union(groupSet);
-      flatGroupSetCount.put(set, flatGroupSetCount.getOrDefault(set, 0) + 1);
+      flatGroupSets.add(ImmutableBitSet.union(groupSet));
     }
 
     // For GROUP BY (), we need a singleton grouping set.
-    if (flatGroupSetCount.isEmpty()) {
-      flatGroupSetCount.put(ImmutableBitSet.of(), 1);
+    if (flatGroupSets.isEmpty()) {
+      flatGroupSets.add(ImmutableBitSet.of());
     }
 
-    return new Resolved(extraExprs, temporaryGroupExprList, flatGroupSetCount.keySet(),
-        flatGroupSetCount, groupExprProjection);
+    return new Resolved(extraExprs, temporaryGroupExprList, flatGroupSets, groupExprProjection);
   }
 
   /**
@@ -249,18 +246,15 @@ public class AggregatingSelectScope
     public final ImmutableList<SqlNode> groupExprList;
     public final ImmutableBitSet groupSet;
     public final ImmutableList<ImmutableBitSet> groupSets;
-    public final Map<ImmutableBitSet, Integer> groupSetCount;
     public final Map<Integer, Integer> groupExprProjection;
 
     Resolved(List<SqlNode> extraExprList, List<SqlNode> groupExprList,
         Iterable<ImmutableBitSet> groupSets,
-        Map<ImmutableBitSet, Integer> groupSetCount,
         Map<Integer, Integer> groupExprProjection) {
       this.extraExprList = ImmutableList.copyOf(extraExprList);
       this.groupExprList = ImmutableList.copyOf(groupExprList);
       this.groupSet = ImmutableBitSet.range(groupExprList.size());
       this.groupSets = ImmutableList.copyOf(groupSets);
-      this.groupSetCount = ImmutableMap.copyOf(groupSetCount);
       this.groupExprProjection = ImmutableMap.copyOf(groupExprProjection);
     }
 

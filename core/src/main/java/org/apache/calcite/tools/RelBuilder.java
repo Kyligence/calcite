@@ -78,6 +78,7 @@ import com.google.common.base.Preconditions;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableSet;
+import com.google.common.collect.ImmutableSortedMultiset;
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
 
@@ -1187,22 +1188,21 @@ public class RelBuilder {
       }
       if (registrar.extraNodes.size() == fields().size()) {
         final Boolean unique = mq.areColumnsUnique(peek(), groupSet);
-        if (unique != null && unique) {
+        if (unique != null && unique && groupKey_.iSimple()) {
           // Rel is already unique.
           return project(fields(groupSet.asList()));
         }
       }
       final Double maxRowCount = mq.getMaxRowCount(peek());
-      if (maxRowCount != null && maxRowCount <= 1D) {
+      if (maxRowCount != null && maxRowCount <= 1D && groupKey_.iSimple()) {
         // If there is at most one row, rel is already unique.
-        return this;
+        return project(fields(groupSet.asList()));
       }
     }
     final ImmutableList<ImmutableBitSet> groupSets;
     if (groupKey_.nodeLists != null) {
       final int sizeBefore = registrar.extraNodes.size();
-      final SortedSet<ImmutableBitSet> groupSetSet =
-          new TreeSet<>(ImmutableBitSet.ORDERING);
+      final List<ImmutableBitSet> groupSetList = new ArrayList<>();
       for (ImmutableList<RexNode> nodeList : groupKey_.nodeLists) {
         final ImmutableBitSet groupSet2 =
             ImmutableBitSet.of(registrar.registerExpressions(nodeList));
@@ -1210,9 +1210,12 @@ public class RelBuilder {
           throw new IllegalArgumentException("group set element " + nodeList
               + " must be a subset of group key");
         }
-        groupSetSet.add(groupSet2);
+        groupSetList.add(groupSet2);
       }
-      groupSets = ImmutableList.copyOf(groupSetSet);
+      final ImmutableSortedMultiset<ImmutableBitSet> groupSetMultiset =
+          ImmutableSortedMultiset.copyOf(ImmutableBitSet.COMPARATOR, groupSetList);
+
+      groupSets = ImmutableList.copyOf(groupSetMultiset.elementSet());
       if (registrar.extraNodes.size() > sizeBefore) {
         throw new IllegalArgumentException(
             "group sets contained expressions not in group key: "
@@ -1947,6 +1950,10 @@ public class RelBuilder {
       return Objects.equals(this.alias, alias)
           ? this
           : new GroupKeyImpl(nodes, indicator, nodeLists, alias);
+    }
+
+    public boolean iSimple() {
+      return nodeLists == null || nodeLists.size() == 1;
     }
   }
 
