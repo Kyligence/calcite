@@ -315,6 +315,7 @@ public abstract class Types {
    */
   private static boolean assignableFrom(Class parameter, Class argument) {
     return parameter.isAssignableFrom(argument)
+           || argument.isPrimitive() && parameter.isAssignableFrom(Primitive.box(argument))
            || parameter.isPrimitive()
         && argument.isPrimitive()
         && Primitive.of(parameter).assignableFrom(Primitive.of(argument));

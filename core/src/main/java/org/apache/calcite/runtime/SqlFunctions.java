@@ -715,9 +715,28 @@ public class SqlFunctions {
     return (b0 == null || b1 == null) ? null : b0.add(b1);
   }
 
-  /** SQL <code>+</code> operator applied to String values. Same as string concat operator. */
-  public static String plus(String s0, String s1) {
-    return s0 + s1;
+  public static Double plus(String s0, String s1) {
+    try {
+      return plus(toBigDecimal(s0), toBigDecimal(s1)).doubleValue();
+    } catch (NumberFormatException ignored) {
+      return null;
+    }
+  }
+
+  public static Double plus(String s0, BigDecimal b1) {
+    try {
+      return plus(toBigDecimal(s0), b1).doubleValue();
+    } catch (NumberFormatException ignored) {
+      return null;
+    }
+  }
+
+  public static Double plus(String s0, Number b1) {
+    return plus(s0, toBigDecimal(b1));
+  }
+
+  public static Double plus(Number b1, String s0) {
+    return plus(s0, toBigDecimal(b1));
   }
 
   /** SQL <code>+</code> operator applied to Object values (at least one operand
