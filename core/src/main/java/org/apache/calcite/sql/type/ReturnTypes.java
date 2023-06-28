@@ -86,7 +86,7 @@ public abstract class ReturnTypes {
   }
 
   /**
-   * Type-inference strategy for calculation between Strings.
+   * Type-inference strategy for calculation between Decimal/String and String.
    *
    */
   public static final SqlReturnTypeInference STRING_ARITHMETIC =
