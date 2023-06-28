@@ -178,9 +178,11 @@ import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableList.Builder;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableSet;
+import com.google.common.collect.ImmutableSortedMultiset;
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
+import com.google.common.collect.Multiset;
 import com.google.common.collect.Sets;
 
 import org.slf4j.Logger;
@@ -3005,10 +3007,13 @@ public class SqlToRelConverter {
             bb.scope.getMonotonicity(groupItem));
       }
 
-      final RelNode relNode = aggConverter.containsGroupId()
-          ? rewriteAggregateWithGroupId(bb, r, aggConverter)
-          : createAggregate(bb, r.groupSet, r.groupSets,
-              aggConverter.getAggCalls());
+      ImmutableSortedMultiset<ImmutableBitSet> sortedGroupSets =
+          ImmutableSortedMultiset.copyOf(r.groupSets);
+      boolean hasGroupIdOrDuplicateGroupSets = aggConverter.containsGroupId()
+          || !ImmutableBitSet.ORDERING.isStrictlyOrdered(sortedGroupSets);
+      final RelNode relNode = hasGroupIdOrDuplicateGroupSets
+          ? rewriteAggregateWithGroupId(bb, r.groupSet, sortedGroupSets, aggConverter)
+          : createAggregate(bb, r.groupSet, sortedGroupSets.asList(), aggConverter.getAggCalls());
 
       bb.setRoot(relNode, false);
       bb.mapRootRelToFieldProjection.put(bb.root, r.groupExprProjection);
@@ -3097,14 +3102,12 @@ public class SqlToRelConverter {
    * <a href="https://issues.apache.org/jira/browse/CALCITE-1824">[CALCITE-1824]
    * GROUP_ID returns wrong result</a>.
    */
-  private RelNode rewriteAggregateWithGroupId(Blackboard bb,
-      AggregatingSelectScope.Resolved r, AggConverter converter) {
+  private RelNode rewriteAggregateWithGroupId(Blackboard bb, ImmutableBitSet groupSet,
+      ImmutableSortedMultiset<ImmutableBitSet> sortedGroupSets, AggConverter converter) {
     final List<AggregateCall> aggregateCalls = converter.getAggCalls();
-    final ImmutableBitSet groupSet = r.groupSet;
-    final Map<ImmutableBitSet, Integer> groupSetCount = r.groupSetCount;
 
     final List<String> fieldNamesIfNoRewrite = createAggregate(bb, groupSet,
-        r.groupSets, aggregateCalls).getRowType().getFieldNames();
+        sortedGroupSets.asList(), aggregateCalls).getRowType().getFieldNames();
 
     // If n duplicates exist for a particular grouping, the {@code GROUP_ID()}
     // function produces values in the range 0 to n-1. For each value,
@@ -3118,15 +3121,15 @@ public class SqlToRelConverter {
     //      GROUPING SETS (c) produces value 3
     final Map<Integer, Set<ImmutableBitSet>> groupIdToGroupSets = new HashMap<>();
     int maxGroupId = 0;
-    for (Map.Entry<ImmutableBitSet, Integer> entry: groupSetCount.entrySet()) {
-      int groupId = entry.getValue() - 1;
+    for (Multiset.Entry<ImmutableBitSet> entry: sortedGroupSets.entrySet()) {
+      int groupId = entry.getCount() - 1;
       if (groupId > maxGroupId) {
         maxGroupId = groupId;
       }
       for (int i = 0; i <= groupId; i++) {
         groupIdToGroupSets.computeIfAbsent(i,
             k -> Sets.newTreeSet(ImmutableBitSet.COMPARATOR))
-            .add(entry.getKey());
+            .add(entry.getElement());
       }
     }
 
@@ -3155,7 +3158,7 @@ public class SqlToRelConverter {
 
       relBuilder.push(aggregate);
       final List<RexNode> selectList = new ArrayList<>();
-      final int groupExprLength = r.groupExprList.size();
+      final int groupExprLength = groupSet.cardinality();
       // Project fields in group by expressions
       for (int i = 0; i < groupExprLength; i++) {
         selectList.add(relBuilder.field(i));
@@ -3202,7 +3205,9 @@ public class SqlToRelConverter {
    */
   protected RelNode createAggregate(Blackboard bb, ImmutableBitSet groupSet,
       ImmutableList<ImmutableBitSet> groupSets, List<AggregateCall> aggCalls) {
-    return LogicalAggregate.create(bb.root, groupSet, groupSets, aggCalls);
+    relBuilder.push(bb.root);
+    final RelBuilder.GroupKey groupKey = relBuilder.groupKey(groupSet, groupSets);
+    return relBuilder.aggregate(groupKey, aggCalls).build();
   }
 
   public RexDynamicParam convertDynamicParam(
