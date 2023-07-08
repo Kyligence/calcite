@@ -1858,6 +1858,8 @@ public class RexImpTable {
         final Primitive primitive = Primitive.ofBoxOr(type0);
         if (primitive == null
             || type1 == BigDecimal.class
+            || isNumberOrString(type0) && isNumberOrString(type1)
+            && backupMethodName.equals("plus")
             || COMPARISON_OPERATORS.contains(op)
             && !COMP_OP_TYPES.contains(primitive)) {
           return Expressions.call(SqlFunctions.class, backupMethodName,
@@ -1870,6 +1872,14 @@ public class RexImpTable {
       return Types.castIfNecessary(returnType,
           Expressions.makeBinary(expressionType, expressions.get(0),
               expressions.get(1)));
+    }
+
+    private boolean isNumberOrString(Type type) {
+      if (type == String.class || type == BigDecimal.class) {
+        return true;
+      }
+      Primitive primitive = Primitive.ofBoxOr(type);
+      return primitive!=null && Number.class.isAssignableFrom(primitive.boxClass);
     }
 
     /** Returns whether any of a call's operands have ANY type. */
