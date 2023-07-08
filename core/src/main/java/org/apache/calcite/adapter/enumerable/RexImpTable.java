@@ -1858,8 +1858,8 @@ public class RexImpTable {
         final Primitive primitive = Primitive.ofBoxOr(type0);
         if (primitive == null
             || type1 == BigDecimal.class
-            || isNumberOrString(type0) && isNumberOrString(type1)
-            && backupMethodName.equals("plus")
+            || backupMethodName.equals("plus")
+            && isNumberOrString(type0) && isNumberOrString(type1)
             || COMPARISON_OPERATORS.contains(op)
             && !COMP_OP_TYPES.contains(primitive)) {
           return Expressions.call(SqlFunctions.class, backupMethodName,
