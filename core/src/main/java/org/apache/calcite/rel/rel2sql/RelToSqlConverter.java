@@ -853,9 +853,10 @@ public class RelToSqlConverter extends SqlImplementor
         //   SELECT *
         //   FROM (VALUES (CAST(NULL AS Type), CAST(NULL AS Type)...)) AS T (C1, C2 ...)
         //   WHERE 1 = 0
-        List<SqlNode> nodes = e.getRowType().getFieldList().stream().map(
-            field -> castNullType(SqlLiteral.createNull(POS), field.getType())
-        ).collect(Collectors.toList());
+        List<SqlNode> nodes =
+            e.getRowType().getFieldList().stream()
+            .map(field -> castNullType(SqlLiteral.createNull(POS), field.getType()))
+            .collect(Collectors.toList());
         selects.add(SqlInternalOperators.ANONYMOUS_ROW.createCall(POS, nodes));
       } else {
         for (List<RexLiteral> tuple : e.getTuples()) {
