@@ -31,12 +31,12 @@ import com.google.common.base.Supplier;
 import com.google.common.base.Suppliers;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
-import com.google.common.collect.Sets;
+import com.google.common.collect.Maps;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
+import java.util.SortedMap;
 
 import static org.apache.calcite.sql.SqlUtil.stripAs;
 
@@ -111,8 +111,7 @@ public class AggregatingSelectScope
       groupExprProjection = groupAnalyzer.groupExprProjection;
     }
 
-    final Set<ImmutableBitSet> flatGroupSets =
-        Sets.newTreeSet(ImmutableBitSet.COMPARATOR);
+    final List<ImmutableBitSet> flatGroupSets = new ArrayList<>();
     for (List<ImmutableBitSet> groupSet : Linq4j.product(builder.build())) {
       flatGroupSets.add(ImmutableBitSet.union(groupSet));
     }
@@ -122,8 +121,7 @@ public class AggregatingSelectScope
       flatGroupSets.add(ImmutableBitSet.of());
     }
 
-    return new Resolved(extraExprs, temporaryGroupExprList, flatGroupSets,
-        groupExprProjection);
+    return new Resolved(extraExprs, temporaryGroupExprList, flatGroupSets, groupExprProjection);
   }
 
   /**

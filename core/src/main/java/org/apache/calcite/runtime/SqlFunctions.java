@@ -715,9 +715,32 @@ public class SqlFunctions {
     return (b0 == null || b1 == null) ? null : b0.add(b1);
   }
 
-  /** SQL <code>+</code> operator applied to String values. Same as string concat operator. */
-  public static String plus(String s0, String s1) {
-    return s0 + s1;
+  public static BigDecimal plus(String s0, String s1) {
+    try {
+      return plus(toBigDecimal(s0), toBigDecimal(s1));
+    } catch (NumberFormatException ignored) {
+      return null;
+    }
+  }
+
+  public static BigDecimal plus(String s0, BigDecimal b1) {
+    try {
+      return plus(toBigDecimal(s0), b1);
+    } catch (NumberFormatException ignored) {
+      return null;
+    }
+  }
+
+  public static BigDecimal plus(String s0, Number b1) {
+    return plus(s0, toBigDecimal(b1));
+  }
+
+  public static BigDecimal plus(Number b1, String s0) {
+    return plus(s0, toBigDecimal(b1));
+  }
+
+  public static BigDecimal plus(Number b1, Number b2) {
+    return plus(toBigDecimal(b1), toBigDecimal(b2));
   }
 
   /** SQL <code>+</code> operator applied to Object values (at least one operand
@@ -1841,7 +1864,8 @@ public class SqlFunctions {
   public static BigDecimal toBigDecimal(Number number) {
     // There are some values of "long" that cannot be represented as "double".
     // Not so "int". If it isn't a long, go straight to double.
-    return number instanceof BigDecimal ? (BigDecimal) number
+    return number == null ? null
+        : number instanceof BigDecimal ? (BigDecimal) number
         : number instanceof BigInteger ? new BigDecimal((BigInteger) number)
         : number instanceof Long ? new BigDecimal(number.longValue())
         : new BigDecimal(number.doubleValue());

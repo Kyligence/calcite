@@ -4331,6 +4331,99 @@ public class JdbcTest {
             "empid=100; deptno=10; name=Bill; salary=10000.0; commission=1000\n");
   }
 
+  /** Test case for rewriting queries that contain {@code GROUP_ID()} function.
+   * For instance, the query
+   * {@code
+   *    select deptno, group_id() as gid
+   *    from scott.emp
+   *    group by grouping sets(deptno, deptno, deptno, (), ())
+   * }
+   * will be converted into:
+   * {@code
+   *    select deptno, 0 as gid
+   *    from scott.emp group by grouping sets(deptno, ())
+   *    union all
+   *    select deptno, 1 as gid
+   *    from scott.emp group by grouping sets(deptno, ())
+   *    union all
+   *    select deptno, 2 as gid
+   *    from scott.emp group by grouping sets(deptno)
+   * }
+   */
+  @Test public void testGroupId() {
+    CalciteAssert.that()
+        .with(CalciteAssert.Config.SCOTT)
+        .query("select deptno, group_id() + 1 as g, count(*) as c\n"
+            + "from \"scott\".emp\n"
+            + "group by grouping sets (deptno, deptno, deptno, (), ())\n"
+            + "having group_id() > 0")
+        .explainContains("PLAN=EnumerableCalc(expr#0..2=[{inputs}], expr#3=[1], expr#4=[+($t1, $t3)], "
+            + "expr#5=[0], expr#6=[>($t1, $t5)], DEPTNO=[$t0], G=[$t4], C=[$t2], $condition=[$t6])\n"
+            + "  EnumerableUnion(all=[true])\n"
+            + "    EnumerableCalc(expr#0..1=[{inputs}], expr#2=[0], DEPTNO=[$t0], $f1=[$t2], C=[$t1])\n"
+            + "      EnumerableAggregate(group=[{7}], groups=[[{7}, {}]], C=[COUNT()])\n"
+            + "        EnumerableTableScan(table=[[scott, EMP]])\n"
+            + "    EnumerableCalc(expr#0..1=[{inputs}], expr#2=[1], DEPTNO=[$t0], $f1=[$t2], C=[$t1])\n"
+            + "      EnumerableAggregate(group=[{7}], groups=[[{7}, {}]], C=[COUNT()])\n"
+            + "        EnumerableTableScan(table=[[scott, EMP]])\n"
+            + "    EnumerableCalc(expr#0..1=[{inputs}], expr#2=[2], DEPTNO=[$t0], $f1=[$t2], C=[$t1])\n"
+            + "      EnumerableAggregate(group=[{7}], C=[COUNT()])\n"
+            + "        EnumerableTableScan(table=[[scott, EMP]])");
+    CalciteAssert.that()
+        .with(CalciteAssert.Config.REGULAR)
+        .query("select deptno, group_id() + 1 as g, count(*) as c\n"
+            + "from (VALUES(10), (20), (30)) AS tst(deptno)\n"
+            + "group by grouping sets (deptno, deptno, deptno, (), ())\n"
+            + "having group_id() > 0")
+        .returnsUnordered("DEPTNO=10; G=2; C=1",
+            "DEPTNO=10; G=3; C=1",
+            "DEPTNO=20; G=2; C=1",
+            "DEPTNO=20; G=3; C=1",
+            "DEPTNO=30; G=2; C=1",
+            "DEPTNO=30; G=3; C=1",
+            "DEPTNO=null; G=2; C=3");
+  }
+
+  @Test public void testDuplicateGroupByGroupingSetsWithGroupId() {
+    CalciteAssert.that()
+        .with(CalciteAssert.Config.SCOTT)
+        .query("select deptno, name, group_id() + 1 as g, count(*) as c\n" +
+            "from (VALUES(10, 'a'), (20, 'b'), (30,'a')) AS tst(deptno, name)\n" +
+            "group by deptno, name, grouping sets ((deptno), (name), ())")
+        // Calcite marks duplicated group sets with monotonically increasing integers from 0
+        // As the following result, DEPTNO=10 AND NAME=a has 3 duplications, and each of them
+        // has an increased sequence number, saying G=1, G=2, G=3.
+        .returnsUnordered("DEPTNO=10; NAME=a; G=1; C=1\n"
+            + "DEPTNO=10; NAME=a; G=2; C=1\n"
+            + "DEPTNO=10; NAME=a; G=3; C=1\n"
+            + "DEPTNO=20; NAME=b; G=1; C=1\n"
+            + "DEPTNO=20; NAME=b; G=2; C=1\n"
+            + "DEPTNO=20; NAME=b; G=3; C=1\n"
+            + "DEPTNO=30; NAME=a; G=1; C=1\n"
+            + "DEPTNO=30; NAME=a; G=2; C=1\n"
+            + "DEPTNO=30; NAME=a; G=3; C=1");
+  }
+
+  @Test public void testDuplicateGroupByGroupingSets() {
+    CalciteAssert.that()
+        .with(CalciteAssert.Config.SCOTT)
+        .query("select deptno, name, count(*) as c\n" +
+            "from (VALUES(10, 'a'), (20, 'b'), (30,'a')) AS tst(deptno, name)\n" +
+            "group by deptno, name, grouping sets ((deptno), (name), ())")
+        // Calcite marks duplicated group sets with monotonically increasing integers from 0
+        // As the following result, DEPTNO=10 AND NAME=a has 3 duplications, and each of them
+        // has an increased sequence number, saying G=1, G=2, G=3.
+        .returnsUnordered("DEPTNO=10; NAME=a; C=1\n"
+            + "DEPTNO=10; NAME=a; C=1\n"
+            + "DEPTNO=10; NAME=a; C=1\n"
+            + "DEPTNO=20; NAME=b; C=1\n"
+            + "DEPTNO=20; NAME=b; C=1\n"
+            + "DEPTNO=20; NAME=b; C=1\n"
+            + "DEPTNO=30; NAME=a; C=1\n"
+            + "DEPTNO=30; NAME=a; C=1\n"
+            + "DEPTNO=30; NAME=a; C=1");
+  }
+
   /** Tests CALCITE-980: Not (C='a' or C='b') causes NPE */
   @Test public void testWhereOrAndNullable() {
     /* Generates the following code:

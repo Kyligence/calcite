@@ -1347,10 +1347,6 @@ public abstract class SqlTypeUtil {
     return type.getSqlTypeName() == SqlTypeName.ARRAY;
   }
 
-  public static boolean inStringFamily(RelDataType type) {
-    return SqlTypeFamily.STRING.getTypeNames().contains(type.getSqlTypeName());
-  }
-
   /**
    * Returns whether the decimal value is valid for the type. For example, 1111.11 is not
    * valid for DECIMAL(3, 1) since it overflows.

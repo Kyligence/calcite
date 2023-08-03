@@ -24,7 +24,6 @@ import org.apache.calcite.sql.SqlAsOperator;
 import org.apache.calcite.sql.SqlBasicCall;
 import org.apache.calcite.sql.SqlBinaryOperator;
 import org.apache.calcite.sql.SqlCall;
-import org.apache.calcite.sql.SqlCharStringLiteral;
 import org.apache.calcite.sql.SqlFilterOperator;
 import org.apache.calcite.sql.SqlFunction;
 import org.apache.calcite.sql.SqlFunctionCategory;
@@ -58,12 +57,9 @@ import org.apache.calcite.sql.type.OperandTypes;
 import org.apache.calcite.sql.type.ReturnTypes;
 import org.apache.calcite.sql.type.SqlOperandCountRanges;
 import org.apache.calcite.sql.type.SqlTypeName;
-import org.apache.calcite.sql.type.SqlTypeUtil;
 import org.apache.calcite.sql.util.ReflectiveSqlOperatorTable;
 import org.apache.calcite.sql.validate.SqlConformance;
 import org.apache.calcite.sql.validate.SqlModality;
-import org.apache.calcite.sql.validate.SqlValidator;
-import org.apache.calcite.sql.validate.SqlValidatorScope;
 import org.apache.calcite.sql2rel.AuxiliaryConverter;
 import org.apache.calcite.util.Litmus;
 import org.apache.calcite.util.Pair;
@@ -538,46 +534,7 @@ public class SqlStdOperatorTable extends ReflectiveSqlOperatorTable {
           true,
           ReturnTypes.NULLABLE_SUM,
           InferTypes.FIRST_KNOWN,
-          OperandTypes.PLUS_OPERATOR) {
-        @Override public void validateCall(SqlCall call,
-                                           SqlValidator validator,
-                                           SqlValidatorScope scope,
-                                           SqlValidatorScope operandScope) {
-          super.validateCall(call, validator, scope, operandScope);
-          if (call.getOperator() == SqlStdOperatorTable.PLUS) {
-            RelDataType type1 = validator.deriveType(scope, call.getOperandList().get(0));
-            RelDataType type2 = validator.deriveType(scope, call.getOperandList().get(1));
-            if (SqlTypeUtil.isNumeric(type1) && SqlTypeUtil.inStringFamily(type2)) {
-              return;
-            }
-            if (SqlTypeUtil.isNumeric(type2) && SqlTypeUtil.inStringFamily(type1)) {
-              return;
-            }
-          }
-          for (SqlNode operand : call.getOperandList()) {
-            if (operand instanceof SqlCharStringLiteral
-                && SqlTypeName.STRING_TYPES.contains(((SqlCharStringLiteral) operand).getTypeName())
-                && call instanceof SqlBasicCall) {
-              ((SqlBasicCall) call).setOperator(CONCAT);
-              break;
-            }
-          }
-        }
-
-        @Override public RelDataType inferReturnType(SqlOperatorBinding opBinding) {
-          RelDataType relDataType = ReturnTypes.NULLABLE_SUM.inferReturnType(opBinding);
-          if (relDataType != null) {
-            return relDataType;
-          }
-          int opBindCnt = opBinding.getOperandCount();
-          for (int i = 0; i < opBindCnt; i++) {
-            if (SqlTypeUtil.inCharOrBinaryFamilies(opBinding.getOperandType(i))) {
-              return ReturnTypes.DYADIC_STRING_SUM_PRECISION_NULLABLE.inferReturnType(opBinding);
-            }
-          }
-          return null;
-        }
-      };
+          OperandTypes.PLUS_OPERATOR);
 
   /**
    * Infix datetime plus operator, '<code>DATETIME + INTERVAL</code>'.

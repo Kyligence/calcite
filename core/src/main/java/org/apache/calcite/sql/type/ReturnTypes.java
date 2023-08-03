@@ -25,6 +25,7 @@ import org.apache.calcite.rel.type.RelProtoDataType;
 import org.apache.calcite.sql.ExplicitOperatorBinding;
 import org.apache.calcite.sql.SqlCallBinding;
 import org.apache.calcite.sql.SqlCollation;
+import org.apache.calcite.sql.SqlKind;
 import org.apache.calcite.sql.SqlOperatorBinding;
 import org.apache.calcite.sql.SqlUtil;
 import org.apache.calcite.util.Glossary;
@@ -85,25 +86,25 @@ public abstract class ReturnTypes {
   }
 
   /**
-   * Type-inference strategy for calculation between Decimal and String.
+   * Type-inference strategy for calculation between Decimal/String and String.
    *
    */
-  public static final SqlReturnTypeInference NUMERIC_STRING =
-      new SqlReturnTypeInference() {
-        public RelDataType inferReturnType(
-                SqlOperatorBinding opBinding) {
-          RelDataType type1 = opBinding.getOperandType(0);
-          RelDataType type2 = opBinding.getOperandType(1);
-          final RelDataTypeFactory typeFactory = opBinding.getTypeFactory();
-          if (SqlTypeUtil.isNumeric(type1) && SqlTypeUtil.inStringFamily(type2)) {
-            return typeFactory.copyType(type1);
-          }
-          if (SqlTypeUtil.isNumeric(type2) && SqlTypeUtil.inStringFamily(type1)) {
-            return typeFactory.copyType(type2);
-          }
-          return null;
+  public static final SqlReturnTypeInference STRING_ARITHMETIC =
+      opBinding -> {
+        RelDataType type1 = opBinding.getOperandType(0);
+        RelDataType type2 = opBinding.getOperandType(1);
+        if (SqlTypeUtil.inCharFamily(type1) && SqlTypeUtil.inCharFamily(type2)
+            && opBinding.getOperator().getKind() == SqlKind.PLUS
+            && Boolean.parseBoolean(
+            System.getProperty("calcite.compatible-with-mssql-plus", "false"))) {
+          return ReturnTypes.DYADIC_STRING_SUM_PRECISION_NULLABLE.inferReturnType(opBinding);
         }
-  };
+        if (SqlTypeUtil.inCharFamily(type1) || SqlTypeUtil.inCharFamily(type2)) {
+          RelDataTypeFactory typeFactory = opBinding.getTypeFactory();
+          return typeFactory.createTypeWithNullability(typeFactory.createSqlType(SqlTypeName.DOUBLE), true);
+        }
+        return null;
+      };
   /**
    * Type-inference strategy whereby the result type of a call is the type of
    * the operand #0 (0-based).
@@ -536,7 +537,7 @@ public abstract class ReturnTypes {
    */
   public static final SqlReturnTypeInference PRODUCT_NULLABLE =
       chain(DECIMAL_PRODUCT_NULLABLE, ARG0_INTERVAL_NULLABLE,
-          LEAST_RESTRICTIVE, NUMERIC_STRING);
+        STRING_ARITHMETIC, LEAST_RESTRICTIVE);
 
   /**
    * Type-inference strategy whereby the result type of a call is the decimal
@@ -594,8 +595,8 @@ public abstract class ReturnTypes {
           DOUBLE_QUOTIENT_NULLABLE,
           DECIMAL_QUOTIENT_NULLABLE,
           ARG0_INTERVAL_NULLABLE,
-          LEAST_RESTRICTIVE,
-              NUMERIC_STRING);
+        STRING_ARITHMETIC,
+          LEAST_RESTRICTIVE);
   /**
    * Type-inference strategy whereby the result type of a call is the decimal
    * sum of two exact numeric operands where at least one of the operands is a
@@ -664,7 +665,7 @@ public abstract class ReturnTypes {
    * These rules are used for addition and subtraction.
    */
   public static final SqlReturnTypeInference NULLABLE_SUM =
-      new SqlReturnTypeInferenceChain(DECIMAL_SUM_NULLABLE, LEAST_RESTRICTIVE, NUMERIC_STRING);
+      new SqlReturnTypeInferenceChain(DECIMAL_SUM_NULLABLE, STRING_ARITHMETIC, LEAST_RESTRICTIVE);
 
   /**
    * Type-inference strategy whereby the result type of a call is
