@@ -109,6 +109,7 @@ import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
 
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 
 import java.math.BigDecimal;
@@ -1828,6 +1829,121 @@ public class SqlValidatorImpl implements SqlValidatorWithHints {
             operandTypes);
       }
       for (int i = 0; i < operands.size(); ++i) {
+        if (node instanceof SqlBasicCall) {
+          final SqlBasicCall sqlBasicCall = (SqlBasicCall) node;
+          final String operatorName = callBinding.getOperator().getName();
+          if (StringUtils.equalsIgnoreCase(operatorName, "substring")) {
+            // todo: Hard Code, when kyclacite update to 1.30, need update
+            inferUnknownTypes(operandTypes[i], scope, operands.get(i), sqlBasicCall);
+            return;
+          }
+        }
+        inferUnknownTypes(operandTypes[i], scope, operands.get(i));
+      }
+    }
+  }
+
+  protected void inferUnknownTypes(
+          RelDataType inferredType,
+          SqlValidatorScope scope,
+          SqlNode node, SqlBasicCall parent) {
+    final SqlValidatorScope newScope = scopes.get(node);
+    if (newScope != null) {
+      scope = newScope;
+    }
+    boolean isNullLiteral = SqlUtil.isNullLiteral(node, false);
+    if ((node instanceof SqlDynamicParam) || isNullLiteral) {
+      if (inferredType.equals(unknownType)) {
+        if (isNullLiteral) {
+          // derive type of null literal
+          // todo: Hard Code, when kyclacite update to 1.30, need update
+          deriveType(scope, node);
+          return;
+        } else {
+          throw newValidationError(node, RESOURCE.dynamicParamIllegal());
+        }
+      }
+
+      // REVIEW:  should dynamic parameter types always be nullable?
+      RelDataType newInferredType =
+              typeFactory.createTypeWithNullability(inferredType, true);
+      if (SqlTypeUtil.inCharFamily(inferredType)) {
+        newInferredType =
+                typeFactory.createTypeWithCharsetAndCollation(
+                        newInferredType,
+                        inferredType.getCharset(),
+                        inferredType.getCollation());
+      }
+      setValidatedNodeType(node, newInferredType);
+    } else if (node instanceof SqlNodeList) {
+      SqlNodeList nodeList = (SqlNodeList) node;
+      if (inferredType.isStruct()) {
+        if (inferredType.getFieldCount() != nodeList.size()) {
+          // this can happen when we're validating an INSERT
+          // where the source and target degrees are different;
+          // bust out, and the error will be detected higher up
+          return;
+        }
+      }
+      int i = 0;
+      for (SqlNode child : nodeList) {
+        RelDataType type;
+        if (inferredType.isStruct()) {
+          type = inferredType.getFieldList().get(i).getType();
+          ++i;
+        } else {
+          type = inferredType;
+        }
+        inferUnknownTypes(type, scope, child);
+      }
+    } else if (node instanceof SqlCase) {
+      final SqlCase caseCall = (SqlCase) node;
+
+      final RelDataType whenType =
+              caseCall.getValueOperand() == null ? booleanType : unknownType;
+      for (SqlNode sqlNode : caseCall.getWhenOperands().getList()) {
+        inferUnknownTypes(whenType, scope, sqlNode);
+      }
+      RelDataType returnType = deriveType(scope, node);
+      for (SqlNode sqlNode : caseCall.getThenOperands().getList()) {
+        inferUnknownTypes(returnType, scope, sqlNode);
+      }
+
+      if (!SqlUtil.isNullLiteral(caseCall.getElseOperand(), false)) {
+        inferUnknownTypes(
+                returnType,
+                scope,
+                caseCall.getElseOperand());
+      } else {
+        setValidatedNodeType(caseCall.getElseOperand(), returnType);
+      }
+    } else if (node instanceof SqlCall) {
+      final SqlCall call = (SqlCall) node;
+      final SqlOperandTypeInference operandTypeInference =
+              call.getOperator().getOperandTypeInference();
+      final SqlCallBinding callBinding = new SqlCallBinding(this, scope, call);
+      final List<SqlNode> operands = callBinding.operands();
+      final RelDataType[] operandTypes = new RelDataType[operands.size()];
+      if (operandTypeInference == null) {
+        // TODO:  eventually should assert(operandTypeInference != null)
+        // instead; for now just eat it
+        Arrays.fill(operandTypes, unknownType);
+      } else {
+        operandTypeInference.inferOperandTypes(
+                callBinding,
+                inferredType,
+                operandTypes);
+      }
+      for (int i = 0; i < operands.size(); ++i) {
+        if (node instanceof SqlBasicCall) {
+          final SqlBasicCall sqlBasicCall = (SqlBasicCall) node;
+          final String operatorName = callBinding.getOperator().getName();
+          if (StringUtils.equalsIgnoreCase(operatorName, "substring")) {
+            // todo: Hard Code, when kyclacite update to 1.30, need update
+            inferUnknownTypes(operandTypes[i], scope, operands.get(i), sqlBasicCall);
+            return;
+          }
+        }
         inferUnknownTypes(operandTypes[i], scope, operands.get(i));
       }
     }

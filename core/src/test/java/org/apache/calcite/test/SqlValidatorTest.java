@@ -56,6 +56,7 @@ import org.slf4j.LoggerFactory;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
 import java.util.Comparator;
 import java.util.List;
@@ -852,7 +853,12 @@ public class SqlValidatorTest extends SqlValidatorTestCase {
         Charset.forName("latin1"));
     checkCharset(
         "substring(_UTF16'10' FROM 1  FOR 2)",
-        Charset.forName("UTF-16LE"));
+        StandardCharsets.UTF_16LE);
+
+    // Correctly processed null string and params.
+    checkExp("SUBSTRING(NULL, 1)");
+    checkExp("SUBSTRING(NULL, 1, 2)");
+    checkExp("SUBSTRING(NULL FROM 1 FOR 2)");
   }
 
   @Test public void testSubstringFails() {
