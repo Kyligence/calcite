@@ -18,7 +18,7 @@ package org.apache.calcite.rel.rules;
 
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableSet;
-import com.google.common.collect.Lists;
+import org.apache.calcite.plan.RelOptPredicateList;
 import org.apache.calcite.plan.RelOptRule;
 import org.apache.calcite.plan.RelOptRuleCall;
 import org.apache.calcite.plan.RelOptRuleOperand;
@@ -33,12 +33,12 @@ import org.apache.calcite.rel.core.Project;
 import org.apache.calcite.rel.core.RelFactories;
 import org.apache.calcite.rel.metadata.RelMetadataQuery;
 import org.apache.calcite.rex.LogicVisitor;
-import org.apache.calcite.rex.RexCall;
+import org.apache.calcite.rex.RexBuilder;
 import org.apache.calcite.rex.RexCorrelVariable;
 import org.apache.calcite.rex.RexInputRef;
-import org.apache.calcite.rex.RexLiteral;
 import org.apache.calcite.rex.RexNode;
 import org.apache.calcite.rex.RexShuttle;
+import org.apache.calcite.rex.RexSimplify;
 import org.apache.calcite.rex.RexSubQuery;
 import org.apache.calcite.rex.RexUtil;
 import org.apache.calcite.sql.SqlKind;
@@ -114,7 +114,7 @@ public abstract class SubQueryRemoveRule extends RelOptRule {
                     e);
             final Set<CorrelationId>  variablesSet =
                 RelOptUtil.getVariablesUsed(e.rel);
-            c = removeIdentityExpression(builder, c);
+            c = simplifyBooleanExpression(filter.getCluster().getRexBuilder(), c);
             final RexNode target = apply(e, variablesSet, logic, builder, 1,
                     builder.peek().getRowType().getFieldCount(),
                     c.getKind() == SqlKind.EQUALS && variablesSet.isEmpty());
@@ -426,38 +426,11 @@ public abstract class SubQueryRemoveRule extends RelOptRule {
     }
   }
 
-  private static RexNode removeIdentityExpression(RelBuilder builder, RexNode c) {
-    if (c.getKind() == SqlKind.AND) {
-      // remove always true expression
-      RexCall andCall = (RexCall) c;
-      List<RexNode> optimizedOperands = Lists.newArrayList(andCall.getOperands());
-
-      for (RexNode rexNode : andCall.getOperands()) {
-        RexCall rexCall = (RexCall) rexNode;
-        if (rexCall.getKind() == SqlKind.EQUALS
-                && rexCall.getOperands().stream().allMatch(RexLiteral.class::isInstance)) {
-          RexLiteral leftLiteral = (RexLiteral) rexCall.getOperands().get(0);
-          RexLiteral rightLiteral = (RexLiteral) rexCall.getOperands().get(1);
-
-          if (leftLiteral.getValue().equals(rightLiteral.getValue())) {
-            optimizedOperands.remove(rexCall);
-          } else {
-            // when one expression in the AND statement is false, other expressions do not need to be evaluated.
-            optimizedOperands = Lists.newArrayList(builder.literal(false));
-            break;
-          }
-        }
-      }
-      // update condition RexNode
-      if (optimizedOperands.size() == 1) {
-        c = optimizedOperands.get(0);
-      } else {
-        c = andCall.clone(andCall.getType(), optimizedOperands);
-      }
-    }
-    return c;
+  private static RexNode simplifyBooleanExpression(RexBuilder rexBuilder, RexNode rexNode) {
+    RexSimplify simplifier = new RexSimplify(rexBuilder, RelOptPredicateList.EMPTY,
+            true, RexUtil.EXECUTOR);
+    return simplifier.simplify(rexNode);
   }
-
 }
 
 // End SubQueryRemoveRule.java
