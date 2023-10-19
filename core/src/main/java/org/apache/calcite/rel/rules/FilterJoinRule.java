@@ -131,11 +131,6 @@ public abstract class FilterJoinRule extends RelOptRule {
         RelOptUtil.conjunctions(join.getCondition());
     final List<RexNode> origJoinFilters = ImmutableList.copyOf(joinFilters);
 
-    // HACK POINT
-    if (join.getJoinType() != JoinRelType.INNER || joinFilters.size() != 0) {
-      return;
-    }
-
     // If there is only the joinRel,
     // make sure it does not match a cartesian product joinRel
     // (with "true" condition), otherwise this rule will be applied
