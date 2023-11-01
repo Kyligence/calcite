@@ -18,6 +18,7 @@ package org.apache.calcite.sql.type;
 
 import org.apache.calcite.linq4j.Ord;
 import org.apache.calcite.rel.type.RelDataType;
+import org.apache.calcite.sql.fun.SqlStdOperatorTable;
 import org.apache.calcite.sql.SqlCallBinding;
 import org.apache.calcite.sql.SqlNode;
 import org.apache.calcite.sql.SqlOperandCountRange;
@@ -26,7 +27,6 @@ import org.apache.calcite.sql.SqlUtil;
 
 import com.google.common.base.Predicate;
 import com.google.common.collect.ImmutableList;
-import org.apache.commons.lang3.StringUtils;
 
 import java.util.List;
 
@@ -70,16 +70,16 @@ public class FamilyOperandTypeChecker implements SqlSingleOperandTypeChecker {
       return true;
     }
     if (SqlUtil.isNullLiteral(node, false)) {
-        final String operatorName = callBinding.getOperator().getName();
-        if (StringUtils.equalsIgnoreCase(operatorName, "substring")) {
-            // todo: Hard Code, when kyclacite update to 1.30, need update
-            return true;
-        }
-        if (throwOnFailure) {
-            throw callBinding.getValidator().newValidationError(node, RESOURCE.nullIllegal());
-        } else {
-            return false;
-        }
+      if (SqlStdOperatorTable.SUBSTRING.equals(callBinding.getOperator())) {
+          // todo: Hard Code, when kyclacite update to 1.30, need new implement
+          return true;
+      }
+      if (throwOnFailure) {
+        throw callBinding.getValidator().newValidationError(node,
+            RESOURCE.nullIllegal());
+      } else {
+        return false;
+      }
     }
     RelDataType type =
         callBinding.getValidator().deriveType(

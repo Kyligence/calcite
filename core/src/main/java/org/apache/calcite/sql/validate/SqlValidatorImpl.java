@@ -109,7 +109,6 @@ import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
 
-import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 
 import java.math.BigDecimal;
@@ -1829,14 +1828,10 @@ public class SqlValidatorImpl implements SqlValidatorWithHints {
             operandTypes);
       }
       for (int i = 0; i < operands.size(); ++i) {
-        if (node instanceof SqlBasicCall) {
-          final SqlBasicCall sqlBasicCall = (SqlBasicCall) node;
-          final String operatorName = callBinding.getOperator().getName();
-          if (StringUtils.equalsIgnoreCase(operatorName, "substring")) {
-            // todo: Hard Code, when kyclacite update to 1.30, need update
-            inferUnknownTypes(operandTypes[i], scope, operands.get(i), sqlBasicCall);
-            return;
-          }
+        if (SqlStdOperatorTable.SUBSTRING.equals(call.getOperator())) {
+          // todo: Hard Code, when kyclacite update to 1.30, need new implement
+          inferUnknownTypes(operandTypes[i], scope, operands.get(i), call);
+          return;
         }
         inferUnknownTypes(operandTypes[i], scope, operands.get(i));
       }
@@ -1846,7 +1841,7 @@ public class SqlValidatorImpl implements SqlValidatorWithHints {
   protected void inferUnknownTypes(
           RelDataType inferredType,
           SqlValidatorScope scope,
-          SqlNode node, SqlBasicCall parent) {
+          SqlNode node, SqlCall parent) {
     final SqlValidatorScope newScope = scopes.get(node);
     if (newScope != null) {
       scope = newScope;
@@ -1856,7 +1851,7 @@ public class SqlValidatorImpl implements SqlValidatorWithHints {
       if (inferredType.equals(unknownType)) {
         if (isNullLiteral) {
           // derive type of null literal
-          // todo: Hard Code, when kyclacite update to 1.30, need update
+          // todo: Hard Code, when kyclacite update to 1.30, need new implement
           deriveType(scope, node);
           return;
         } else {
@@ -1935,14 +1930,10 @@ public class SqlValidatorImpl implements SqlValidatorWithHints {
                 operandTypes);
       }
       for (int i = 0; i < operands.size(); ++i) {
-        if (node instanceof SqlBasicCall) {
-          final SqlBasicCall sqlBasicCall = (SqlBasicCall) node;
-          final String operatorName = callBinding.getOperator().getName();
-          if (StringUtils.equalsIgnoreCase(operatorName, "substring")) {
-            // todo: Hard Code, when kyclacite update to 1.30, need update
-            inferUnknownTypes(operandTypes[i], scope, operands.get(i), sqlBasicCall);
-            return;
-          }
+        if (SqlStdOperatorTable.SUBSTRING.equals(call.getOperator())) {
+          // todo: Hard Code, when kyclacite update to 1.30, need new implement
+          inferUnknownTypes(operandTypes[i], scope, operands.get(i), call);
+          return;
         }
         inferUnknownTypes(operandTypes[i], scope, operands.get(i));
       }
