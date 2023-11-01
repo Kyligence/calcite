@@ -171,7 +171,7 @@ public abstract class FilterJoinRule extends RelOptRule {
         join,
         aboveFilters,
         joinType,
-        !(join instanceof EquiJoin),
+        true,
         !joinType.generatesNullsOnLeft(),
         !joinType.generatesNullsOnRight(),
         joinFilters,
