@@ -149,7 +149,9 @@ public abstract class FilterJoinRule extends RelOptRule {
 
     // Simplify Outer Joins
     JoinRelType joinType = join.getJoinType();
+    boolean pushInto = canPushIntoFromAbove(filter);
     if (smart
+        && pushInto
         && !origAboveFilters.isEmpty()
         && join.getJoinType() != JoinRelType.INNER) {
       joinType = RelOptUtil.simplifyJoin(join, origAboveFilters, joinType);
@@ -168,7 +170,6 @@ public abstract class FilterJoinRule extends RelOptRule {
     // filters. They can be pushed down if they are not on the NULL
     // generating side.
     boolean filterPushed = false;
-    boolean pushInto = canPushIntoFromAbove(filter);
     if (pushInto && RelOptUtil.classifyFilters(
         join,
         aboveFilters,
