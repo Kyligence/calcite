@@ -31,11 +31,8 @@ import org.apache.calcite.rel.core.JoinRelType;
 import org.apache.calcite.rel.core.RelFactories;
 import org.apache.calcite.rel.type.RelDataType;
 import org.apache.calcite.rex.RexBuilder;
-import org.apache.calcite.rex.RexCall;
-import org.apache.calcite.rex.RexInputRef;
 import org.apache.calcite.rex.RexNode;
 import org.apache.calcite.rex.RexUtil;
-import org.apache.calcite.sql.SqlKind;
 import org.apache.calcite.tools.RelBuilder;
 import org.apache.calcite.tools.RelBuilderFactory;
 
@@ -281,6 +278,11 @@ public abstract class FilterJoinRule extends RelOptRule {
     call.transformTo(relBuilder.build());
   }
 
+  // https://olapio.atlassian.net/browse/AL-8813
+  protected boolean canPushIntoFromAbove(Filter filter) {
+    return true;
+  }
+
   /**
    * Validates that target execution framework can satisfy join filters.
    *
@@ -362,30 +364,6 @@ public abstract class FilterJoinRule extends RelOptRule {
    * above the join. */
   public interface Predicate {
     boolean apply(Join join, JoinRelType joinType, RexNode exp);
-  }
-
-  // https://olapio.atlassian.net/browse/AL-8813
-  private static boolean canPushIntoFromAbove(Filter filter) {
-    if (filter == null) {
-      return false;
-    }
-
-    RexNode condition = filter.getCondition();
-    if (condition.isA(SqlKind.AND)) {
-      RexCall call = (RexCall) condition;
-      return call.getOperands().stream().allMatch(FilterJoinRule::isSimpleCondition);
-    }
-    return isSimpleCondition(condition);
-  }
-
-  private static boolean isSimpleCondition(RexNode condition) {
-    if (condition.isA(SqlKind.EQUALS)) {
-      RexCall call = (RexCall) condition;
-      RexNode left = call.getOperands().get(0);
-      RexNode right = call.getOperands().get(1);
-      return left instanceof RexInputRef && right instanceof RexInputRef;
-    }
-    return false;
   }
 }
 
