@@ -190,8 +190,7 @@ public abstract class ReduceExpressionsRule extends RelOptRule {
             filter.getInput());
       } else if (newConditionExp instanceof RexLiteral
           || RexUtil.isNullLiteral(newConditionExp, true)) {
-        Values values = (Values) createEmptyRelOrEquivalent(call, filter);
-        call.transformTo(values.copy(call.rel(0).getTraitSet(), values.getInputs()));
+        call.transformTo(createEmptyRelOrEquivalent(call, filter));
       } else if (reduced) {
         call.transformTo(call.builder()
             .push(filter.getInput())
