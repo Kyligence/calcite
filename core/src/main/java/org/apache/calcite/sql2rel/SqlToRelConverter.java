@@ -4811,6 +4811,16 @@ public class SqlToRelConverter {
         case SCALAR_QUERY:
           call = (SqlCall) expr;
           query = Iterables.getOnlyElement(call.getOperandList());
+          if (query instanceof SqlSelect) {
+            // simplify scalar query to constant, such as: select 1 => 1.
+            SqlSelect sqlSelect = (SqlSelect) query;
+            SqlNodeList selectList = sqlSelect.getSelectList();
+            boolean isConstant = sqlSelect.getFrom() == null
+                    && selectList.size() == 1 && selectList.get(0) instanceof SqlLiteral;
+            if (isConstant) {
+              return convertExpression(selectList.get(0));
+            }
+          }
           root = convertQueryRecursive(query, false, null);
           return RexSubQuery.scalar(root.rel);
         }
