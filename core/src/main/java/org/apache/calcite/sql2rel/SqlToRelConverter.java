@@ -4818,7 +4818,11 @@ public class SqlToRelConverter {
             boolean isConstant = sqlSelect.getFrom() == null
                     && selectList.size() == 1 && selectList.get(0) instanceof SqlLiteral;
             if (isConstant) {
-              return convertExpression(selectList.get(0));
+              RexNode rexNode = convertExpression(selectList.get(0));
+              // nullable in RexSubQuery.scalar(root.rel) is always true
+              RelDataType relDataType = typeFactory.createTypeWithNullability(rexNode.getType(), true);
+              // same logic as makeLiteral(Object value, RelDataType type, boolean allowCast)
+              return rexBuilder.makeAbstractCast(relDataType, rexNode);
             }
           }
           root = convertQueryRecursive(query, false, null);
