@@ -551,11 +551,6 @@ public class SqlFunctions {
     return b0.compareTo(b1) < 0;
   }
 
-  /** SQL <code>&lt;</code> operator applied to Number values. */
-  public static boolean lt(Number b0, Number b1) {
-    return lt(toBigDecimal(b0), toBigDecimal(b1));
-  }
-
   /** SQL <code>&lt;</code> operator applied to Object values. */
   public static boolean ltAny(Object b0, Object b1) {
     if (b0.getClass().equals(b1.getClass())
@@ -589,11 +584,6 @@ public class SqlFunctions {
   /** SQL <code>&le;</code> operator applied to BigDecimal values. */
   public static boolean le(BigDecimal b0, BigDecimal b1) {
     return b0.compareTo(b1) <= 0;
-  }
-
-  /** SQL <code>&le;</code> operator applied to Number values. */
-  public static boolean le(Number b0, Number b1) {
-    return le(toBigDecimal(b0), toBigDecimal(b1));
   }
 
   /** SQL <code>&le;</code> operator applied to Object values (at least one
@@ -632,11 +622,6 @@ public class SqlFunctions {
     return b0.compareTo(b1) > 0;
   }
 
-  /** SQL <code>&gt;</code> operator applied to Number values. */
-  public static boolean gt(Number b0, Number b1) {
-    return gt(toBigDecimal(b0), toBigDecimal(b1));
-  }
-
   /** SQL <code>&gt;</code> operator applied to Object values (at least one
    * operand has ANY type; neither may be null). */
   public static boolean gtAny(Object b0, Object b1) {
@@ -671,11 +656,6 @@ public class SqlFunctions {
   /** SQL <code>&ge;</code> operator applied to BigDecimal values. */
   public static boolean ge(BigDecimal b0, BigDecimal b1) {
     return b0.compareTo(b1) >= 0;
-  }
-
-  /** SQL <code>&ge;</code> operator applied to Number values. */
-  public static boolean ge(Number b0, Number b1) {
-    return ge(toBigDecimal(b0), toBigDecimal(b1));
   }
 
   /** SQL <code>&ge;</code> operator applied to Object values (at least one
@@ -730,40 +710,21 @@ public class SqlFunctions {
         : (b0.longValue() + b1.longValue());
   }
 
-  /** SQL <code>+</code> operator applied to nullable long and long values. */
-  public static Long plus(Long b0, Long b1) {
-    return (b0 == null || b1 == null)
-            ? null
-            : (b0.longValue() + b1.longValue());
-  }
-
   /** SQL <code>+</code> operator applied to BigDecimal values. */
   public static BigDecimal plus(BigDecimal b0, BigDecimal b1) {
     return (b0 == null || b1 == null) ? null : b0.add(b1);
   }
 
-  public static BigDecimal plus(String s0, String s1) {
-    try {
-      return plus(toBigDecimal(s0), toBigDecimal(s1));
-    } catch (NumberFormatException ignored) {
-      return null;
-    }
+  public static Double plus(String s0, String s1) {
+    throw new RuntimeException("plus string not supported");
   }
 
-  public static BigDecimal plus(String s0, BigDecimal b1) {
-    try {
-      return plus(toBigDecimal(s0), b1);
-    } catch (NumberFormatException ignored) {
-      return null;
-    }
+  public static Double plus(String s0, Number b1) {
+    throw new RuntimeException("plus string not supported");
   }
 
-  public static BigDecimal plus(String s0, Number b1) {
-    return plus(s0, toBigDecimal(b1));
-  }
-
-  public static BigDecimal plus(Number b1, String s0) {
-    return plus(s0, toBigDecimal(b1));
+  public static Double plus(Number b1, String s0) {
+    throw new RuntimeException("plus string not supported");
   }
 
   public static BigDecimal plus(Number b1, Number b2) {
@@ -815,13 +776,6 @@ public class SqlFunctions {
         : (b0.longValue() - b1.longValue());
   }
 
-  /** SQL <code>-</code> operator applied to nullable long and long values. */
-  public static Long minus(Long b0, Long b1) {
-    return (b0 == null || b1 == null)
-            ? null
-            : (b0.longValue() - b1.longValue());
-  }
-
   /** SQL <code>-</code> operator applied to nullable int and long values. */
   public static Long minus(Integer b0, Long b1) {
     return (b0 == null || b1 == null)
@@ -832,15 +786,6 @@ public class SqlFunctions {
   /** SQL <code>-</code> operator applied to BigDecimal values. */
   public static BigDecimal minus(BigDecimal b0, BigDecimal b1) {
     return (b0 == null || b1 == null) ? null : b0.subtract(b1);
-  }
-
-  /** SQL <code>-</code> operator applied to Number values. */
-  public static BigDecimal minus(Number b1, Number b2) {
-    if(b1 == null || b2 == null){
-      return null;
-    }
-
-    return minus(toBigDecimal(b1), toBigDecimal(b2));
   }
 
   /** SQL <code>-</code> operator applied to Object values (at least one operand
@@ -895,23 +840,11 @@ public class SqlFunctions {
         : (b0.longValue() / b1.longValue());
   }
 
-  /** SQL <code>/</code> operator applied to nullable long and long values. */
-  public static Long divide(Long b0, Long b1) {
-    return (b0 == null || b1 == null)
-            ? null
-            : (b0.longValue() / b1.longValue());
-  }
-
   /** SQL <code>/</code> operator applied to BigDecimal values. */
   public static BigDecimal divide(BigDecimal b0, BigDecimal b1) {
     return (b0 == null || b1 == null)
         ? null
         : b0.divide(b1, MathContext.DECIMAL64);
-  }
-
-  /** SQL <code>/</code> operator applied to BigDecimal values. */
-  public static BigDecimal divide(Number b1, Number b2) {
-    return divide(toBigDecimal(b1), toBigDecimal(b2));
   }
 
   /** SQL <code>/</code> operator applied to Object values (at least one operand
@@ -958,6 +891,7 @@ public class SqlFunctions {
   }
 
   /** SQL <code>*</code> operator applied to nullable int values. */
+
   public static Integer multiply(Integer b0, Integer b1) {
     return (b0 == null || b1 == null) ? null : (b0 * b1);
   }
@@ -976,21 +910,9 @@ public class SqlFunctions {
         : (b0.longValue() * b1.longValue());
   }
 
-  /** SQL <code>*</code> operator applied to nullable long and long values. */
-  public static Long multiply(Long b0, Long b1) {
-    return (b0 == null || b1 == null)
-            ? null
-            : (b0.longValue() * b1.longValue());
-  }
-
   /** SQL <code>*</code> operator applied to BigDecimal values. */
   public static BigDecimal multiply(BigDecimal b0, BigDecimal b1) {
     return (b0 == null || b1 == null) ? null : b0.multiply(b1);
-  }
-
-  /** SQL <code>*</code> operator applied to Number values. */
-  public static BigDecimal multiply(Number b1, Number b2) {
-    return multiply(toBigDecimal(b1), toBigDecimal(b2));
   }
 
   /** SQL <code>*</code> operator applied to Object values (at least one operand
@@ -1102,10 +1024,6 @@ public class SqlFunctions {
     return Math.pow(n1, n2);
   }
 
-  public static double power(Number n1, Number n2) {
-    return power(toBigDecimal(n1), toBigDecimal(n2));
-  }
-
   // OVERRIDE POINT ends, more power overloads
 
   // LN
@@ -1179,10 +1097,6 @@ public class SqlFunctions {
     return bigDecimals[1];
   }
 
-  public static BigDecimal mod(Number b0, Number b1) {
-    return mod(toBigDecimal(b0), toBigDecimal(b1));
-  }
-
   // FLOOR
 
   public static double floor(double b0) {
@@ -1244,10 +1158,6 @@ public class SqlFunctions {
     return b0.subtract(r);
   }
 
-  public static BigDecimal floor(Number b0, Number b1) {
-    return floor(toBigDecimal(b0), toBigDecimal(b1));
-  }
-
   // CEIL
 
   public static double ceil(double b0) {
@@ -1303,10 +1213,6 @@ public class SqlFunctions {
       r = r.subtract(b1);
     }
     return b0.subtract(r);
-  }
-
-  public static BigDecimal ceil(Number b0, Number b1) {
-    return ceil(toBigDecimal(b0), toBigDecimal(b1));
   }
 
   // ABS
@@ -1415,10 +1321,6 @@ public class SqlFunctions {
     return Math.atan2(b0, b1);
   }
 
-  public static double atan2(Number b0, Number b1) {
-    return atan2(toBigDecimal(b0), toBigDecimal(b1));
-  }
-
   // COS
   /** SQL <code>COS</code> operator applied to long values. */
   public static double cos(long b0) {
@@ -1525,11 +1427,6 @@ public class SqlFunctions {
     return sround(BigDecimal.valueOf(b0), b1).doubleValue();
   }
 
-  /** SQL <code>ROUND</code> operator applied to double values. */
-  public static double sround(Number b0, Number b1) {
-    return sround(toBigDecimal(b0), toBigDecimal(b1));
-  }
-
   // SQL TRUNCATE
   /** SQL <code>TRUNCATE</code> operator applied to int values. */
   public static int struncate(int b0) {
@@ -1566,11 +1463,6 @@ public class SqlFunctions {
 
   public static double struncate(double b0, int b1) {
     return struncate(BigDecimal.valueOf(b0), b1).doubleValue();
-  }
-
-  /** SQL <code>TRUNCATE</code> operator applied to double values. */
-  public static double struncate(Number b0, Number b1) {
-    return struncate(toBigDecimal(b0), toBigDecimal(b1));
   }
 
   // SIGN
@@ -1965,6 +1857,7 @@ public class SqlFunctions {
         : number instanceof BigDecimal ? (BigDecimal) number
         : number instanceof BigInteger ? new BigDecimal((BigInteger) number)
         : number instanceof Long ? new BigDecimal(number.longValue())
+        : number instanceof Double ? new BigDecimal(number.toString())
         : new BigDecimal(number.doubleValue());
   }
 
@@ -1985,10 +1878,6 @@ public class SqlFunctions {
     return v == null ? null : internalToDate(v.intValue());
   }
 
-  public static java.sql.Date internalToDate(Number v) {
-    return v == null ? null : internalToDate(v.intValue());
-  }
-
   /** Converts the internal representation of a SQL TIME (int) to the Java
    * type used for UDF parameters ({@link java.sql.Time}). */
   public static java.sql.Time internalToTime(int v) {
@@ -1996,10 +1885,6 @@ public class SqlFunctions {
   }
 
   public static java.sql.Time internalToTime(Integer v) {
-    return v == null ? null : internalToTime(v.intValue());
-  }
-
-  public static java.sql.Time internalToTime(Number v) {
     return v == null ? null : internalToTime(v.intValue());
   }
 
@@ -2024,10 +1909,6 @@ public class SqlFunctions {
         .getMillisOfDay();
   }
 
-  public static int timeWithLocalTimeZoneToTime(Number v, TimeZone timeZone) {
-    return timeWithLocalTimeZoneToTime(v.intValue(), timeZone);
-  }
-
   public static long timeWithLocalTimeZoneToTimestamp(String date, int v, TimeZone timeZone) {
     final TimeWithTimeZoneString tTZ = TimeWithTimeZoneString.fromMillisOfDay(v)
         .withTimeZone(DateTimeUtils.UTC_ZONE);
@@ -2037,20 +1918,12 @@ public class SqlFunctions {
         .getMillisSinceEpoch();
   }
 
-  public static long timeWithLocalTimeZoneToTimestamp(String date, Number v, TimeZone timeZone)  {
-    return timeWithLocalTimeZoneToTimestamp(date, v.intValue(), timeZone);
-  }
-
   public static long timeWithLocalTimeZoneToTimestampWithLocalTimeZone(String date, int v) {
     final TimeWithTimeZoneString tTZ = TimeWithTimeZoneString.fromMillisOfDay(v)
         .withTimeZone(DateTimeUtils.UTC_ZONE);
     return new TimestampWithTimeZoneString(date + " " + tTZ.toString())
         .getLocalTimestampString()
         .getMillisSinceEpoch();
-  }
-
-  public static long timeWithLocalTimeZoneToTimestampWithLocalTimeZone(String date, Number v) {
-    return timeWithLocalTimeZoneToTimestampWithLocalTimeZone(date, v.intValue());
   }
 
   public static String timeWithLocalTimeZoneToString(int v, TimeZone timeZone) {
@@ -2069,10 +1942,6 @@ public class SqlFunctions {
     return v == null ? null : internalToTimestamp(v.longValue());
   }
 
-  public static java.sql.Timestamp internalToTimestamp(Number v) {
-    return v == null ? null : internalToTimestamp(v.longValue());
-  }
-
   public static int timestampWithLocalTimeZoneToDate(long v, TimeZone timeZone) {
     return TimestampWithTimeZoneString.fromMillisSinceEpoch(v)
         .withTimeZone(timeZone)
@@ -2085,10 +1954,6 @@ public class SqlFunctions {
         .withTimeZone(timeZone)
         .getLocalTimeString()
         .getMillisOfDay();
-  }
-
-  public static int timestampWithLocalTimeZoneToTime(Number v, TimeZone timeZone) {
-    return timestampWithLocalTimeZoneToTime(v.longValue(), timeZone);
   }
 
   public static long timestampWithLocalTimeZoneToTimestamp(long v, TimeZone timeZone) {
@@ -2104,18 +1969,10 @@ public class SqlFunctions {
         .toString();
   }
 
-  public static String timestampWithLocalTimeZoneToString(Number v, TimeZone timeZone) {
-    return timestampWithLocalTimeZoneToString(v.longValue(), timeZone);
-  }
-
   public static int timestampWithLocalTimeZoneToTimeWithLocalTimeZone(long v) {
     return TimestampWithTimeZoneString.fromMillisSinceEpoch(v)
         .getLocalTimeString()
         .getMillisOfDay();
-  }
-
-  public static int timestampWithLocalTimeZoneToTimeWithLocalTimeZone(Number v) {
-    return timestampWithLocalTimeZoneToTimeWithLocalTimeZone(v.longValue());
   }
 
   public static Long toTimestampWithLocalTimeZone(String v) {
@@ -2145,10 +2002,6 @@ public class SqlFunctions {
     }
   }
 
-  public static String truncate(String s, Number maxLength) {
-    return truncate(s, maxLength.intValue());
-  }
-
   /** Helper for CAST(... AS CHAR(maxLength)). */
   public static String truncateOrPad(String s, int maxLength) {
     if (s == null) {
@@ -2163,10 +2016,6 @@ public class SqlFunctions {
     }
   }
 
-  public static String truncateOrPad(String s, Number maxLength) {
-    return truncateOrPad(s, maxLength.intValue());
-  }
-
   /** Helper for CAST(... AS VARBINARY(maxLength)). */
   public static ByteString truncate(ByteString s, int maxLength) {
     if (s == null) {
@@ -2176,10 +2025,6 @@ public class SqlFunctions {
     } else {
       return s;
     }
-  }
-
-  public static ByteString truncate(ByteString s, Number maxLength) {
-    return truncate(s, maxLength.intValue());
   }
 
   /** Helper for CAST(... AS BINARY(maxLength)). */
