@@ -716,15 +716,15 @@ public class SqlFunctions {
   }
 
   public static Double plus(String s0, String s1) {
-    throw new RuntimeException("plus string not supported");
+    throw new IllegalStateException("string plus string not supported");
   }
 
   public static Double plus(String s0, Number b1) {
-    throw new RuntimeException("plus string not supported");
+    throw new IllegalStateException("string plus number not supported");
   }
 
   public static Double plus(Number b1, String s0) {
-    throw new RuntimeException("plus string not supported");
+    throw new IllegalStateException("number plus string not supported");
   }
 
   public static BigDecimal plus(Number b1, Number b2) {
