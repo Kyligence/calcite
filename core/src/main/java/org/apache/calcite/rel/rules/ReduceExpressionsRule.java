@@ -65,6 +65,7 @@ import org.apache.calcite.sql.fun.SqlFloorFunction;
 import org.apache.calcite.sql.fun.SqlRowOperator;
 import org.apache.calcite.sql.fun.SqlStdOperatorTable;
 import org.apache.calcite.sql.type.NotConstant;
+import org.apache.calcite.sql.type.SqlTypeFamily;
 import org.apache.calcite.sql.type.SqlTypeName;
 import org.apache.calcite.sql.validate.SqlUserDefinedFunction;
 import org.apache.calcite.tools.RelBuilder;
@@ -990,6 +991,18 @@ public abstract class ReduceExpressionsRule extends RelOptRule {
               || call.getOperator() instanceof SqlFloorFunction)) {
         callConstancy = Constancy.NON_CONSTANT;
       }
+
+      if ((callConstancy == Constancy.REDUCIBLE_CONSTANT)
+              && ("plus".equals(call.getOperator().kind.lowerName))) {
+        // AL-9326, Calcite does not support plus string
+        for(RexNode operand:call.operands){
+          if(SqlTypeFamily.NUMERIC != operand.getType().getSqlTypeName().getFamily()){
+            callConstancy = Constancy.IRREDUCIBLE_CONSTANT;
+          }
+        }
+      }
+
+
 
       if (callConstancy == Constancy.NON_CONSTANT) {
         // any REDUCIBLE_CONSTANT children are now known to be maximal

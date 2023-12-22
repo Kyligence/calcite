@@ -715,28 +715,16 @@ public class SqlFunctions {
     return (b0 == null || b1 == null) ? null : b0.add(b1);
   }
 
-  public static BigDecimal plus(String s0, String s1) {
-    try {
-      return plus(toBigDecimal(s0), toBigDecimal(s1));
-    } catch (NumberFormatException ignored) {
-      return null;
-    }
+  public static Double plus(String s0, String s1) {
+    throw new IllegalStateException("string plus string not supported");
   }
 
-  public static BigDecimal plus(String s0, BigDecimal b1) {
-    try {
-      return plus(toBigDecimal(s0), b1);
-    } catch (NumberFormatException ignored) {
-      return null;
-    }
+  public static Double plus(String s0, Number b1) {
+    throw new IllegalStateException("string plus number not supported");
   }
 
-  public static BigDecimal plus(String s0, Number b1) {
-    return plus(s0, toBigDecimal(b1));
-  }
-
-  public static BigDecimal plus(Number b1, String s0) {
-    return plus(s0, toBigDecimal(b1));
+  public static Double plus(Number b1, String s0) {
+    throw new IllegalStateException("number plus string not supported");
   }
 
   public static BigDecimal plus(Number b1, Number b2) {
@@ -903,6 +891,7 @@ public class SqlFunctions {
   }
 
   /** SQL <code>*</code> operator applied to nullable int values. */
+
   public static Integer multiply(Integer b0, Integer b1) {
     return (b0 == null || b1 == null) ? null : (b0 * b1);
   }
@@ -1868,6 +1857,7 @@ public class SqlFunctions {
         : number instanceof BigDecimal ? (BigDecimal) number
         : number instanceof BigInteger ? new BigDecimal((BigInteger) number)
         : number instanceof Long ? new BigDecimal(number.longValue())
+        : number instanceof Double ? new BigDecimal(number.toString())
         : new BigDecimal(number.doubleValue());
   }
 
@@ -2053,6 +2043,10 @@ public class SqlFunctions {
     }
   }
 
+  public static ByteString truncateOrPad(ByteString s, Number maxLength) {
+    return truncateOrPad(s, maxLength.intValue());
+  }
+
   /** SQL {@code POSITION(seek IN string)} function. */
   public static int position(String seek, String s) {
     return s.indexOf(seek) + 1;
@@ -2073,6 +2067,10 @@ public class SqlFunctions {
     return s.indexOf(seek, from0) + 1;
   }
 
+  public static int position(String seek, String s, Number from) {
+    return position(seek, s, from.intValue());
+  }
+
   /** SQL {@code POSITION(seek IN string FROM integer)} function for byte
    * strings. */
   public static int position(ByteString seek, ByteString s, int from) {
@@ -2089,6 +2087,10 @@ public class SqlFunctions {
       return 0;
     }
     return p + from;
+  }
+
+  public static int position(ByteString seek, ByteString s, Number from) {
+    return position(seek, s, from.intValue());
   }
 
   /** Helper for rounding. Truncate(12345, 1000) returns 12000. */
@@ -2117,6 +2119,14 @@ public class SqlFunctions {
       remainder += x;
     }
     return v - remainder;
+  }
+
+  public static long round(Number v, Number x) {
+    return round(v.longValue(), x.longValue());
+  }
+
+  public static long truncate(Number v, Number x) {
+    return truncate(v.longValue(), x.longValue());
   }
 
   /** SQL {@code CURRENT_TIMESTAMP} function. */
