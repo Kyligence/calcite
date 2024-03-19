@@ -357,7 +357,8 @@ public class StandardConvertletTable extends ReflectiveConvertletTable {
         convertOperands(cx, call, SqlOperandTypeChecker.Consistency.NONE);
     final RelDataType type =
         cx.getValidator().getValidatedNodeType(call);
-    return rexBuilder.makeCall(type, SqlStdOperatorTable.CASE, operands);
+    // keep if for kylin
+    return rexBuilder.makeCall(type, SqlLibraryOperators.IF, operands);
   }
 
   /** Converts an interval expression to a numeric multiplied by an interval
