@@ -119,7 +119,7 @@ public class StandardConvertletTable extends ReflectiveConvertletTable {
         SqlStdOperatorTable.IS_NOT_NULL);
     addAlias(SqlLibraryOperators.NULL_SAFE_EQUAL, SqlStdOperatorTable.IS_NOT_DISTINCT_FROM);
     addAlias(SqlStdOperatorTable.PERCENT_REMAINDER, SqlStdOperatorTable.MOD);
-    addAlias(SqlLibraryOperators.IFNULL, SqlLibraryOperators.NVL);
+    // addAlias(SqlLibraryOperators.IFNULL, SqlLibraryOperators.NVL); // kylin IFNULL ≠ NVL for cc
 
     // Register convertlets for specific objects.
     registerOp(SqlStdOperatorTable.CAST, this::convertCast);
@@ -166,6 +166,7 @@ public class StandardConvertletTable extends ReflectiveConvertletTable {
     registerOp(SqlLibraryOperators.DECODE,
         StandardConvertletTable::convertDecode);
     registerOp(SqlLibraryOperators.IF, StandardConvertletTable::convertIf);
+    registerOp(SqlLibraryOperators.IFNULL, StandardConvertletTable::convertIfNull);
 
     // Expand "x NOT LIKE y" into "NOT (x LIKE y)"
     registerOp(SqlStdOperatorTable.NOT_LIKE,
@@ -324,6 +325,20 @@ public class StandardConvertletTable extends ReflectiveConvertletTable {
                     .createTypeWithNullability(type, operand1.getType().isNullable()),
                 operand1)
         ));
+  }
+
+  /** Converts a call to the IfNull function. */
+  private static RexNode convertIfNull(SqlRexContext cx, SqlCall call) {
+    final RexBuilder rexBuilder = cx.getRexBuilder();
+    final RexNode operand0 =
+        cx.convertExpression(call.getOperandList().get(0));
+    final RexNode operand1 =
+        cx.convertExpression(call.getOperandList().get(1));
+    final RelDataType type =
+        cx.getValidator().getValidatedNodeType(call);
+    // Preserve Operand Nullability
+    return rexBuilder.makeCall(type, SqlLibraryOperators.IFNULL,
+        ImmutableList.of(operand0, operand1));
   }
 
   /** Converts a call to the DECODE function. */
