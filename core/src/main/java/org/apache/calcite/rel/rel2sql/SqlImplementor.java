@@ -2001,15 +2001,16 @@ public abstract class SqlImplementor {
         if (orderList == null) {
           return false;
         }
-        for (SqlNode child : orderList) {
-          if (hasSortByOrdinal(child)) {
+        for (SqlNode order : orderList) {
+          if (order instanceof SqlNumericLiteral) {
             return true;
           }
-        }
-      } else if (sqlNode instanceof SqlBasicCall) {
-        for (SqlNode operand : ((SqlBasicCall) sqlNode).getOperandList()) {
-          if (hasSortByOrdinal(operand)) {
-            return true;
+          if (order instanceof SqlBasicCall) {
+            for (SqlNode operand : ((SqlBasicCall) order).getOperandList()) {
+              if (operand instanceof SqlNumericLiteral) {
+                return true;
+              }
+            }
           }
         }
       }
