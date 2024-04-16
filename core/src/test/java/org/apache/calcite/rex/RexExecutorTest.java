@@ -377,4 +377,29 @@ class RexExecutorTest {
   interface Action {
     void check(RexBuilder rexBuilder, RexExecutorImpl executor);
   }
+
+  /** Test case for
+   * <a href="https://issues.apache.org/jira/browse/CALCITE-5949">[CALCITE-5949]
+   * RexExecutable should return unchanged original expressions when it fails</a>.
+   */
+  @Test void testInvalidExpressionInList() {
+    check((rexBuilder, executor) -> {
+      final List<RexNode> reducedValues = new ArrayList<>();
+      final RelDataTypeFactory typeFactory = rexBuilder.getTypeFactory();
+      final RelDataType integer =
+          typeFactory.createSqlType(SqlTypeName.INTEGER);
+      final RexCall first =
+          (RexCall) rexBuilder.makeCall(SqlStdOperatorTable.LN,
+          rexBuilder.makeLiteral(3, integer, true));
+      final RexCall second =
+          (RexCall) rexBuilder.makeCall(SqlStdOperatorTable.LN,
+          rexBuilder.makeLiteral(-2, integer, true));
+      executor.reduce(rexBuilder, ImmutableList.of(first, second),
+          reducedValues);
+      // TODO wait for Calcite 1.36
+      // assertThat(reducedValues, hasSize(2));
+      assertThat(reducedValues.get(0), instanceOf(RexCall.class));
+      assertThat(reducedValues.get(1), instanceOf(RexCall.class));
+    });
+  }
 }
