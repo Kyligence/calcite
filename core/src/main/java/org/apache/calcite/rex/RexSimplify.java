@@ -1676,7 +1676,9 @@ public class RexSimplify {
             final RexLiteral literal = comparison.literal;
             final RexLiteral prevLiteral =
                 equalityConstantTerms.put(comparison.ref, literal);
-            if (prevLiteral != null && !literal.equals(prevLiteral)) {
+            // see https://olapio.atlassian.net/browse/AL-9703
+            if (prevLiteral != null && !(literal.getTypeName() == prevLiteral.getTypeName()
+                && literal.getValue().equals(prevLiteral.getValue()))) {
               return rexBuilder.makeLiteral(false);
             }
           } else if (RexUtil.isReferenceOrAccess(left, true)
