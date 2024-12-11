@@ -5366,7 +5366,7 @@ public class SqlToRelConverter {
 
     /* OVERRIDE POINT */
     private boolean isSimpleCount(SqlCall call) {
-      if (call.getOperator().isName("COUNT") && call.operandCount() == 1) {
+      if (call.getOperator().isName("COUNT", false) && call.operandCount() == 1) {
         final SqlNode parm = call.operand(0);
         if (parm instanceof SqlNumericLiteral && call.getFunctionQuantifier() == null) {
           return true;
