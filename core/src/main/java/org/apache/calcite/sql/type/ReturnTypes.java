@@ -587,6 +587,47 @@ public abstract class ReturnTypes {
   };
 
   /**
+   * Type-inference strategy for a call where the first argument is a decimal and
+   * the optional second argument is an integer.
+   * The result type of a call is a decimal with a scale of either the original or
+   * the second integer depends on which is smaller, or 0 if negative scale occurs,
+   * and the same precision and nullability as the first argument.
+   */
+  public static final SqlReturnTypeInference DECIMAL_SCALE_SMALL = opBinding -> {
+    RelDataType type1 = opBinding.getOperandType(0);
+    Integer type2 = 0;
+    if (opBinding.getOperandCount() == 2) {
+      type2 = opBinding.getOperandLiteralValue(1, Integer.class);
+    }
+    if (SqlTypeUtil.isDecimal(type1)) {
+      int p = type1.getPrecision();
+      int originalScale = type1.getScale();
+      int targetScale = type2 == null ? 0 : type2;
+      RelDataType ret;
+      ret = opBinding.getTypeFactory().createSqlType(
+          SqlTypeName.DECIMAL,
+          p,
+          Math.max(Math.min(originalScale, targetScale), 0)
+      );
+      if (type1.isNullable()) {
+        ret =
+            opBinding.getTypeFactory()
+                .createTypeWithNullability(ret, true);
+      }
+      return ret;
+    }
+    return null;
+  };
+
+  /**
+   * Type-inference strategy whereby the result type of a call is
+   * {@link #DECIMAL_SCALE_SMALL} with a fallback to {@link #ARG0_NULLABLE}.
+   * This rule is used for truncate, round.
+   */
+  public static final SqlReturnTypeInference ARG0_OR_SCALE_SMALL_NULLABLE =
+      DECIMAL_SCALE_SMALL.orElse(ARG0_NULLABLE);
+
+  /**
    * return long type for all numeric type.
    */
   public static final SqlReturnTypeInference NUMERIC_TO_LONG = opBinding -> {
