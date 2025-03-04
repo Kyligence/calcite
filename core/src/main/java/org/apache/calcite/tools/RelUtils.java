@@ -41,7 +41,7 @@ public class RelUtils {
     Class aClass;
     try {
       aClass = Thread.currentThread().getContextClassLoader()
-                        .loadClass("org.apache.kylin.query.relnode.OLAPRel");
+                        .loadClass("org.apache.kylin.query.relnode.OlapRel");
     } catch (ClassNotFoundException e) {
       return false;
     }
