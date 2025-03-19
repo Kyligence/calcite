@@ -597,12 +597,16 @@ public abstract class ReturnTypes {
     RelDataType type1 = opBinding.getOperandType(0);
     Integer type2 = 0;
     if (opBinding.getOperandCount() == 2) {
-      type2 = opBinding.getOperandLiteralValue(1, Integer.class);
+      if (opBinding.isOperandLiteral(1, false)) {
+        type2 = opBinding.getOperandLiteralValue(1, Integer.class);
+      } else {
+        return null;
+      }
     }
-    if (SqlTypeUtil.isDecimal(type1)) {
+    if (SqlTypeUtil.isDecimal(type1) && type2 != null) {
       int p = type1.getPrecision();
       int originalScale = type1.getScale();
-      int targetScale = type2 == null ? 0 : type2;
+      int targetScale = type2;
       RelDataType ret;
       ret = opBinding.getTypeFactory().createSqlType(
           SqlTypeName.DECIMAL,
