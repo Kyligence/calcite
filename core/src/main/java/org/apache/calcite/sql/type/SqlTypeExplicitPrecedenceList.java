@@ -145,10 +145,12 @@ public class SqlTypeExplicitPrecedenceList
         getListPosition(
             type1.getSqlTypeName(),
             typeNames);
+    p1 = (p1 == -1) ? Integer.MAX_VALUE : p1;
     int p2 =
         getListPosition(
             type2.getSqlTypeName(),
             typeNames);
+    p2 = (p2 == -1) ? Integer.MAX_VALUE : p2;
     return p2 - p1;
   }
 
