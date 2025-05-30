@@ -138,8 +138,12 @@ public class SqlTypeExplicitPrecedenceList
 
   // implement RelDataTypePrecedenceList
   @Override public int compareTypePrecedence(RelDataType type1, RelDataType type2) {
-    assert containsType(type1) : type1;
-    assert containsType(type2) : type2;
+    if (SqlTypeName.ANY != type1.getSqlTypeName()) {
+      assert containsType(type1) : type1;
+    }
+    if (SqlTypeName.ANY != type2.getSqlTypeName()) {
+      assert containsType(type2) : type2;
+    }
 
     int p1 =
         getListPosition(
@@ -156,7 +160,9 @@ public class SqlTypeExplicitPrecedenceList
 
   private static int getListPosition(SqlTypeName type, List<SqlTypeName> list) {
     int i = list.indexOf(type);
-    assert i != -1;
+    if (SqlTypeName.ANY != type) {
+      assert i != -1;
+    }
     return i;
   }
 
