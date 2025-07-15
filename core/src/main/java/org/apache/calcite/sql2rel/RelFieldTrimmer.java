@@ -675,17 +675,19 @@ public class RelFieldTrimmer implements ReflectiveVisitor {
 
   private void handleEmpty(Sort sort, RelBuilder relBuilder) {
     RelNode relNode = relBuilder.peek();
-    if ((relNode instanceof LogicalValues) && !(relNode.getTraitSet().equals(sort.getTraitSet()))) {
-      Values logicalValues = new LogicalValues(relNode.getCluster(), sort.getTraitSet(), relNode.getRowType(),
-          ((LogicalValues) relNode).getTuples());
+    if ((relNode instanceof LogicalValues)
+        && !(relNode.getTraitSet().equals(sort.getTraitSet()))) {
+      LogicalValues oldLogicalValues = (LogicalValues) relNode;
+      Values logicalValues = new LogicalValues(oldLogicalValues.getCluster(),
+          sort.getTraitSet(), oldLogicalValues.getRowType(), oldLogicalValues.getTuples());
       final EnumerableValues enumerableValues = EnumerableValues.create(
           logicalValues.getCluster(), logicalValues.getRowType(), logicalValues.getTuples());
       relNode = enumerableValues.copy(
           logicalValues.getTraitSet().replace(EnumerableConvention.INSTANCE),
           enumerableValues.getInputs());
+      relBuilder.clear();
+      relBuilder.push(relNode);
     }
-    relBuilder.clear();
-    relBuilder.push(relNode);
   }
 
   public TrimResult trimFields(
