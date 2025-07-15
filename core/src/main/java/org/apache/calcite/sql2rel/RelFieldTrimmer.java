@@ -662,11 +662,22 @@ public class RelFieldTrimmer implements ReflectiveVisitor {
     final ImmutableList<RexNode> fields =
         relBuilder.fields(RexUtil.apply(inputMapping, collation));
     relBuilder.sortLimit(offset, fetch, fields);
+    handleEmpty(sort, relBuilder);
 
     // The result has the same mapping as the input gave us. Sometimes we
     // return fields that the consumer didn't ask for, because the filter
     // needs them for its condition.
     return result(relBuilder.build(), inputMapping);
+  }
+
+  private void handleEmpty(Sort sort, RelBuilder relBuilder) {
+    RelNode relNode = relBuilder.peek();
+    if ((relNode instanceof LogicalValues) && !(relNode.getTraitSet().equals(sort.getTraitSet()))) {
+      relNode = new LogicalValues(relNode.getCluster(), sort.getTraitSet(), relNode.getRowType(),
+          ((LogicalValues) relNode).getTuples());
+    }
+    relBuilder.clear();
+    relBuilder.push(relNode);
   }
 
   public TrimResult trimFields(
