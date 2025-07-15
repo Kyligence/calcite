@@ -16,6 +16,8 @@
  */
 package org.apache.calcite.sql2rel;
 
+import org.apache.calcite.adapter.enumerable.EnumerableConvention;
+import org.apache.calcite.adapter.enumerable.EnumerableValues;
 import org.apache.calcite.linq4j.Ord;
 import org.apache.calcite.plan.RelOptCluster;
 import org.apache.calcite.plan.RelOptUtil;
@@ -38,6 +40,7 @@ import org.apache.calcite.rel.core.SetOp;
 import org.apache.calcite.rel.core.Sort;
 import org.apache.calcite.rel.core.SortExchange;
 import org.apache.calcite.rel.core.TableScan;
+import org.apache.calcite.rel.core.Values;
 import org.apache.calcite.rel.logical.LogicalTableFunctionScan;
 import org.apache.calcite.rel.logical.LogicalTableModify;
 import org.apache.calcite.rel.logical.LogicalValues;
@@ -673,8 +676,13 @@ public class RelFieldTrimmer implements ReflectiveVisitor {
   private void handleEmpty(Sort sort, RelBuilder relBuilder) {
     RelNode relNode = relBuilder.peek();
     if ((relNode instanceof LogicalValues) && !(relNode.getTraitSet().equals(sort.getTraitSet()))) {
-      relNode = new LogicalValues(relNode.getCluster(), sort.getTraitSet(), relNode.getRowType(),
+      Values logicalValues = new LogicalValues(relNode.getCluster(), sort.getTraitSet(), relNode.getRowType(),
           ((LogicalValues) relNode).getTuples());
+      final EnumerableValues enumerableValues = EnumerableValues.create(
+          logicalValues.getCluster(), logicalValues.getRowType(), logicalValues.getTuples());
+      relNode = enumerableValues.copy(
+          logicalValues.getTraitSet().replace(EnumerableConvention.INSTANCE),
+          enumerableValues.getInputs());
     }
     relBuilder.clear();
     relBuilder.push(relNode);
