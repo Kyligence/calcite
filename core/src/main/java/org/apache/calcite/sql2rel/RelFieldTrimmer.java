@@ -664,30 +664,12 @@ public class RelFieldTrimmer implements ReflectiveVisitor {
         sort.fetch == null ? -1 : RexLiteral.intValue(sort.fetch);
     final ImmutableList<RexNode> fields =
         relBuilder.fields(RexUtil.apply(inputMapping, collation));
-    relBuilder.sortLimit(offset, fetch, fields);
-    handleEmpty(sort, relBuilder);
+    relBuilder.sortLimit(sort.getTraitSet(), offset, fetch, fields);
 
     // The result has the same mapping as the input gave us. Sometimes we
     // return fields that the consumer didn't ask for, because the filter
     // needs them for its condition.
     return result(relBuilder.build(), inputMapping);
-  }
-
-  private void handleEmpty(Sort sort, RelBuilder relBuilder) {
-    RelNode relNode = relBuilder.peek();
-    if ((relNode instanceof LogicalValues)
-        && !(relNode.getTraitSet().equals(sort.getTraitSet()))) {
-      LogicalValues oldLogicalValues = (LogicalValues) relNode;
-      Values logicalValues = new LogicalValues(oldLogicalValues.getCluster(),
-          sort.getTraitSet(), oldLogicalValues.getRowType(), oldLogicalValues.getTuples());
-      final EnumerableValues enumerableValues = EnumerableValues.create(
-          logicalValues.getCluster(), logicalValues.getRowType(), logicalValues.getTuples());
-      relNode = enumerableValues.copy(
-          logicalValues.getTraitSet().replace(EnumerableConvention.INSTANCE),
-          enumerableValues.getInputs());
-      relBuilder.clear();
-      relBuilder.push(relNode);
-    }
   }
 
   public TrimResult trimFields(
