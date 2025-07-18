@@ -26,6 +26,7 @@ import org.apache.calcite.plan.RelOptPredicateList;
 import org.apache.calcite.plan.RelOptSchema;
 import org.apache.calcite.plan.RelOptTable;
 import org.apache.calcite.plan.RelOptUtil;
+import org.apache.calcite.plan.RelTraitSet;
 import org.apache.calcite.plan.ViewExpanders;
 import org.apache.calcite.prepare.RelOptTableImpl;
 import org.apache.calcite.rel.RelCollation;
@@ -3050,13 +3051,23 @@ public class RelBuilder {
    * create a relation expression that retains the input, just to read its
    * schema.
    */
-  public RelBuilder empty() {
+  public RelBuilder empty(RelTraitSet sortTraits) {
     final Frame frame = stack.pop();
-    final RelNode values =
+    RelNode values =
         struct.valuesFactory.createValues(cluster, frame.rel.getRowType(),
             ImmutableList.of());
+    if (null != sortTraits) {
+      if (values.getConvention() != null) {
+        sortTraits = sortTraits.replace(values.getConvention());
+      }
+      values = values.copy(sortTraits, values.getInputs());
+    }
     stack.push(new Frame(values, frame.fields));
     return this;
+  }
+
+  public RelBuilder empty() {
+    return empty(null);
   }
 
   /** Creates a {@link Values} with a specified row type.
@@ -3190,11 +3201,12 @@ public class RelBuilder {
 
   /** Creates a {@link Sort} by a list of expressions, with limit and offset.
    *
+   * @param sortTraits traits of Sort
    * @param offset Number of rows to skip; non-positive means don't skip any
    * @param fetch Maximum number of rows to fetch; negative means no limit
    * @param nodes Sort expressions
    */
-  public RelBuilder sortLimit(int offset, int fetch,
+  public RelBuilder sortLimit(RelTraitSet sortTraits, int offset, int fetch,
       Iterable<? extends RexNode> nodes) {
     final Registrar registrar = new Registrar(fields(), ImmutableList.of());
     final List<RelFieldCollation> fieldCollations =
@@ -3203,7 +3215,7 @@ public class RelBuilder {
     final RexNode offsetNode = offset <= 0 ? null : literal(offset);
     final RexNode fetchNode = fetch < 0 ? null : literal(fetch);
     if (offsetNode == null && fetch == 0 && config.simplifyLimit()) {
-      return empty();
+      return empty(sortTraits);
     }
     if (offsetNode == null && fetchNode == null && fieldCollations.isEmpty()) {
       return this; // sort is trivial
@@ -3252,6 +3264,11 @@ public class RelBuilder {
       project(registrar.originalExtraNodes);
     }
     return this;
+  }
+
+  public RelBuilder sortLimit(int offset, int fetch,
+      Iterable<? extends RexNode> nodes) {
+    return sortLimit(null, offset, fetch, nodes);
   }
 
   private static RelFieldCollation collation(RexNode node,
