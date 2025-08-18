@@ -661,7 +661,7 @@ public class RelFieldTrimmer implements ReflectiveVisitor {
         sort.fetch == null ? -1 : RexLiteral.intValue(sort.fetch);
     final ImmutableList<RexNode> fields =
         relBuilder.fields(RexUtil.apply(inputMapping, collation));
-    relBuilder.sortLimit(offset, fetch, fields);
+    relBuilder.sortLimit(sort.getTraitSet(), offset, fetch, fields);
 
     // The result has the same mapping as the input gave us. Sometimes we
     // return fields that the consumer didn't ask for, because the filter
