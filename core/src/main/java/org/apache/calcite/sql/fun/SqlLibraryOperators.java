@@ -387,7 +387,7 @@ public abstract class SqlLibraryOperators {
           .withSyntax(SqlSyntax.ORDERED_FUNCTION);
 
   /** The "DATE(string)" function, equivalent to "CAST(string AS DATE). */
-  @LibraryOperator(libraries = {BIG_QUERY})
+  @LibraryOperator(libraries = {BIG_QUERY, SPARK})
   public static final SqlFunction DATE =
       new SqlFunction("DATE", SqlKind.OTHER_FUNCTION,
           ReturnTypes.DATE_NULLABLE, null, OperandTypes.STRING,
