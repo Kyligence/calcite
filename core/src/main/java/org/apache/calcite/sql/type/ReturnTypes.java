@@ -22,16 +22,21 @@ import org.apache.calcite.rel.type.RelDataTypeField;
 import org.apache.calcite.rel.type.RelDataTypeImpl;
 import org.apache.calcite.rel.type.RelDataTypeSystem;
 import org.apache.calcite.rel.type.RelProtoDataType;
+import org.apache.calcite.rex.RexCallBinding;
+import org.apache.calcite.rex.RexLiteral;
 import org.apache.calcite.sql.ExplicitOperatorBinding;
 import org.apache.calcite.sql.SqlCall;
 import org.apache.calcite.sql.SqlCallBinding;
 import org.apache.calcite.sql.SqlCollation;
 import org.apache.calcite.sql.SqlKind;
 import org.apache.calcite.sql.SqlNodeList;
+import org.apache.calcite.sql.SqlNumericLiteral;
 import org.apache.calcite.sql.SqlOperatorBinding;
 import org.apache.calcite.sql.SqlUtil;
 import org.apache.calcite.sql.validate.SqlValidatorNamespace;
 import org.apache.calcite.util.Glossary;
+import org.apache.calcite.util.Pair;
+import org.apache.calcite.util.SqlNodeUtils;
 import org.apache.calcite.util.Util;
 
 import org.apache.kylin.guava30.shaded.common.base.Preconditions;
@@ -54,19 +59,23 @@ public abstract class ReturnTypes {
   private ReturnTypes() {
   }
 
-  /** Creates a return-type inference that applies a rule then a sequence of
+  /**
+   * Creates a return-type inference that applies a rule then a sequence of
    * rules, returning the first non-null result.
    *
-   * @see SqlReturnTypeInference#orElse(SqlReturnTypeInference) */
+   * @see SqlReturnTypeInference#orElse(SqlReturnTypeInference)
+   */
   public static SqlReturnTypeInferenceChain chain(
       SqlReturnTypeInference... rules) {
     return new SqlReturnTypeInferenceChain(rules);
   }
 
-  /** Creates a return-type inference that applies a rule then a sequence of
+  /**
+   * Creates a return-type inference that applies a rule then a sequence of
    * transforms.
    *
-   * @see SqlReturnTypeInference#andThen(SqlTypeTransform) */
+   * @see SqlReturnTypeInference#andThen(SqlTypeTransform)
+   */
   public static SqlTypeTransformCascade cascade(SqlReturnTypeInference rule,
       SqlTypeTransform... transforms) {
     return new SqlTypeTransformCascade(rule, transforms);
@@ -101,10 +110,12 @@ public abstract class ReturnTypes {
     return explicit(RelDataTypeImpl.proto(typeName, precision, false));
   }
 
-  /** Returns a return-type inference that first transforms a binding and
+  /**
+   * Returns a return-type inference that first transforms a binding and
    * then applies an inference.
    *
-   * <p>{@link #stripOrderBy} is an example of {@code bindingTransform}. */
+   * <p>{@link #stripOrderBy} is an example of {@code bindingTransform}.
+   */
   public static SqlReturnTypeInference andThen(
       UnaryOperator<SqlOperatorBinding> bindingTransform,
       SqlReturnTypeInference typeInference) {
@@ -112,10 +123,12 @@ public abstract class ReturnTypes {
         typeInference.inferReturnType(bindingTransform.apply(opBinding));
   }
 
-  /** Converts a binding of {@code FOO(x, y ORDER BY z)}
+  /**
+   * Converts a binding of {@code FOO(x, y ORDER BY z)}
    * or {@code FOO(x, y ORDER BY z SEPARATOR s)}
    * to a binding of {@code FOO(x, y)}.
-   * Used for {@code STRING_AGG} and {@code GROUP_CONCAT}. */
+   * Used for {@code STRING_AGG} and {@code GROUP_CONCAT}.
+   */
   public static SqlOperatorBinding stripOrderBy(
       SqlOperatorBinding operatorBinding) {
     if (operatorBinding instanceof SqlCallBinding) {
@@ -367,7 +380,7 @@ public abstract class ReturnTypes {
    * Type-inference strategy whereby the result type of a call is a Char.
    */
   public static final SqlReturnTypeInference CHAR =
-          explicit(SqlTypeName.CHAR);
+      explicit(SqlTypeName.CHAR);
 
   /**
    * Type-inference strategy whereby the result type of a call is a nullable
@@ -686,10 +699,68 @@ public abstract class ReturnTypes {
    */
   public static final SqlReturnTypeInference DECIMAL_PRODUCT = opBinding -> {
     RelDataTypeFactory typeFactory = opBinding.getTypeFactory();
-    RelDataType type1 = opBinding.getOperandType(0);
-    RelDataType type2 = opBinding.getOperandType(1);
-    return typeFactory.getTypeSystem().deriveDecimalMultiplyType(typeFactory, type1, type2);
+    Pair<RelDataType, RelDataType> result = getDecimalMultiplyBindingType(opBinding, typeFactory);
+    return typeFactory.getTypeSystem().deriveDecimalMultiplyType(typeFactory, result.left,
+        result.right);
   };
+
+  private static Pair<RelDataType, RelDataType> getDecimalMultiplyBindingType(SqlOperatorBinding opBinding,
+      RelDataTypeFactory typeFactory) {
+    if (opBinding instanceof SqlCallBinding) {
+      RelDataType type1 = createDecimalTypeOrDefault(typeFactory, (SqlCallBinding) opBinding, 0);
+      RelDataType type2 = createDecimalTypeOrDefault(typeFactory, (SqlCallBinding) opBinding, 1);
+      return Pair.of(type1, type2);
+    }
+    if (opBinding instanceof RexCallBinding) {
+      RelDataType type1 = createDecimalTypeOrDefault(typeFactory, (RexCallBinding) opBinding, 0);
+      RelDataType type2 = createDecimalTypeOrDefault(typeFactory, (RexCallBinding) opBinding, 1);
+      return Pair.of(type1, type2);
+    }
+    return Pair.of(opBinding.getOperandType(0), opBinding.getOperandType(1));
+  }
+
+  private static RelDataType createDecimalTypeOrDefault(RelDataTypeFactory typeFactory,
+      RexCallBinding opBinding, int ordinal) {
+    RelDataType defaultType = opBinding.getOperandType(ordinal);
+    try {
+      if (!SqlNodeUtils.isNumericLiteral(opBinding, ordinal)) {
+        return defaultType;
+      }
+
+      RexLiteral literal = (RexLiteral) opBinding.operands().get(ordinal);
+
+      if (SqlNodeUtils.isDecimalConstant(literal)) {
+        return defaultType;
+      }
+
+      Long value = literal.getValueAs(Long.class);
+      int length = (int) Math.floor(Math.log10(Math.abs(value))) + 1;
+      return typeFactory.createSqlType(SqlTypeName.DECIMAL, length, 0);
+    } catch (IllegalArgumentException | AssertionError e) {
+      return defaultType;
+    }
+  }
+
+  private static RelDataType createDecimalTypeOrDefault(RelDataTypeFactory typeFactory,
+      SqlCallBinding opBinding, int ordinal) {
+    RelDataType defaultType = opBinding.getOperandType(ordinal);
+    try {
+      if (!SqlNodeUtils.isNumericLiteral(opBinding, ordinal)) {
+        return defaultType;
+      }
+
+      SqlNumericLiteral literal =
+          (SqlNumericLiteral) opBinding.getCall().getOperandList().get(ordinal);
+      // When parsing into a **SqlNode**, integers are converted to **DECIMAL** type.
+      if (SqlNodeUtils.isDecimalConstant(literal)) {
+        return typeFactory.createSqlType(SqlTypeName.DECIMAL, literal.getPrec(),
+            literal.getScale());
+      }
+      return defaultType;
+    } catch (IllegalArgumentException e) {
+      return defaultType;
+    }
+  }
 
   /**
    * Same as {@link #DECIMAL_PRODUCT} but returns with nullability if any of
@@ -746,7 +817,7 @@ public abstract class ReturnTypes {
    * {@link org.apache.calcite.sql.type.SqlTypeTransforms#TO_NULLABLE}.
    */
   public static final SqlReturnTypeInference DOUBLE_QUOTIENT_NULLABLE =
-          DOUBLE_QUOTIENT.andThen(SqlTypeTransforms.TO_NULLABLE);
+      DOUBLE_QUOTIENT.andThen(SqlTypeTransforms.TO_NULLABLE);
 
   /**
    * Type-inference strategy whereby the result type of a call is
@@ -933,7 +1004,7 @@ public abstract class ReturnTypes {
         List<RelDataType> operandTypes = opBinding.collectOperandTypes();
         final RelDataTypeFactory typeFactory = opBinding.getTypeFactory();
         final RelDataTypeSystem typeSystem = typeFactory.getTypeSystem();
-        for (RelDataType operandType: operandTypes) {
+        for (RelDataType operandType : operandTypes) {
           int operandPrecision = operandType.getPrecision();
           amount = (long) operandPrecision + amount;
           if (operandPrecision == RelDataType.PRECISION_NOT_SPECIFIED) {
