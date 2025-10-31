@@ -24,11 +24,13 @@ import org.apache.calcite.rel.type.RelDataTypeSystem;
 import org.apache.calcite.rel.type.RelProtoDataType;
 import org.apache.calcite.rex.RexCallBinding;
 import org.apache.calcite.rex.RexLiteral;
+import org.apache.calcite.rex.RexNode;
 import org.apache.calcite.sql.ExplicitOperatorBinding;
 import org.apache.calcite.sql.SqlCall;
 import org.apache.calcite.sql.SqlCallBinding;
 import org.apache.calcite.sql.SqlCollation;
 import org.apache.calcite.sql.SqlKind;
+import org.apache.calcite.sql.SqlNode;
 import org.apache.calcite.sql.SqlNodeList;
 import org.apache.calcite.sql.SqlNumericLiteral;
 import org.apache.calcite.sql.SqlOperatorBinding;
@@ -704,62 +706,280 @@ public abstract class ReturnTypes {
         result.right);
   };
 
+  /**
+   * Determines the appropriate data types for decimal multiplication operations.
+   *
+   * <p>This method serves as a dispatcher that routes to the appropriate handler
+   * based on the type of operator binding. It handles both SQL parse tree bindings
+   * (SqlCallBinding) and relational expression bindings (RexCallBinding), with a
+   * fallback for other binding types.</p>
+   *
+   * <p>The method is crucial for decimal multiplication type inference because it
+   * needs to analyze the actual operand values (not just their declared types) to
+   * determine if integer literals should be converted to decimal types for proper
+   * decimal arithmetic.</p>
+   *
+   * @param opBinding the operator binding containing operand information and types
+   * @param typeFactory the type factory used to create new data types if needed
+   * @return a Pair containing the left and right operand types to be used for
+   *         decimal multiplication, possibly with type conversions applied
+   */
   private static Pair<RelDataType, RelDataType> getDecimalMultiplyBindingType(SqlOperatorBinding opBinding,
       RelDataTypeFactory typeFactory) {
+    // Route to SqlCallBinding handler for SQL parse tree scenarios
     if (opBinding instanceof SqlCallBinding) {
-      RelDataType type1 = createDecimalTypeOrDefault(typeFactory, (SqlCallBinding) opBinding, 0);
-      RelDataType type2 = createDecimalTypeOrDefault(typeFactory, (SqlCallBinding) opBinding, 1);
-      return Pair.of(type1, type2);
+      return getRelDataTypeRelDataTypePair((SqlCallBinding) opBinding, typeFactory);
     }
+    // Route to RexCallBinding handler for relational expression scenarios
     if (opBinding instanceof RexCallBinding) {
-      RelDataType type1 = createDecimalTypeOrDefault(typeFactory, (RexCallBinding) opBinding, 0);
-      RelDataType type2 = createDecimalTypeOrDefault(typeFactory, (RexCallBinding) opBinding, 1);
-      return Pair.of(type1, type2);
+      return getRelDataTypeRelDataTypePair((RexCallBinding) opBinding, typeFactory);
     }
+    // Fallback: return original operand types for other binding types
     return Pair.of(opBinding.getOperandType(0), opBinding.getOperandType(1));
   }
 
-  private static RelDataType createDecimalTypeOrDefault(RelDataTypeFactory typeFactory,
-      RexCallBinding opBinding, int ordinal) {
-    RelDataType defaultType = opBinding.getOperandType(ordinal);
+  /**
+   * Determines operand types for decimal multiplication in RexCallBinding scenarios.
+   *
+   * <p>This method handles relational expression bindings (RexCallBinding) where operands
+   * are represented as RexNode objects. It analyzes both the declared types and actual
+   * values to determine if type conversions are needed for proper decimal arithmetic.</p>
+   *
+   * <p>The method implements a comprehensive type inference strategy that considers:
+   * <ul>
+   *   <li>Whether operands have decimal types or contain decimal constants</li>
+   *   <li>Whether operands are numeric (including integer literals)</li>
+   *   <li>Whether integer literals should be converted to decimal types</li>
+   * </ul>
+   * </p>
+   *
+   * <p>Key scenarios handled:
+   * <ul>
+   *   <li>Decimal × Decimal: both operands maintain decimal types</li>
+   *   <li>Decimal × Integer: integer may be converted to decimal</li>
+   *   <li>Integer × Decimal: integer may be converted to decimal</li>
+   *   <li>Integer × Integer: no conversion, return original types</li>
+   * </ul>
+   * </p>
+   *
+   * @param opBinding the RexCallBinding containing RexNode operands
+   * @param typeFactory the type factory for creating new data types
+   * @return a Pair containing the potentially converted left and right operand types
+   */
+  private static Pair<RelDataType, RelDataType> getRelDataTypeRelDataTypePair(RexCallBinding opBinding,
+      RelDataTypeFactory typeFactory) {
+    // Get the default types for both operands
+    RelDataType leftDefaultType = opBinding.getOperandType(0);
+    RelDataType rightDefaultType = opBinding.getOperandType(1);
     try {
-      if (!SqlNodeUtils.isNumericLiteral(opBinding, ordinal)) {
-        return defaultType;
+      // Extract the actual RexNode operands for value analysis
+      RexNode leftOperand = opBinding.operands().get(0);
+      RexNode rightOperand = opBinding.operands().get(1);
+
+      // Determine if operands are decimal (either by type or by constant value)
+      // Check if left operand is decimal by type or contains decimal constant
+      boolean leftIsDecimal = SqlTypeUtil.isDecimal(leftDefaultType)
+          || SqlNodeUtils.isDecimalConstantRexNode(leftOperand);
+      // Check if right operand is decimal by type or contains decimal constant
+      boolean rightIsDecimal = SqlTypeUtil.isDecimal(rightDefaultType)
+          || SqlNodeUtils.isDecimalConstantRexNode(rightOperand);
+      // Determine if operands are numeric (either by type or by literal value)
+      boolean leftIsNumeric = SqlTypeUtil.isNumeric(leftDefaultType)
+          || SqlNodeUtils.isNumericLiteralRexNode(leftOperand);
+      boolean rightIsNumeric = SqlTypeUtil.isNumeric(rightDefaultType)
+          || SqlNodeUtils.isNumericLiteralRexNode(rightOperand);
+
+      // Apply decimal type inference if at least one operand is decimal and both are numeric
+      // This covers scenarios where we need decimal arithmetic precision
+      if ((leftIsDecimal || rightIsDecimal) && leftIsNumeric && rightIsNumeric) {
+        // Convert operands to appropriate decimal types if needed
+        RelDataType type1 = createDecimalTypeOrDefault(typeFactory, opBinding, 0, leftDefaultType);
+        RelDataType type2 = createDecimalTypeOrDefault(typeFactory, opBinding, 1, rightDefaultType);
+        return Pair.of(type1, type2);
       }
 
-      RexLiteral literal = (RexLiteral) opBinding.operands().get(ordinal);
-
-      if (SqlNodeUtils.isDecimalConstant(literal)) {
-        return defaultType;
-      }
-
-      Long value = literal.getValueAs(Long.class);
-      int length = (int) Math.floor(Math.log10(Math.abs(value))) + 1;
-      return typeFactory.createSqlType(SqlTypeName.DECIMAL, length, 0);
-    } catch (IllegalArgumentException | AssertionError e) {
-      return defaultType;
+      // Fallback: both operands are numeric but neither is decimal, no conversion needed
+      return Pair.of(leftDefaultType, rightDefaultType);
+    } catch (Exception e) {
+      // Exception safety: return original types if any error occurs during analysis
+      return Pair.of(leftDefaultType, rightDefaultType);
     }
   }
 
+  /**
+   * Converts integer literals to decimal types for RexCallBinding scenarios.
+   *
+   * <p>This method is responsible for type conversion in relational expression scenarios
+   * where integer literals need to be promoted to decimal types for proper decimal arithmetic.
+   * The conversion is essential when multiplying integers with decimals to maintain
+   * precision and avoid unintended integer arithmetic.</p>
+   *
+   * <p>Conversion logic:
+   * <ul>
+   *   <li>If the operand is already a decimal constant, return the default type</li>
+   *   <li>If the operand is an integer literal, convert it to DECIMAL with appropriate precision</li>
+   *   <li>For other cases, return the default type unchanged</li>
+   * </ul>
+   * </p>
+   *
+   * <p>The precision calculation for converted integers uses the number of digits
+   * in the integer value. For example:
+   * <ul>
+   *   <li>123 → DECIMAL(3, 0) (3 digits)</li>
+   *   <li>45 → DECIMAL(2, 0) (2 digits)</li>
+   *   <li>0 → DECIMAL(1, 0) (special case)</li>
+   * </ul>
+   * </p>
+   *
+   * @param typeFactory the type factory for creating new DECIMAL types
+   * @param opBinding the RexCallBinding containing the operands
+   * @param ordinal the zero-based index of the operand to analyze
+   * @param defaultType the default type to return if no conversion is needed
+   * @return either a converted DECIMAL type or the original default type
+   */
   private static RelDataType createDecimalTypeOrDefault(RelDataTypeFactory typeFactory,
-      SqlCallBinding opBinding, int ordinal) {
-    RelDataType defaultType = opBinding.getOperandType(ordinal);
-    try {
-      if (!SqlNodeUtils.isNumericLiteral(opBinding, ordinal)) {
+      RexCallBinding opBinding, int ordinal, RelDataType defaultType) {
+    // Check if the operand at the specified position is a numeric literal
+    if (SqlNodeUtils.isNumericLiteral(opBinding, ordinal)) {
+      RexNode node = opBinding.operands().get(ordinal);
+      // If it's already a decimal constant, no conversion needed
+      if (SqlNodeUtils.isDecimalConstant(node)) {
         return defaultType;
       }
 
+      // Attempt to convert integer literals to decimal for proper decimal multiplication
+      RexLiteral literal = (RexLiteral) node;
+      RelDataType type = literal.getType();
+      // Check if it's an exact numeric type (INTEGER, BIGINT, etc.) but not already DECIMAL
+      if (SqlTypeUtil.isExactNumeric(type) && !SqlTypeUtil.isDecimal(type)) {
+        // Convert integer types (INTEGER, BIGINT, etc.) to DECIMAL
+        Long value = literal.getValueAs(Long.class);
+        if (value != null) {
+          // Calculate precision based on the number of digits in the integer
+          // For example: 123 → 3 digits, 45 → 2 digits, 0 → 1 digit
+          int length = (int) Math.floor(Math.log10(Math.abs(value))) + 1;
+          // Create DECIMAL type with calculated precision and 0 scale
+          return typeFactory.createSqlType(SqlTypeName.DECIMAL, length, 0);
+        }
+      }
+    }
+    // Return default type for non-literals or when conversion is not applicable
+    return defaultType;
+  }
+
+  /**
+   * Determines operand types for decimal multiplication in SqlCallBinding scenarios.
+   *
+   * <p>This method handles SQL parse tree bindings (SqlCallBinding) where operands
+   * are represented as SqlNode objects. It analyzes both the declared types and actual
+   * values to determine if type conversions are needed for proper decimal arithmetic.</p>
+   *
+   * <p>Similar to the RexCallBinding version, this method implements comprehensive
+   * type inference but operates on SqlNode objects instead of RexNode objects.
+   * The key difference is that during SQL parsing, integer literals are automatically
+   * converted to DECIMAL type, which affects the conversion logic.</p>
+   *
+   * <p>Key scenarios handled:
+   * <ul>
+   *   <li>Decimal × Decimal: both operands maintain decimal types</li>
+   *   <li>Decimal × Integer: integer may be converted to decimal</li>
+   *   <li>Integer × Decimal: integer may be converted to decimal</li>
+   *   <li>Integer × Integer: no conversion, return original types</li>
+   * </ul>
+   * </p>
+   *
+   * @param opBinding the SqlCallBinding containing SqlNode operands
+   * @param typeFactory the type factory for creating new data types
+   * @return a Pair containing the potentially converted left and right operand types
+   */
+  private static Pair<RelDataType, RelDataType> getRelDataTypeRelDataTypePair(SqlCallBinding opBinding,
+      RelDataTypeFactory typeFactory) {
+    // Get the default types for both operands
+    RelDataType leftDefaultType = opBinding.getOperandType(0);
+    RelDataType rightDefaultType = opBinding.getOperandType(1);
+    try {
+      // Extract the actual SqlNode operands for value analysis
+      SqlNode leftOperand = opBinding.operands().get(0);
+      SqlNode rightOperand = opBinding.operands().get(1);
+
+      // Determine if operands are decimal (either by type or by constant value)
+      // Check if left operand is decimal by type or contains decimal constant
+      boolean leftIsDecimal = SqlTypeUtil.isDecimal(leftDefaultType)
+          || SqlNodeUtils.isDecimalConstantSqlNode(leftOperand);
+      // Check if right operand is decimal by type or contains decimal constant
+      boolean rightIsDecimal = SqlTypeUtil.isDecimal(rightDefaultType)
+          || SqlNodeUtils.isDecimalConstantSqlNode(rightOperand);
+      // Determine if operands are numeric (either by type or by literal value)
+      boolean leftIsNumeric = SqlTypeUtil.isNumeric(leftDefaultType)
+          || SqlNodeUtils.isNumericLiteralSqlNode(leftOperand);
+      boolean rightIsNumeric = SqlTypeUtil.isNumeric(rightDefaultType)
+          || SqlNodeUtils.isNumericLiteralSqlNode(rightOperand);
+
+      // Apply decimal type inference if at least one operand is decimal and both are numeric
+      // This covers scenarios where we need decimal arithmetic precision
+      if ((leftIsDecimal || rightIsDecimal) && leftIsNumeric && rightIsNumeric) {
+        // Convert operands to appropriate decimal types if needed
+        RelDataType type1 = createDecimalTypeOrDefault(typeFactory, opBinding, 0, leftDefaultType);
+        RelDataType type2 = createDecimalTypeOrDefault(typeFactory, opBinding, 1, rightDefaultType);
+        return Pair.of(type1, type2);
+      }
+
+      // Return default types for scenarios where both operands are numeric but neither is decimal
+      return Pair.of(leftDefaultType, rightDefaultType);
+    } catch (Exception e) {
+      // Exception safety: return original types if any error occurs during analysis
+      return Pair.of(leftDefaultType, rightDefaultType);
+    }
+  }
+
+  /**
+   * Converts numeric literals to decimal types for SqlCallBinding scenarios.
+   *
+   * <p>This method handles type conversion in SQL parse tree scenarios where numeric literals
+   * need to be processed for decimal arithmetic. Unlike the RexCallBinding version, this method
+   * operates on SqlNode objects where integer literals have already been converted to DECIMAL
+   * type during SQL parsing.</p>
+   *
+   * <p>Key difference from RexCallBinding version:
+   * <ul>
+   *   <li>During SQL parsing, integer literals are automatically converted to DECIMAL type</li>
+   *   <li>This method primarily ensures proper precision and scale are preserved</li>
+   *   <li>No need to manually calculate precision from integer values</li>
+   * </ul>
+   * </p>
+   *
+   * <p>Conversion logic:
+   * <ul>
+   *   <li>If the operand is a numeric literal (DECIMAL or INTEGER), create DECIMAL type</li>
+   *   <li>Use the literal's existing precision and scale information</li>
+   *   <li>For non-literals, return the default type unchanged</li>
+   * </ul>
+   * </p>
+   *
+   * @param typeFactory the type factory for creating new DECIMAL types
+   * @param opBinding the SqlCallBinding containing SqlNode operands
+   * @param ordinal the zero-based index of the operand to analyze
+   * @param defaultType the default type to return if no conversion is needed
+   * @return either a converted DECIMAL type or the original default type
+   */
+  private static RelDataType createDecimalTypeOrDefault(RelDataTypeFactory typeFactory,
+      SqlCallBinding opBinding, int ordinal, RelDataType defaultType) {
+    // Check if the operand at the specified position is a numeric literal
+    if (SqlNodeUtils.isNumericLiteral(opBinding, ordinal)) {
+      // Extract the SqlNumericLiteral from the call's operand list
       SqlNumericLiteral literal =
           (SqlNumericLiteral) opBinding.getCall().getOperandList().get(ordinal);
-      // When parsing into a **SqlNode**, integers are converted to **DECIMAL** type.
-      if (SqlNodeUtils.isDecimalConstant(literal)) {
+      // When parsing into a SqlNode, integers are converted to DECIMAL type
+      // This method ensures both decimal and integer literals are properly handled
+      if (SqlNodeUtils.isDecimalOrIntegerConstant(literal)) {
+        // Create DECIMAL type using the literal's existing precision and scale
+        // This preserves the original precision/scale information from parsing
         return typeFactory.createSqlType(SqlTypeName.DECIMAL, literal.getPrec(),
             literal.getScale());
       }
-      return defaultType;
-    } catch (IllegalArgumentException e) {
-      return defaultType;
     }
+    // Return default type for non-literals or when conversion is not applicable
+    return defaultType;
   }
 
   /**
