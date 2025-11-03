@@ -46,30 +46,26 @@ public class SqlNodeUtilsTest {
     rexBuilder = new RexBuilder(new org.apache.calcite.jdbc.JavaTypeFactoryImpl());
   }
 
-  @Test
-  public void testIsDecimalConstantSqlNodeWithDecimalLiteral() {
+  @Test public void testIsDecimalConstantSqlNodeWithDecimalLiteral() {
     // Test with a decimal literal
     SqlNumericLiteral decimalLiteral = SqlNumericLiteral.createExactNumeric("123.45",
         SqlParserPos.ZERO);
     assertTrue(SqlNodeUtils.isDecimalConstantSqlNode(decimalLiteral));
   }
 
-  @Test
-  public void testIsDecimalConstantSqlNodeWithIntegerLiteral() {
+  @Test public void testIsDecimalConstantSqlNodeWithIntegerLiteral() {
     // Test with an integer literal (which is not considered a decimal constant)
     SqlNumericLiteral integerLiteral = SqlNumericLiteral.createExactNumeric("123",
         SqlParserPos.ZERO);
     assertFalse(SqlNodeUtils.isDecimalConstantSqlNode(integerLiteral));
   }
 
-  @Test
-  public void testIsDecimalConstantSqlNodeWithNull() {
+  @Test public void testIsDecimalConstantSqlNodeWithNull() {
     // Test with null input
     assertFalse(SqlNodeUtils.isDecimalConstantSqlNode(null));
   }
 
-  @Test
-  public void testIsDecimalConstantSqlNodeWithIntegerCall() {
+  @Test public void testIsDecimalConstantSqlNodeWithIntegerCall() {
     // Test with an integer literal (which is not considered a decimal constant)
     SqlNumericLiteral decimalLiteral1 = SqlNumericLiteral.createExactNumeric("123",
         SqlParserPos.ZERO);
@@ -80,8 +76,7 @@ public class SqlNodeUtilsTest {
     assertFalse(SqlNodeUtils.isDecimalConstantSqlNode(call));
   }
 
-  @Test
-  public void testIsDecimalConstantSqlNodeWithSimpleCall() {
+  @Test public void testIsDecimalConstantSqlNodeWithSimpleCall() {
     // Test with a simple call containing decimal constants
     SqlNumericLiteral decimalLiteral1 = SqlNumericLiteral.createExactNumeric("123.45",
         SqlParserPos.ZERO);
@@ -92,8 +87,7 @@ public class SqlNodeUtilsTest {
     assertTrue(SqlNodeUtils.isDecimalConstantSqlNode(call));
   }
 
-  @Test
-  public void testIsDecimalConstantSqlNodeWithMixedCall() {
+  @Test public void testIsDecimalConstantSqlNodeWithMixedCall() {
     // Test with a call containing both decimal and integer constants
     SqlNumericLiteral decimalLiteral = SqlNumericLiteral.createExactNumeric("123.45",
         SqlParserPos.ZERO);
@@ -104,8 +98,7 @@ public class SqlNodeUtilsTest {
     assertTrue(SqlNodeUtils.isDecimalConstantSqlNode(call));
   }
 
-  @Test
-  public void testIsDecimalConstantSqlNodeWithDeeplyNestedCall() {
+  @Test public void testIsDecimalConstantSqlNodeWithDeeplyNestedCall() {
     // Test with a deeply nested call containing decimal constants
     SqlNumericLiteral decimalLiteral1 = SqlNumericLiteral.createExactNumeric("1.1",
         SqlParserPos.ZERO);
@@ -127,8 +120,7 @@ public class SqlNodeUtilsTest {
     assertTrue(SqlNodeUtils.isDecimalConstantSqlNode(outerCall));
   }
 
-  @Test
-  public void testIsDecimalConstantSqlNodeWithNonArithmeticCall() {
+  @Test public void testIsDecimalConstantSqlNodeWithNonArithmeticCall() {
     // Test with a non-arithmetic call (CONCAT) containing decimal constants
     SqlNumericLiteral decimalLiteral1 = SqlNumericLiteral.createExactNumeric("123.45",
         SqlParserPos.ZERO);
@@ -140,29 +132,25 @@ public class SqlNodeUtilsTest {
   }
 
 
-  @Test
-  public void testIsDecimalConstantRexNodeWithDecimalLiteral() {
+  @Test public void testIsDecimalConstantRexNodeWithDecimalLiteral() {
     // Test with a decimal literal
     RexLiteral decimalLiteral = rexBuilder.makeExactLiteral(new BigDecimal("123.45"));
     assertTrue(SqlNodeUtils.isDecimalConstantRexNode(decimalLiteral));
   }
 
-  @Test
-  public void testIsDecimalConstantRexNodeWithIntegerLiteral() {
+  @Test public void testIsDecimalConstantRexNodeWithIntegerLiteral() {
     // Test with an integer literal (which is not considered a decimal constant)
     RexLiteral integerLiteral = rexBuilder.makeExactLiteral(new BigDecimal("123"));
     // Even though it's created with BigDecimal, it's still considered a decimal constant
     assertFalse(SqlNodeUtils.isDecimalConstantRexNode(integerLiteral));
   }
 
-  @Test
-  public void testIsDecimalConstantRexNodeWithNull() {
+  @Test public void testIsDecimalConstantRexNodeWithNull() {
     // Test with null input
     assertFalse(SqlNodeUtils.isDecimalConstantRexNode(null));
   }
 
-  @Test
-  public void testIsDecimalConstantRexNodeWithIntegerCall() {
+  @Test public void testIsDecimalConstantRexNodeWithIntegerCall() {
     // Test with a simple call containing decimal constants
     RexLiteral decimalLiteral1 = rexBuilder.makeExactLiteral(new BigDecimal("123"));
     RexLiteral decimalLiteral2 = rexBuilder.makeExactLiteral(new BigDecimal("678"));
@@ -171,8 +159,7 @@ public class SqlNodeUtilsTest {
     assertFalse(SqlNodeUtils.isDecimalConstantRexNode(call));
   }
 
-  @Test
-  public void testIsDecimalConstantRexNodeWithSimpleCall() {
+  @Test public void testIsDecimalConstantRexNodeWithSimpleCall() {
     // Test with a simple call containing decimal constants
     RexLiteral decimalLiteral1 = rexBuilder.makeExactLiteral(new BigDecimal("123.45"));
     RexLiteral decimalLiteral2 = rexBuilder.makeExactLiteral(new BigDecimal("678.90"));
@@ -181,8 +168,7 @@ public class SqlNodeUtilsTest {
     assertTrue(SqlNodeUtils.isDecimalConstantRexNode(call));
   }
 
-  @Test
-  public void testIsDecimalConstantRexNodeWithMixedCall() {
+  @Test public void testIsDecimalConstantRexNodeWithMixedCall() {
     // Test with a call containing both decimal and integer constants
     RexLiteral decimalLiteral = rexBuilder.makeExactLiteral(new BigDecimal("123.45"));
     RexLiteral integerLiteral = rexBuilder.makeExactLiteral(new BigDecimal("678"));
@@ -191,8 +177,7 @@ public class SqlNodeUtilsTest {
     assertTrue(SqlNodeUtils.isDecimalConstantRexNode(call));
   }
 
-  @Test
-  public void testIsDecimalConstantRexNodeWithDeeplyNestedCall() {
+  @Test public void testIsDecimalConstantRexNodeWithDeeplyNestedCall() {
     // Test with a deeply nested call containing decimal constants
     RexLiteral decimalLiteral1 = rexBuilder.makeExactLiteral(new BigDecimal("1.1"));
     RexLiteral decimalLiteral2 = rexBuilder.makeExactLiteral(new BigDecimal("2.2"));
@@ -210,8 +195,7 @@ public class SqlNodeUtilsTest {
     assertTrue(SqlNodeUtils.isDecimalConstantRexNode(outerCall));
   }
 
-  @Test
-  public void testIsDecimalConstantRexNodeWithNonArithmeticCall() {
+  @Test public void testIsDecimalConstantRexNodeWithNonArithmeticCall() {
     // Test with a non-arithmetic call (LIKE) containing decimal constants
     RexLiteral decimalLiteral1 = rexBuilder.makeExactLiteral(new BigDecimal("123.45"));
     RexLiteral decimalLiteral2 = rexBuilder.makeLiteral("678.90");
@@ -220,28 +204,24 @@ public class SqlNodeUtilsTest {
     assertFalse(SqlNodeUtils.isDecimalConstantRexNode(call));
   }
 
-  @Test
-  public void testIsNumericLiteralRexNodeWithNumericLiteral() {
+  @Test public void testIsNumericLiteralRexNodeWithNumericLiteral() {
     // Test with a numeric literal
     RexLiteral numericLiteral = rexBuilder.makeExactLiteral(new BigDecimal("123.45"));
     assertTrue(SqlNodeUtils.isNumericLiteralRexNode(numericLiteral));
   }
 
-  @Test
-  public void testIsNumericLiteralRexNodeWithNonNumericLiteral() {
+  @Test public void testIsNumericLiteralRexNodeWithNonNumericLiteral() {
     // Test with a non-numeric literal
     RexLiteral stringLiteral = rexBuilder.makeLiteral("hello");
     assertFalse(SqlNodeUtils.isNumericLiteralRexNode(stringLiteral));
   }
 
-  @Test
-  public void testIsNumericLiteralRexNodeWithNull() {
+  @Test public void testIsNumericLiteralRexNodeWithNull() {
     // Test with null input
     assertFalse(SqlNodeUtils.isNumericLiteralRexNode(null));
   }
 
-  @Test
-  public void testIsNumericLiteralRexNodeWithArithmeticCall() {
+  @Test public void testIsNumericLiteralRexNodeWithArithmeticCall() {
     // Test with an arithmetic call containing numeric literals
     RexLiteral numericLiteral1 = rexBuilder.makeExactLiteral(new BigDecimal("123.45"));
     RexLiteral numericLiteral2 = rexBuilder.makeExactLiteral(new BigDecimal("678"));
@@ -250,8 +230,7 @@ public class SqlNodeUtilsTest {
     assertTrue(SqlNodeUtils.isNumericLiteralRexNode(call));
   }
 
-  @Test
-  public void testIsNumericLiteralRexNodeWithNonNumericCall() {
+  @Test public void testIsNumericLiteralRexNodeWithNonNumericCall() {
     // Test with a call containing non-numeric literals
     RexLiteral stringLiteral1 = rexBuilder.makeLiteral("hello");
     RexLiteral stringLiteral2 = rexBuilder.makeLiteral("world");
@@ -260,8 +239,7 @@ public class SqlNodeUtilsTest {
     assertFalse(SqlNodeUtils.isNumericLiteralRexNode(call));
   }
 
-  @Test
-  public void testIsNumericLiteralRexNodeWithMixedCall() {
+  @Test public void testIsNumericLiteralRexNodeWithMixedCall() {
     // Test with a call containing both numeric and non-numeric literals
     RexLiteral numericLiteral = rexBuilder.makeExactLiteral(new BigDecimal("123.45"));
     RexLiteral stringLiteral = rexBuilder.makeLiteral("hello");
@@ -270,8 +248,7 @@ public class SqlNodeUtilsTest {
     assertFalse(SqlNodeUtils.isNumericLiteralRexNode(call));
   }
 
-  @Test
-  public void testIsNumericLiteralRexNodeWithDeeplyNestedCall() {
+  @Test public void testIsNumericLiteralRexNodeWithDeeplyNestedCall() {
     // Test with a deeply nested arithmetic call containing numeric literals
     RexLiteral numericLiteral1 = rexBuilder.makeExactLiteral(new BigDecimal("1.1"));
     RexLiteral numericLiteral2 = rexBuilder.makeExactLiteral(new BigDecimal("2.2"));
@@ -289,8 +266,7 @@ public class SqlNodeUtilsTest {
     assertTrue(SqlNodeUtils.isNumericLiteralRexNode(outerCall));
   }
 
-  @Test
-  public void testIsNumericLiteralRexNodeWithNonArithmeticCall() {
+  @Test public void testIsNumericLiteralRexNodeWithNonArithmeticCall() {
     // Test with a non-arithmetic call containing numeric literals
     RexLiteral numericLiteral1 = rexBuilder.makeExactLiteral(new BigDecimal("123.45"));
     RexLiteral numericLiteral2 = rexBuilder.makeExactLiteral(new BigDecimal("678.90"));
@@ -299,8 +275,7 @@ public class SqlNodeUtilsTest {
     assertFalse(SqlNodeUtils.isNumericLiteralRexNode(call));
   }
 
-  @Test
-  public void testIsNumericLiteralRexNodeWithDifferentArithmeticOperators() {
+  @Test public void testIsNumericLiteralRexNodeWithDifferentArithmeticOperators() {
     // Test with different arithmetic operators
     RexLiteral numericLiteral1 = rexBuilder.makeExactLiteral(new BigDecimal("10"));
     RexLiteral numericLiteral2 = rexBuilder.makeExactLiteral(new BigDecimal("5"));
@@ -331,8 +306,7 @@ public class SqlNodeUtilsTest {
     assertTrue(SqlNodeUtils.isNumericLiteralRexNode(modCall));
   }
 
-  @Test
-  public void testIsNumericLiteralRexNodeWithApproximateNumericLiterals() {
+  @Test public void testIsNumericLiteralRexNodeWithApproximateNumericLiterals() {
     // Test with approximate numeric literals
     RexLiteral approxLiteral1 = rexBuilder.makeApproxLiteral(new BigDecimal("1.23E45"));
     RexLiteral approxLiteral2 = rexBuilder.makeApproxLiteral(new BigDecimal("6.78E90"));
@@ -341,8 +315,7 @@ public class SqlNodeUtilsTest {
     assertTrue(SqlNodeUtils.isNumericLiteralRexNode(call));
   }
 
-  @Test
-  public void testIsNumericLiteralRexNodeWithMixedArithmeticOperators() {
+  @Test public void testIsNumericLiteralRexNodeWithMixedArithmeticOperators() {
     // Test with mixed arithmetic operators in nested expressions
     RexLiteral numericLiteral1 = rexBuilder.makeExactLiteral(new BigDecimal("10"));
     RexLiteral numericLiteral2 = rexBuilder.makeExactLiteral(new BigDecimal("5"));
@@ -357,8 +330,7 @@ public class SqlNodeUtilsTest {
     assertTrue(SqlNodeUtils.isNumericLiteralRexNode(outerCall));
   }
 
-  @Test
-  public void testIsNumericLiteralRexNodeWithUnaryMinus() {
+  @Test public void testIsNumericLiteralRexNodeWithUnaryMinus() {
     // Test with unary minus operator
     RexLiteral numericLiteral = rexBuilder.makeExactLiteral(new BigDecimal("10"));
     RexCall call = (RexCall) rexBuilder.makeCall(SqlStdOperatorTable.UNARY_MINUS, numericLiteral);
@@ -366,8 +338,7 @@ public class SqlNodeUtilsTest {
     assertFalse(SqlNodeUtils.isNumericLiteralRexNode(call));
   }
 
-  @Test
-  public void testIsNumericLiteralRexNodeWithUnaryPlus() {
+  @Test public void testIsNumericLiteralRexNodeWithUnaryPlus() {
     // Test with unary plus operator
     RexLiteral numericLiteral = rexBuilder.makeExactLiteral(new BigDecimal("10"));
     RexCall call = (RexCall) rexBuilder.makeCall(SqlStdOperatorTable.UNARY_PLUS, numericLiteral);
@@ -375,42 +346,39 @@ public class SqlNodeUtilsTest {
     assertFalse(SqlNodeUtils.isNumericLiteralRexNode(call));
   }
 
-  @Test
-  public void testIsNumericLiteralRexNodeWithUnaryOperatorsAndArithmetic() {
+  @Test public void testIsNumericLiteralRexNodeWithUnaryOperatorsAndArithmetic() {
     // Test with unary operators combined with arithmetic operators
     RexLiteral numericLiteral1 = rexBuilder.makeExactLiteral(new BigDecimal("10"));
     RexLiteral numericLiteral2 = rexBuilder.makeExactLiteral(new BigDecimal("5"));
 
     // Create expression: (-10) + 5
-    RexCall unaryMinus = (RexCall) rexBuilder.makeCall(SqlStdOperatorTable.UNARY_MINUS, numericLiteral1);
-    RexCall call = (RexCall) rexBuilder.makeCall(SqlStdOperatorTable.PLUS, unaryMinus, numericLiteral2);
+    RexCall unaryMinus =
+        (RexCall) rexBuilder.makeCall(SqlStdOperatorTable.UNARY_MINUS, numericLiteral1);
+    RexCall call =
+        (RexCall) rexBuilder.makeCall(SqlStdOperatorTable.PLUS, unaryMinus, numericLiteral2);
 
     assertFalse(SqlNodeUtils.isNumericLiteralRexNode(call));
   }
 
-  @Test
-  public void testIsNumericLiteralSqlNodeWithNumericLiteral() {
+  @Test public void testIsNumericLiteralSqlNodeWithNumericLiteral() {
     // Test with a numeric literal
     SqlNumericLiteral numericLiteral = SqlNumericLiteral.createExactNumeric("123.45",
         SqlParserPos.ZERO);
     assertTrue(SqlNodeUtils.isNumericLiteralSqlNode(numericLiteral));
   }
 
-  @Test
-  public void testIsNumericLiteralSqlNodeWithNonNumericLiteral() {
+  @Test public void testIsNumericLiteralSqlNodeWithNonNumericLiteral() {
     // Test with a non-numeric literal (string literal)
     SqlCharStringLiteral stringLiteral = SqlLiteral.createCharString("hello", SqlParserPos.ZERO);
     assertFalse(SqlNodeUtils.isNumericLiteralSqlNode(stringLiteral));
   }
 
-  @Test
-  public void testIsNumericLiteralSqlNodeWithNull() {
+  @Test public void testIsNumericLiteralSqlNodeWithNull() {
     // Test with null input
     assertFalse(SqlNodeUtils.isNumericLiteralSqlNode(null));
   }
 
-  @Test
-  public void testIsNumericLiteralSqlNodeWithArithmeticCall() {
+  @Test public void testIsNumericLiteralSqlNodeWithArithmeticCall() {
     // Test with an arithmetic call containing numeric literals
     SqlNumericLiteral numericLiteral1 = SqlNumericLiteral.createExactNumeric("123.45",
         SqlParserPos.ZERO);
@@ -421,8 +389,7 @@ public class SqlNodeUtilsTest {
     assertTrue(SqlNodeUtils.isNumericLiteralSqlNode(call));
   }
 
-  @Test
-  public void testIsNumericLiteralSqlNodeWithNonNumericCall() {
+  @Test public void testIsNumericLiteralSqlNodeWithNonNumericCall() {
     // Test with a call containing non-numeric literals
     SqlCharStringLiteral stringLiteral1 = SqlLiteral.createCharString("hello", SqlParserPos.ZERO);
     SqlCharStringLiteral stringLiteral2 = SqlLiteral.createCharString("world", SqlParserPos.ZERO);
@@ -431,8 +398,7 @@ public class SqlNodeUtilsTest {
     assertFalse(SqlNodeUtils.isNumericLiteralSqlNode(call));
   }
 
-  @Test
-  public void testIsNumericLiteralSqlNodeWithMixedCall() {
+  @Test public void testIsNumericLiteralSqlNodeWithMixedCall() {
     // Test with a call containing both numeric and non-numeric literals
     SqlNumericLiteral numericLiteral = SqlNumericLiteral.createExactNumeric("123.45",
         SqlParserPos.ZERO);
@@ -442,8 +408,7 @@ public class SqlNodeUtilsTest {
     assertFalse(SqlNodeUtils.isNumericLiteralSqlNode(call));
   }
 
-  @Test
-  public void testIsNumericLiteralSqlNodeWithDeeplyNestedCall() {
+  @Test public void testIsNumericLiteralSqlNodeWithDeeplyNestedCall() {
     // Test with a deeply nested arithmetic call containing numeric literals
     SqlNumericLiteral numericLiteral1 = SqlNumericLiteral.createExactNumeric("1.1",
         SqlParserPos.ZERO);
@@ -465,8 +430,7 @@ public class SqlNodeUtilsTest {
     assertTrue(SqlNodeUtils.isNumericLiteralSqlNode(outerCall));
   }
 
-  @Test
-  public void testIsNumericLiteralSqlNodeWithNonArithmeticCall() {
+  @Test public void testIsNumericLiteralSqlNodeWithNonArithmeticCall() {
     // Test with a non-arithmetic call containing numeric literals
     SqlNumericLiteral numericLiteral1 = SqlNumericLiteral.createExactNumeric("123.45",
         SqlParserPos.ZERO);
@@ -477,11 +441,12 @@ public class SqlNodeUtilsTest {
     assertFalse(SqlNodeUtils.isNumericLiteralSqlNode(call));
   }
 
-  @Test
-  public void testIsNumericLiteralSqlNodeWithDifferentArithmeticOperators() {
+  @Test public void testIsNumericLiteralSqlNodeWithDifferentArithmeticOperators() {
     // Test with different arithmetic operators
-    SqlNumericLiteral numericLiteral1 = SqlNumericLiteral.createExactNumeric("10", SqlParserPos.ZERO);
-    SqlNumericLiteral numericLiteral2 = SqlNumericLiteral.createExactNumeric("5", SqlParserPos.ZERO);
+    SqlNumericLiteral numericLiteral1 =
+        SqlNumericLiteral.createExactNumeric("10", SqlParserPos.ZERO);
+    SqlNumericLiteral numericLiteral2 =
+        SqlNumericLiteral.createExactNumeric("5", SqlParserPos.ZERO);
 
     // Test PLUS
     SqlCall plusCall = SqlStdOperatorTable.PLUS.createCall(SqlParserPos.ZERO, numericLiteral1,
@@ -509,8 +474,7 @@ public class SqlNodeUtilsTest {
     assertTrue(SqlNodeUtils.isNumericLiteralSqlNode(modCall));
   }
 
-  @Test
-  public void testIsNumericLiteralSqlNodeWithApproximateNumeric() {
+  @Test public void testIsNumericLiteralSqlNodeWithApproximateNumeric() {
     // Test with approximate numeric literals
     SqlNumericLiteral approxLiteral1 = SqlNumericLiteral.createApproxNumeric("1.23E45",
         SqlParserPos.ZERO);

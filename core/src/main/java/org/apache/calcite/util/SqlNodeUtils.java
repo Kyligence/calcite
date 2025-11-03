@@ -166,7 +166,8 @@ public class SqlNodeUtils {
    * @return true if the operand at the specified position is a numeric literal, false otherwise
    */
   public static boolean isNumericLiteral(SqlOperatorBinding binding, int ordinal) {
-    return binding.isOperandLiteral(ordinal, false) && SqlTypeUtil.isNumeric(binding.getOperandType(ordinal));
+    return binding.isOperandLiteral(ordinal, false)
+        && SqlTypeUtil.isNumeric(binding.getOperandType(ordinal));
   }
 
   /**

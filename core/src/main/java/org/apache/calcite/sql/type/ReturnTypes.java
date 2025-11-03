@@ -236,8 +236,7 @@ public abstract class ReturnTypes {
    */
   public static final SqlReturnTypeInference ARG0_NULLABLE_IF_EMPTY =
       new OrdinalReturnTypeInference(0) {
-        @Override public RelDataType
-        inferReturnType(SqlOperatorBinding opBinding) {
+        @Override public RelDataType inferReturnType(SqlOperatorBinding opBinding) {
           final RelDataType type = super.inferReturnType(opBinding);
           if (opBinding.getGroupCount() == 0 || opBinding.hasFilter()) {
             return opBinding.getTypeFactory()
@@ -719,13 +718,13 @@ public abstract class ReturnTypes {
    * determine if integer literals should be converted to decimal types for proper
    * decimal arithmetic.</p>
    *
-   * @param opBinding the operator binding containing operand information and types
+   * @param opBinding   the operator binding containing operand information and types
    * @param typeFactory the type factory used to create new data types if needed
    * @return a Pair containing the left and right operand types to be used for
-   *         decimal multiplication, possibly with type conversions applied
+   * decimal multiplication, possibly with type conversions applied
    */
-  private static Pair<RelDataType, RelDataType> getDecimalMultiplyBindingType(SqlOperatorBinding opBinding,
-      RelDataTypeFactory typeFactory) {
+  private static Pair<RelDataType, RelDataType> getDecimalMultiplyBindingType(
+      SqlOperatorBinding opBinding, RelDataTypeFactory typeFactory) {
     // Route to SqlCallBinding handler for SQL parse tree scenarios
     if (opBinding instanceof SqlCallBinding) {
       return getRelDataTypeRelDataTypePair((SqlCallBinding) opBinding, typeFactory);
@@ -762,12 +761,12 @@ public abstract class ReturnTypes {
    * </ul>
    * </p>
    *
-   * @param opBinding the RexCallBinding containing RexNode operands
+   * @param opBinding   the RexCallBinding containing RexNode operands
    * @param typeFactory the type factory for creating new data types
    * @return a Pair containing the potentially converted left and right operand types
    */
-  private static Pair<RelDataType, RelDataType> getRelDataTypeRelDataTypePair(RexCallBinding opBinding,
-      RelDataTypeFactory typeFactory) {
+  private static Pair<RelDataType, RelDataType> getRelDataTypeRelDataTypePair(
+      RexCallBinding opBinding, RelDataTypeFactory typeFactory) {
     // Get the default types for both operands
     RelDataType leftDefaultType = opBinding.getOperandType(0);
     RelDataType rightDefaultType = opBinding.getOperandType(1);
@@ -817,7 +816,8 @@ public abstract class ReturnTypes {
    * <p>Conversion logic:
    * <ul>
    *   <li>If the operand is already a decimal constant, return the default type</li>
-   *   <li>If the operand is an integer literal, convert it to DECIMAL with appropriate precision</li>
+   *   <li>If the operand is an integer literal, convert it to DECIMAL with appropriate
+   *   precision</li>
    *   <li>For other cases, return the default type unchanged</li>
    * </ul>
    * </p>
@@ -832,8 +832,8 @@ public abstract class ReturnTypes {
    * </p>
    *
    * @param typeFactory the type factory for creating new DECIMAL types
-   * @param opBinding the RexCallBinding containing the operands
-   * @param ordinal the zero-based index of the operand to analyze
+   * @param opBinding   the RexCallBinding containing the operands
+   * @param ordinal     the zero-based index of the operand to analyze
    * @param defaultType the default type to return if no conversion is needed
    * @return either a converted DECIMAL type or the original default type
    */
@@ -856,8 +856,17 @@ public abstract class ReturnTypes {
         Long value = literal.getValueAs(Long.class);
         if (value != null) {
           // Calculate precision based on the number of digits in the integer
-          // For example: 123 → 3 digits, 45 → 2 digits, 0 → 1 digit
-          int length = (int) Math.floor(Math.log10(Math.abs(value))) + 1;
+          // For example: 123 → 3 digits, 45 → 2 digits, 0 → 1 digit, -123 → 4 digits
+          int length;
+          if (value == 0) {
+            // Special case: 0 should have precision 1
+            length = 1;
+          } else if (value < 0) {
+            // like sqlNode, negative number add 1 for '-'
+            length = (int) Math.floor(Math.log10(Math.abs(value))) + 2;
+          } else {
+            length = (int) Math.floor(Math.log10(value)) + 1;
+          }
           // Create DECIMAL type with calculated precision and 0 scale
           return typeFactory.createSqlType(SqlTypeName.DECIMAL, length, 0);
         }
@@ -888,12 +897,12 @@ public abstract class ReturnTypes {
    * </ul>
    * </p>
    *
-   * @param opBinding the SqlCallBinding containing SqlNode operands
+   * @param opBinding   the SqlCallBinding containing SqlNode operands
    * @param typeFactory the type factory for creating new data types
    * @return a Pair containing the potentially converted left and right operand types
    */
-  private static Pair<RelDataType, RelDataType> getRelDataTypeRelDataTypePair(SqlCallBinding opBinding,
-      RelDataTypeFactory typeFactory) {
+  private static Pair<RelDataType, RelDataType> getRelDataTypeRelDataTypePair(
+      SqlCallBinding opBinding, RelDataTypeFactory typeFactory) {
     // Get the default types for both operands
     RelDataType leftDefaultType = opBinding.getOperandType(0);
     RelDataType rightDefaultType = opBinding.getOperandType(1);
@@ -957,8 +966,8 @@ public abstract class ReturnTypes {
    * </p>
    *
    * @param typeFactory the type factory for creating new DECIMAL types
-   * @param opBinding the SqlCallBinding containing SqlNode operands
-   * @param ordinal the zero-based index of the operand to analyze
+   * @param opBinding   the SqlCallBinding containing SqlNode operands
+   * @param ordinal     the zero-based index of the operand to analyze
    * @param defaultType the default type to return if no conversion is needed
    * @return either a converted DECIMAL type or the original default type
    */
