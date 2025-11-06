@@ -211,7 +211,8 @@ public interface RelDataTypeFactory {
     return leastRestrictive(types, convertToVarying, false);
   }
 
-  @Nullable RelDataType leastRestrictive(List<RelDataType> types, boolean convertToVarying, boolean coerce);
+  @Nullable RelDataType leastRestrictive(List<RelDataType> types, boolean convertToVarying,
+      boolean coerce);
 
   /**
    * Creates a SQL type with no precision or scale.

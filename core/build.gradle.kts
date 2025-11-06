@@ -85,6 +85,7 @@ dependencies {
 
     testImplementation(project(":testkit"))
     testImplementation("commons-lang:commons-lang")
+    testImplementation("org.mockito:mockito-core")
     testImplementation("net.bytebuddy:byte-buddy")
     testImplementation("net.hydromatic:foodmart-queries")
     testImplementation("net.hydromatic:quidem")
