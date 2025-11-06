@@ -711,12 +711,12 @@ public abstract class ReturnTypes {
    * <p>This method serves as a dispatcher that routes to the appropriate handler
    * based on the type of operator binding. It handles both SQL parse tree bindings
    * (SqlCallBinding) and relational expression bindings (RexCallBinding), with a
-   * fallback for other binding types.</p>
+   * fallback for other binding types.
    *
    * <p>The method is crucial for decimal multiplication type inference because it
    * needs to analyze the actual operand values (not just their declared types) to
    * determine if integer literals should be converted to decimal types for proper
-   * decimal arithmetic.</p>
+   * decimal arithmetic.
    *
    * @param opBinding   the operator binding containing operand information and types
    * @param typeFactory the type factory used to create new data types if needed
@@ -742,7 +742,7 @@ public abstract class ReturnTypes {
    *
    * <p>This method handles relational expression bindings (RexCallBinding) where operands
    * are represented as RexNode objects. It analyzes both the declared types and actual
-   * values to determine if type conversions are needed for proper decimal arithmetic.</p>
+   * values to determine if type conversions are needed for proper decimal arithmetic.
    *
    * <p>The method implements a comprehensive type inference strategy that considers:
    * <ul>
@@ -750,7 +750,6 @@ public abstract class ReturnTypes {
    *   <li>Whether operands are numeric (including integer literals)</li>
    *   <li>Whether integer literals should be converted to decimal types</li>
    * </ul>
-   * </p>
    *
    * <p>Key scenarios handled:
    * <ul>
@@ -759,7 +758,6 @@ public abstract class ReturnTypes {
    *   <li>Integer × Decimal: integer may be converted to decimal</li>
    *   <li>Integer × Integer: no conversion, return original types</li>
    * </ul>
-   * </p>
    *
    * @param opBinding   the RexCallBinding containing RexNode operands
    * @param typeFactory the type factory for creating new data types
@@ -811,7 +809,7 @@ public abstract class ReturnTypes {
    * <p>This method is responsible for type conversion in relational expression scenarios
    * where integer literals need to be promoted to decimal types for proper decimal arithmetic.
    * The conversion is essential when multiplying integers with decimals to maintain
-   * precision and avoid unintended integer arithmetic.</p>
+   * precision and avoid unintended integer arithmetic.
    *
    * <p>Conversion logic:
    * <ul>
@@ -820,7 +818,6 @@ public abstract class ReturnTypes {
    *   precision</li>
    *   <li>For other cases, return the default type unchanged</li>
    * </ul>
-   * </p>
    *
    * <p>The precision calculation for converted integers uses the number of digits
    * in the integer value. For example:
@@ -829,7 +826,6 @@ public abstract class ReturnTypes {
    *   <li>45 → DECIMAL(2, 0) (2 digits)</li>
    *   <li>0 → DECIMAL(1, 0) (special case)</li>
    * </ul>
-   * </p>
    *
    * @param typeFactory the type factory for creating new DECIMAL types
    * @param opBinding   the RexCallBinding containing the operands
@@ -881,12 +877,12 @@ public abstract class ReturnTypes {
    *
    * <p>This method handles SQL parse tree bindings (SqlCallBinding) where operands
    * are represented as SqlNode objects. It analyzes both the declared types and actual
-   * values to determine if type conversions are needed for proper decimal arithmetic.</p>
+   * values to determine if type conversions are needed for proper decimal arithmetic.
    *
    * <p>Similar to the RexCallBinding version, this method implements comprehensive
    * type inference but operates on SqlNode objects instead of RexNode objects.
    * The key difference is that during SQL parsing, integer literals are automatically
-   * converted to DECIMAL type, which affects the conversion logic.</p>
+   * converted to DECIMAL type, which affects the conversion logic.
    *
    * <p>Key scenarios handled:
    * <ul>
@@ -895,7 +891,6 @@ public abstract class ReturnTypes {
    *   <li>Integer × Decimal: integer may be converted to decimal</li>
    *   <li>Integer × Integer: no conversion, return original types</li>
    * </ul>
-   * </p>
    *
    * @param opBinding   the SqlCallBinding containing SqlNode operands
    * @param typeFactory the type factory for creating new data types
@@ -947,7 +942,7 @@ public abstract class ReturnTypes {
    * <p>This method handles type conversion in SQL parse tree scenarios where numeric literals
    * need to be processed for decimal arithmetic. Unlike the RexCallBinding version, this method
    * operates on SqlNode objects where integer literals have already been converted to DECIMAL
-   * type during SQL parsing.</p>
+   * type during SQL parsing.
    *
    * <p>Key difference from RexCallBinding version:
    * <ul>
@@ -955,7 +950,6 @@ public abstract class ReturnTypes {
    *   <li>This method primarily ensures proper precision and scale are preserved</li>
    *   <li>No need to manually calculate precision from integer values</li>
    * </ul>
-   * </p>
    *
    * <p>Conversion logic:
    * <ul>
@@ -963,7 +957,6 @@ public abstract class ReturnTypes {
    *   <li>Use the literal's existing precision and scale information</li>
    *   <li>For non-literals, return the default type unchanged</li>
    * </ul>
-   * </p>
    *
    * @param typeFactory the type factory for creating new DECIMAL types
    * @param opBinding   the SqlCallBinding containing SqlNode operands
@@ -1216,13 +1209,13 @@ public abstract class ReturnTypes {
    * For example,
    *
    * <p>concat(cast('a' as varchar(2)), cast('b' as varchar(3)),cast('c' as varchar(2)))
-   * returns varchar(7).</p>
+   * returns varchar(7).
    *
    * <p>concat(cast('a' as varchar), cast('b' as varchar(2), cast('c' as varchar(2))))
-   * returns varchar.</p>
+   * returns varchar.
    *
    * <p>concat(cast('a' as varchar(65535)), cast('b' as varchar(2)), cast('c' as varchar(2)))
-   * returns varchar.</p>
+   * returns varchar.
    */
   public static final SqlReturnTypeInference MULTIVALENT_STRING_SUM_PRECISION =
       opBinding -> {

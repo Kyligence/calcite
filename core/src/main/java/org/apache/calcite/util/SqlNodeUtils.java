@@ -37,11 +37,11 @@ import java.util.Queue;
  * <p>This class provides various static methods to analyze and validate SQL nodes,
  * particularly focusing on numeric and decimal constant detection. It includes methods
  * to check if nodes represent decimal constants, numeric literals, or complex expressions
- * containing numeric values.</p>
+ * containing numeric values.
  *
  * <p>The utility supports both {@link SqlNode} (parse tree representation) and
  * {@link RexNode} (relational expression representation) objects, providing consistent
- * behavior across different stages of SQL processing.</p>
+ * behavior across different stages of SQL processing.
  */
 public class SqlNodeUtils {
 
@@ -57,7 +57,7 @@ public class SqlNodeUtils {
    *
    * <p>A decimal constant is defined as a {@link SqlNumericLiteral} with DECIMAL type
    * that is not an integer literal. This method specifically excludes integer values
-   * even if they are stored as DECIMAL type.</p>
+   * even if they are stored as DECIMAL type.
    *
    * @param node the SQL node to check, may be null
    * @return true if the node is a decimal constant (non-integer DECIMAL), false otherwise
@@ -82,7 +82,7 @@ public class SqlNodeUtils {
    * <p>Unlike {@link #isDecimalConstant(SqlNode)}, this method includes both decimal
    * and integer values. During SQL parsing, integers are converted to DECIMAL type,
    * so this method checks for DECIMAL type regardless of whether it's an integer
-   * or decimal value.</p>
+   * or decimal value.
    *
    * @param node the SQL node to check, may be null
    * @return true if the node is a DECIMAL type numeric literal (including integers), false
@@ -107,7 +107,7 @@ public class SqlNodeUtils {
    *
    * <p>This method checks if the node is a {@link RexLiteral} with DECIMAL type
    * or any approximate numeric type (like FLOAT, DOUBLE). Unlike the SqlNode
-   * version, this includes approximate numeric types as well.</p>
+   * version, this includes approximate numeric types as well.
    *
    * @param node the Rex node to check, may be null
    * @return true if the node is a decimal or approximate numeric constant, false otherwise
@@ -126,7 +126,7 @@ public class SqlNodeUtils {
    * Checks if the given {@link SqlNode} is a numeric literal.
    *
    * <p>This is a simple type check that returns true if the node is an instance
-   * of {@link SqlNumericLiteral}, regardless of the specific numeric type.</p>
+   * of {@link SqlNumericLiteral}, regardless of the specific numeric type.
    *
    * @param node the SQL node to check, may be null
    * @return true if the node is a numeric literal, false otherwise
@@ -140,7 +140,7 @@ public class SqlNodeUtils {
    *
    * <p>This method checks if the node is a {@link RexLiteral} with a numeric type.
    * It uses {@link SqlTypeUtil#isNumeric(RelDataType)} to determine if the type
-   * is numeric, which includes all numeric types like INTEGER, DECIMAL, FLOAT, etc.</p>
+   * is numeric, which includes all numeric types like INTEGER, DECIMAL, FLOAT, etc.
    *
    * @param node the Rex node to check, may be null
    * @return true if the node is a numeric literal, false otherwise
@@ -159,7 +159,7 @@ public class SqlNodeUtils {
    * is a numeric literal.
    *
    * <p>This method verifies that the operand is both a literal and has a numeric type.
-   * It's commonly used in operator validation to ensure operands are numeric literals.</p>
+   * It's commonly used in operator validation to ensure operands are numeric literals.
    *
    * @param binding the operator binding containing the operands
    * @param ordinal the zero-based index of the operand to check
@@ -175,7 +175,7 @@ public class SqlNodeUtils {
    *
    * <p>This method performs a deep analysis of the expression tree to determine if
    * it contains only numeric literals and at least one decimal constant. It traverses
-   * binary arithmetic operations (like +, -, *, /) and checks all operands.</p>
+   * binary arithmetic operations (like +, -, *, /) and checks all operands.
    *
    * <p>The method returns true only if:
    * <ul>
@@ -183,7 +183,7 @@ public class SqlNodeUtils {
    *   <li>At least one leaf node is a decimal constant</li>
    *   <li>All intermediate nodes are binary arithmetic operations</li>
    * </ul>
-   * </p>
+   *
    *
    * <p>For example, this would return true for expressions like:
    * <ul>
@@ -195,7 +195,6 @@ public class SqlNodeUtils {
    *   <li>1 + 2 (no decimal constants)</li>
    *   <li>1.5 + column_name (contains non-literal)</li>
    * </ul>
-   * </p>
    *
    * @param node the Rex node to check, may be null
    * @return true if the expression contains only numeric literals and at least one decimal constant
@@ -257,10 +256,10 @@ public class SqlNodeUtils {
    *
    * <p>This method performs a deep analysis of the expression tree to determine if
    * it contains only numeric literals. It traverses binary arithmetic operations
-   * and checks all operands to ensure they are all numeric literals.</p>
+   * and checks all operands to ensure they are all numeric literals.
    *
    * <p>Unlike {@link #isDecimalConstantRexNode(RexNode)}, this method doesn't require
-   * at least one decimal constant - it accepts expressions with only integer literals as well.</p>
+   * at least one decimal constant - it accepts expressions with only integer literals as well.
    *
    * <p>For example, this would return true for expressions like:
    * <ul>
@@ -273,7 +272,6 @@ public class SqlNodeUtils {
    *   <li>1 + column_name (contains non-literal)</li>
    *   <li>function_call(5) (contains function call)</li>
    * </ul>
-   * </p>
    *
    * @param node the Rex node to check, may be null
    * @return true if the expression contains only numeric literals, false otherwise
@@ -316,14 +314,14 @@ public class SqlNodeUtils {
    *
    * <p>This method is the SqlNode equivalent of {@link #isDecimalConstantRexNode(RexNode)}.
    * It performs a deep analysis of the SQL expression tree to determine if
-   * it contains only numeric literals and at least one decimal constant.</p>
+   * it contains only numeric literals and at least one decimal constant.
    *
    * <p>The method traverses binary arithmetic operations and checks all operands.
    * It returns true only if all leaf nodes are numeric literals and at least one
-   * is a decimal constant.</p>
+   * is a decimal constant.
    *
    * <p>This method is typically used during SQL parsing and validation stages,
-   * before the SQL is converted to relational expressions.</p>
+   * before the SQL is converted to relational expressions.
    *
    * @param node the SQL node to check, may be null
    * @return true if the expression contains only numeric literals and at least one decimal constant
@@ -384,14 +382,14 @@ public class SqlNodeUtils {
    *
    * <p>This method is the SqlNode equivalent of {@link #isNumericLiteralRexNode(RexNode)}.
    * It performs a deep analysis of the SQL expression tree to determine if
-   * it contains only numeric literals.</p>
+   * it contains only numeric literals.
    *
    * <p>The method traverses binary arithmetic operations and checks all operands
    * to ensure they are all numeric literals. It accepts expressions with both
-   * integer and decimal literals.</p>
+   * integer and decimal literals.
    *
    * <p>This method is typically used during SQL parsing and validation to identify
-   * constant expressions that can be evaluated at compile time.</p>
+   * constant expressions that can be evaluated at compile time.
    *
    * @param node the SQL node to check, may be null
    * @return true if the expression contains only numeric literals, false otherwise
